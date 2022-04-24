@@ -1,0 +1,31 @@
+{
+    "name": "olix/adminltefull-bundle",
+    "description": "Admin theme bundle for Symfony 5+ based on AdminLTE 3.2 with FOSUserBundle, Forms",
+    "type": "symfony-bundle",  
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Olivier",
+            "email": "sabinus52@gmail.com"
+        }
+    ],
+    "keywords" : [
+        "olix",
+        "symfony",
+        "admin",
+        "back office",
+        "back-end",
+        "bootstrap",
+        "theme",
+        "template"
+    ],
+    "require": {
+        "php": ">=7.4",
+        "symfony/framework-bundle": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Olix\\AdminLteFullBundle\\": "src/"
+        }
+    }
+}
