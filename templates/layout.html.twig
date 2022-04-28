@@ -20,10 +20,10 @@
         <div class="wrapper">
 
             <div class="preloader flex-column justify-content-center align-items-center">
-                <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+                {% block preloader %}<img class="animation__shake" src="{{ asset('bundles/olixadminltefull/images/preloader.gif') }}" alt="Loading..." height="128" width="128">{% endblock %}
             </div>
 
-            {% include '@OlixAdminLteFull/header.html.twig' %}
+            {% include '@OlixAdminLteFull/navbar.html.twig' %}
 
             {% include '@OlixAdminLteFull/sidebar.html.twig' %}
 
