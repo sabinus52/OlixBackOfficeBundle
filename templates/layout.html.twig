@@ -8,9 +8,9 @@
         <title>{% block title %}{% endblock %}</title>
 
         {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('bundles/olixadminltefull/css/olix-fonts.css') }}">
-            <link rel="stylesheet" href="{{ asset('bundles/olixadminltefull/css/adminlte.min.css') }}">
-            <link rel="stylesheet" href="{{ asset('bundles/olixadminltefull/plugins/fontawesome-free/css/all.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('bundles/olixbackoffice/css/olix-fonts.css') }}">
+            <link rel="stylesheet" href="{{ asset('bundles/olixbackoffice/css/adminlte.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('bundles/olixbackoffice/plugins/fontawesome-free/css/all.min.css') }}">
         {% endblock %}
 
     </head>
@@ -20,12 +20,12 @@
         <div class="wrapper">
 
             <div class="preloader flex-column justify-content-center align-items-center">
-                {% block preloader %}<img class="animation__shake" src="{{ asset('bundles/olixadminltefull/images/preloader.gif') }}" alt="Loading..." height="128" width="128">{% endblock %}
+                {% block preloader %}<img class="animation__shake" src="{{ asset('bundles/olixbackoffice/images/preloader.gif') }}" alt="Loading..." height="128" width="128">{% endblock %}
             </div>
 
-            {% include '@OlixAdminLteFull/navbar.html.twig' %}
+            {% include '@OlixBackOffice/navbar.html.twig' %}
 
-            {% include '@OlixAdminLteFull/sidebar.html.twig' %}
+            {% include '@OlixBackOffice/sidebar.html.twig' %}
 
             <div class="content-wrapper">
                 {% block content %}{% endblock %}
@@ -37,14 +37,14 @@
                 </div>
             </aside>
 
-            {% include '@OlixAdminLteFull/footer.html.twig' %}
+            {% include '@OlixBackOffice/footer.html.twig' %}
 
         </div>
 
         {% block javascripts %}
-            <script src="{{ asset('bundles/olixadminltefull/plugins/jquery/jquery.min.js') }}"></script>
-            <script src="{{ asset('bundles/olixadminltefull/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-            <script src="{{ asset('bundles/olixadminltefull/js/adminlte.min.js') }}"></script>
+            <script src="{{ asset('bundles/olixbackoffice/plugins/jquery/jquery.min.js') }}"></script>
+            <script src="{{ asset('bundles/olixbackoffice/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+            <script src="{{ asset('bundles/olixbackoffice/js/adminlte.min.js') }}"></script>
         {% endblock %}
 
     </body>
