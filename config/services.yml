@@ -1,2 +1,12 @@
 services:
 
+    olix.backoffice.twig.extension:
+        class: Olix\BackOfficeBundle\Twig\BackOfficeExtension
+        tags:
+            - { name: twig.extension }
+
+    olix.backoffice.twig.runtime:
+        class: Olix\BackOfficeBundle\Twig\BackOfficeRuntime
+        arguments: [ '%olix_back_office%' ]
+        tags:
+            - { name: twig.runtime }
