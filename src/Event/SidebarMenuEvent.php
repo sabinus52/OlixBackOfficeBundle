@@ -17,7 +17,7 @@ class SidebarMenuEvent extends BackOfficeEvent
 {
 
     /**
-     * @var array
+     * @var MenuItemInterface[]
      */
     private $rootItems = [];
 
@@ -95,6 +95,23 @@ class SidebarMenuEvent extends BackOfficeEvent
     public function getItem($code)
     {
         return $this->rootItems[$code] ?? null;
+    }
+
+
+    /**
+     * Retourne le menu actif du niveau 1
+     * 
+     * @return MenuItemInterface|null
+     */
+    public function getActive(): ?MenuItemInterface
+    {
+        foreach ($this->getSidebarMenu() as $item) {
+            if ($item->isActive()) {
+                return $item;
+            }
+        }
+
+        return null;
     }
 
 }

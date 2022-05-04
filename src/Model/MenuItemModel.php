@@ -308,6 +308,21 @@ class MenuItemModel implements MenuItemInterface
 
 
     /**
+     * @return MenuItemInterface|null
+     */
+    public function getActiveChild(): ?MenuItemInterface
+    {
+        foreach ($this->children as $child) {
+            if ($child->isActive()) {
+                return $child;
+            }
+        }
+
+        return null;
+    }
+
+
+    /**
      * @return bool
      */
     public function hasParent(): bool

@@ -10,6 +10,7 @@
 namespace Olix\BackOfficeBundle\EventSubscriber;
 
 use Olix\BackOfficeBundle\Event\SidebarMenuEvent;
+use Olix\BackOfficeBundle\Event\BreadcrumbEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -35,6 +36,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
     {
         return [
             SidebarMenuEvent::class => ['onBuildSidebar', 100],
+            BreadcrumbEvent::class  => ['onBuildSidebar', 100],
         ];
     }
 
@@ -62,6 +64,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
     {
         foreach ($items as $item) {
             if ($item->hasChildren()) {
+                if ($item->getRoute() == $route) $item->setIsActive(true);
                 $this->activateByRoute($route, $item->getChildren());
             } elseif ($item->getRoute() == $route) {
                 $item->setIsActive(true);
