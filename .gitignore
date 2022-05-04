@@ -8,4 +8,8 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
+###> phpunit ###
+/.phpunit*
+###< phpunit ###
+
 /DEVELOP*.md

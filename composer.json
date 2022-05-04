@@ -24,11 +24,15 @@
         "symfony/framework-bundle": "^5.4",
         "symfony/asset": "5.4.*",
         "symfony/dependency-injection": "5.4.*",
+        "symfony/event-dispatcher": "5.4.*",
         "twig/twig": "^2.12|^3.0"
     },
     "autoload": {
         "psr-4": {
             "Olix\\AdminLteFullBundle\\": "src/"
         }
+    },
+    "require-dev": {
+        "symfony/test-pack": "^1.0"
     }
 }

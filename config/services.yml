@@ -10,3 +10,9 @@ services:
         arguments: [ '%olix_back_office%' ]
         tags:
             - { name: twig.runtime }
+
+    olix.backoffice.twig.events:
+        class: Olix\BackOfficeBundle\Twig\EventsRuntime
+        arguments: [ '@event_dispatcher' ]
+        tags:
+            - { name: twig.runtime }
