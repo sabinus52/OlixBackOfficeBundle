@@ -32,6 +32,7 @@ class BackOfficeExtension extends AbstractExtension
             new TwigFunction('olixbo_class_menu', [BackOfficeRuntime::class, 'getClassMenu']),
             new TwigFunction('olixbo_sidebar_menu', [EventsRuntime::class, 'getSidebarMenu']),
             new TwigFunction('olixbo_breadcrumb', [EventsRuntime::class, 'getBreadcrumb']),
+            new TwigFunction('olixbo_notification', [EventsRuntime::class, 'getNotifications']),
         ];
     }
     
