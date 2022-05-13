@@ -47,6 +47,12 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     protected $name;
 
     /**
+     * @var DateTime
+     * @ORM\Column(name="last_login", type="datetime", nullable=true)
+     */
+    protected $lastLogin;
+
+    /**
      * @var array liste des roles
      * @ORM\Column(type="json")
      */
@@ -131,6 +137,26 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+
+    /**
+     * @return DateTime|null
+     */
+    public function getLastLogin(): ?\DateTimeInterface
+    {
+        return $this->lastLogin;
+    }
+
+    /**
+     * @var DateTime $lastLogin
+     * @return User
+     */
+    public function setLastLogin(?\DateTimeInterface $lastLogin): self
+    {
+        $this->lastLogin = $lastLogin;
 
         return $this;
     }

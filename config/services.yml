@@ -16,3 +16,8 @@ services:
         arguments: [ '@event_dispatcher' ]
         tags:
             - { name: twig.runtime }
+
+    Olix\BackOfficeBundle\Listener\LoginListener:
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
