@@ -30,7 +30,7 @@
                         {% endif %}
                     {% endblock %}
                     {% block login_form %}
-                        <form action="{{ path('login') }}" method="post">
+                        <form action="{{ path('olix_login') }}" method="post">
                             <div class="input-group mb-3">
                                 <input type="text" name="_username" class="form-control" placeholder="Username" value="{{ last_username }}">
                                 <div class="input-group-append"><div class="input-group-text"><span class="fas fa-user"></span></div></div>

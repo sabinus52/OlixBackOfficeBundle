@@ -1,13 +1,13 @@
 <?php
 /**
- * Entité de la table utilisateurs de connexion
+ * Classe abstraite de l'entité de la table utilisateurs de connexion
  *
  * @author Sabinus52 <sabinus52@gmail.com>
  * @package Olix
  * @subpackage BackOfficeBundle
  */
 
-namespace Olix\BackOfficeBundle\Entity;
+namespace Olix\BackOfficeBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -26,25 +26,37 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $username;
+    protected $username;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=150, nullable=true)
+     */
+    protected $email;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=150, nullable=true)
+     */
+    protected $name;
 
     /**
      * @var array liste des roles
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    protected $roles = [];
 
     /**
      * @var string Mot de passe hashé
      * @ORM\Column(type="string")
      */
-    private $password;
+    protected $password;
 
 
     /**
@@ -81,6 +93,46 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->username;
+    }
+
+
+    /**
+     * @return string|null
+     */
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @var string $email
+     * @return User
+     */
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @var string $name
+     * @return User
+     */
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
 
