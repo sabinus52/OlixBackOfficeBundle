@@ -1,7 +1,7 @@
 {% if app.user and is_granted('IS_AUTHENTICATED_FULLY') %}
 <div class="user-panel mt-3 pb-3 d-flex">
     <div class="image">
-        <img src="{{ asset('bundles/olixbackoffice/images/avatar.png') }}" class="img-circle elevation-2" alt="{{ app.user.username }}">
+        <img src="{{ asset(app.user.avatar) }}" class="img-circle elevation-2" alt="{{ app.user.username }}">
     </div>
     <div class="info">
         <a href="#" class="d-block">{{ app.user.name|default(app.user.username) }}</a>

@@ -20,6 +20,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
+    const AVATAR_PATH = 'bundles/olixbackoffice/images/avatar/';
+    const AVATAR_DEFAULT = 'default.png';
+
     /**
      * @var integer
      * @ORM\Id
@@ -45,6 +48,12 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=150, nullable=true)
      */
     protected $name;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=250, nullable=true)
+     */
+    protected $avatar;
 
     /**
      * @var DateTime
@@ -137,6 +146,32 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+
+    /**
+     * @return string|null
+     */
+    public function getAvatar(): ?string
+    {
+        if ( ! $this->avatar ) {
+            return self::AVATAR_PATH . self::AVATAR_DEFAULT;
+        } elseif ( substr($this->avatar, 0, 4) == 'http' ) {
+            return $this->avatar;
+        } else {
+            return self::AVATAR_PATH . $this->avatar;
+        }
+    }
+
+    /**
+     * @var string|null $avatar
+     * @return User
+     */
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

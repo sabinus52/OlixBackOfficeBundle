@@ -21,3 +21,9 @@ services:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+
+    Olix\BackOfficeBundle\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+        calls:
+            - ['setContainer', ['@service_container']]
