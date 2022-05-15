@@ -17,6 +17,8 @@ services:
         tags:
             - { name: twig.runtime }
 
+    Olix\BackOfficeBundle\Security\UserChecker:
+
     Olix\BackOfficeBundle\Listener\LoginListener:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:

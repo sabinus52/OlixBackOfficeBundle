@@ -50,6 +50,18 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     protected $name;
 
     /**
+     * @var bool
+     * @ORM\Column(type="smallint", options={"default" : 1})
+     */
+    protected $enabled;
+
+    /**
+     * @var DateTime
+     * @ORM\Column(name="expiresat", type="datetime", nullable=true)
+     */
+    protected $expiresAt;
+
+    /**
      * @var string
      * @ORM\Column(type="string", length=250, nullable=true)
      */
@@ -146,6 +158,49 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @var bool $enabled
+     * @return User
+     */
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function isExpired(): bool
+    {
+        if ( null !== $this->expiresAt && $this->expiresAt->getTimestamp() < time() ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param \DateTime $date
+     * @return User
+     */
+    public function setExpiresAt(?\DateTimeInterface $date = null): self
+    {
+        $this->expiresAt = $date;
 
         return $this;
     }
