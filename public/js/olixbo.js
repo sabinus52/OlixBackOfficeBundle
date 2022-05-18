@@ -12,4 +12,15 @@
         }
     });
 
+
+    /**
+     * Event su click bouton "Delete"
+     */
+    $('.olix-actions .delete').on('click', function (event) {
+        if (confirm('Confirmer la suppression')) {
+            return true;
+        }
+        return false;
+    })
+
 })();

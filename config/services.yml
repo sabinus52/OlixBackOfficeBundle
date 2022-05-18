@@ -19,6 +19,9 @@ services:
 
     Olix\BackOfficeBundle\Security\UserChecker:
 
+    Olix\BackOfficeBundle\Security\UserManager:
+        arguments: [ '@service_container', '@parameter_bag', '@doctrine', '@security.user_password_hasher' ]
+
     Olix\BackOfficeBundle\Listener\LoginListener:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
@@ -26,6 +29,7 @@ services:
 
     Olix\BackOfficeBundle\Controller\:
         resource: '../src/Controller'
+        arguments: ['@parameter_bag']
         tags: ['controller.service_arguments']
         calls:
             - ['setContainer', ['@service_container']]

@@ -32,3 +32,12 @@ olix_back_office:
         footer:
             # Pied de page fixé ou pas
             fixed: false
+
+    security:
+        # Si on active le menu de gestion des utlisateurs
+        menu_activ: false
+        class:
+            # Class de l'entité utilisateur
+            user: App\Entity\User
+            # Class de formulaire de modification des données de l'utilisateur
+            form_user: Olix\BackOffice\Form\UserEditType

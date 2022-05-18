@@ -53,11 +53,11 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var bool
      * @ORM\Column(type="smallint", options={"default" : 1})
      */
-    protected $enabled;
+    protected $enabled = true;
 
     /**
      * @var DateTime
-     * @ORM\Column(name="expiresat", type="datetime", nullable=true)
+     * @ORM\Column(name="expiresat", type="date", nullable=true)
      */
     protected $expiresAt;
 
@@ -192,6 +192,14 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
             return true;
         }
         return false;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getExpiresAt(): ?\DateTimeInterface
+    {
+        return $this->expiresAt;
     }
 
     /**
