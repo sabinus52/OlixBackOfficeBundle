@@ -32,6 +32,7 @@ class UserManager implements UserManagerInterface
         'class' => [
             'user' => 'App\Entity\User',
             'form_user' => 'Olix\BackOfficeBundle\Form\UserEditType',
+            'form_profile' => 'Olix\BackOfficeBundle\Form\UserProfileType',
         ],
     ];
 
@@ -229,6 +230,19 @@ class UserManager implements UserManagerInterface
     public function createFormEditUser(array $options = []): FormInterface
     {
         $class = $this->parameters['class']['form_user'];
+        return $this->createForm($class, $options);
+    }
+
+
+    /**
+     * Crée le formulaire de profile d'un utilisateur
+     * 
+     * @param array $options
+     * @return FormInterface
+     */
+    public function createFormProfileUser(array $options = []): FormInterface
+    {
+        $class = $this->parameters['class']['form_profile'];
         return $this->createForm($class, $options);
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Contrôleut des pages du profil de l'utilisateur
+ * Contrôleur des pages du profil de l'utilisateur
  *
  * @author Sabinus52 <sabinus52@gmail.com>
  * @package Olix
@@ -9,6 +9,7 @@
 namespace Olix\BackOfficeBundle\Controller;
 
 use Olix\BackOfficeBundle\Helper\Gravatar;
+use Olix\BackOfficeBundle\Security\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +22,50 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class ProfileController extends AbstractController
 {
+
+    /**
+     * Page de profile
+     *  
+     * @Route("/profile", name="olix_profile")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function profile(Request $request, UserManager $manager): Response
+    {
+        // Utilisation de la classe UserManager
+        $user = $this->getUser();
+        $manager->setUser($user);
+
+        // Création des formulaires
+        $form1 = $manager->createFormProfileUser();
+        $form2 = $manager->createFormChangePassword();
+
+        // Validation du formulaire de profile de l'utilisateur
+        $form1->handleRequest($request);
+        if ($form1->isSubmitted() && $form1->isValid()) {
+
+            // Update datas of this user
+            $manager->setUser($form1->getData())->update();
+
+            return $this->redirectToRoute('olix_profile');
+        }
+
+        // Validation de formulaire de modification du mot de passe
+        $form2->handleRequest($request);
+        if ($form2->isSubmitted() && $form2->isValid()) {
+
+            // Change password for this user
+            $manager->changePassword($form2->get('password')->getData());
+
+            return $this->redirectToRoute('olix_profile');
+        }
+
+        // Rendu de la page
+        return $this->renderForm('@OlixBackOffice/Security/profile.html.twig', [
+            'form1' => $form1,
+            'form2' => $form2,
+        ]);      
+    }
+
 
     /**
      * Affichage des avatars

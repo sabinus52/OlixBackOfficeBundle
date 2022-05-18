@@ -4,7 +4,7 @@
         <img src="{{ asset(app.user.avatar) }}" class="img-circle elevation-2" alt="{{ app.user.username }}">
     </div>
     <div class="info">
-        <a href="#" class="d-block">{{ app.user.name|default(app.user.username) }}</a>
+        <a href="{{ path('olix_profile') }}" class="d-block">{{ app.user.name|default(app.user.username) }}</a>
     </div>
 </div>
 {% endif %}

@@ -1,3 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Mon profil{% endblock %}
+
+{% block content_title %}Mon profil{% endblock %}
+{% block content_subtitle %}{% endblock %}
+
+{% block content %}
+
 <div class="container-fluid">
 
     <div class="row">
@@ -16,7 +25,7 @@
                                 {% for role in app.user.roles %}<span class="badge bg-green">{{ role }}</span> {% endfor %}
                             </a>
                         </li>
-                        <li class="list-group-item"><b>Dernière connexion</b> <a class="float-right">{{ app.user.lastLogin|date() }}</a></li>
+                        <li class="list-group-item"><b>Dernière connexion</b> <a class="float-right">{{ app.user.lastLogin|date('d§m/Y H:i') }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -91,3 +100,5 @@
         </div>
     </div>
 </div>
+
+{% endblock %}

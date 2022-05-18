@@ -104,6 +104,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('user')->defaultValue('App\Entity\User')->end()
                         ->scalarNode('form_user')->defaultValue('Olix\BackOfficeBundle\Form\UserEditType')->end()
+                        ->scalarNode('form_profile')->defaultValue('Olix\BackOfficeBundle\Form\UserProfileType')->end()
                     ->end()
                 ->end()
             ->end()
