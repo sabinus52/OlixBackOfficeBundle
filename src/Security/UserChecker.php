@@ -1,12 +1,4 @@
 <?php
-/**
- * Classe pour checker l'autorisation des utilsateurs
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- * @see https://symfony.com/doc/current/security/user_checkers.html
- */
 
 namespace Olix\BackOfficeBundle\Security;
 
@@ -15,10 +7,16 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-
+/**
+ * Classe pour checker l'autorisation des utilsateurs
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ * @see        https://symfony.com/doc/current/security/user_checkers.html
+ */
 class UserChecker implements UserCheckerInterface
 {
-
     /**
      * @param UserInterface $user
      */
@@ -40,14 +38,13 @@ class UserChecker implements UserCheckerInterface
         }
 
         // user account is not activ
-        if ( ! $user->isEnabled() ) {
+        if (! $user->isEnabled()) {
             throw new CustomUserMessageAccountStatusException('Account has disabled.');
         }
 
         // user account is expired, the user may be notified
-        if ( $user->isExpired() ) {
+        if ($user->isExpired()) {
             throw new CustomUserMessageAccountStatusException('Account has expired.');
         }
     }
-
 }

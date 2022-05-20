@@ -1,12 +1,4 @@
 <?php
-/**
- * Runtime des "functions" personnalisés TWIG pour les évènements
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- * @see https://symfony.com/doc/current/templating/twig_extension.html#creating-lazy-loaded-twig-extensions
- */
 
 namespace Olix\BackOfficeBundle\Twig;
 
@@ -17,13 +9,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
-
+/**
+ * Runtime des "functions" personnalisés TWIG pour les évènements
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ * @see        https://symfony.com/doc/current/templating/twig_extension.html#creating-lazy-loaded-twig-extensions
+ */
 class EventsRuntime implements RuntimeExtensionInterface
 {
-
     /**
      * Dispatcher (listener)
-     * 
+     *
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -31,7 +29,7 @@ class EventsRuntime implements RuntimeExtensionInterface
 
     /**
      * Constructor
-     * 
+     *
      * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(EventDispatcherInterface $dispatcher)
@@ -42,13 +40,13 @@ class EventsRuntime implements RuntimeExtensionInterface
 
     /**
      * Retourne le menu de la barre latérale
-     * 
+     *
      * @param Request $request
      * @return array
      */
     public function getSidebarMenu(Request $request): ?array
     {
-        if ( !$this->eventDispatcher->hasListeners(SidebarMenuEvent::class) ) {
+        if (!$this->eventDispatcher->hasListeners(SidebarMenuEvent::class)) {
             return null;
         }
 
@@ -61,7 +59,7 @@ class EventsRuntime implements RuntimeExtensionInterface
 
     /**
      * Retourne le fil d'ariane
-     * 
+     *
      * @param Request $request
      * @return array
      */
@@ -91,12 +89,12 @@ class EventsRuntime implements RuntimeExtensionInterface
 
     /**
      * Retourne la liste des notifications de la barre de navigation
-     * 
+     *
      * @return array
      */
     public function getNotifications(): ?NotificationsEvent
     {
-        if ( !$this->eventDispatcher->hasListeners(NotificationsEvent::class) ) {
+        if (!$this->eventDispatcher->hasListeners(NotificationsEvent::class)) {
             return null;
         }
 
@@ -105,5 +103,4 @@ class EventsRuntime implements RuntimeExtensionInterface
 
         return $event;
     }
-
 }

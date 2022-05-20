@@ -1,12 +1,4 @@
 <?php
-/**
- * Chargement de la configuration du bundle
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- * @see https://symfony.com/doc/current/bundles/extension.html
- */
 
 namespace Olix\BackOfficeBundle\DependencyInjection;
 
@@ -15,10 +7,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-
+/**
+ * Chargement de la configuration du bundle
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ * @see        https://symfony.com/doc/current/bundles/extension.html
+ */
 class OlixBackOfficeExtension extends Extension
 {
-
     /**
      * {@inheritdoc}
      */
@@ -32,5 +30,4 @@ class OlixBackOfficeExtension extends Extension
         $config = $this->processConfiguration(new Configuration(), $configs);
         $container->setParameter('olix_back_office', $config);
     }
-
 }

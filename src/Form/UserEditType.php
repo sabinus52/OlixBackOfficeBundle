@@ -1,11 +1,4 @@
 <?php
-/**
- * Formulaire de mise à jour des infos de l'utilisateur
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- */
 
 namespace Olix\BackOfficeBundle\Form;
 
@@ -18,11 +11,15 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
+ * Formulaire de mise à jour des infos de l'utilisateur
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class UserEditType extends AbstractType
 {
-
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -35,7 +32,7 @@ class UserEditType extends AbstractType
             ->add('enabled', CheckboxType::class, [        ])
             ->add('expiresAt')
             ->add('roles', ChoiceType::class, [
-                'choices' => [ 
+                'choices' => [
                     'User' => 'ROLE_USER',  // TODO prendre en compte les rôles
                     'Admin' => 'ROLE_ADMIN',
                     'Reader' => 'ROLE_READER',
@@ -48,7 +45,7 @@ class UserEditType extends AbstractType
 
 
     /**
-     * @var OptionsResolver $resolver
+     * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -56,5 +53,4 @@ class UserEditType extends AbstractType
             'data_class' => User::class,
         ]);
     }
-
 }

@@ -1,11 +1,4 @@
 <?php
-/**
- * Formulaire de création d'un utilisateur
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- */
 
 namespace Olix\BackOfficeBundle\Form;
 
@@ -17,13 +10,16 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
-
 /**
+ * Formulaire de création d'un utilisateur
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class UserCreateType extends AbstractType
 {
-
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -45,7 +41,7 @@ class UserCreateType extends AbstractType
 
 
     /**
-     * @var OptionsResolver $resolver
+     * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -53,5 +49,4 @@ class UserCreateType extends AbstractType
             'data_class' => User::class,
         ]);
     }
-
 }

@@ -1,18 +1,16 @@
 <?php
-/**
- * Interface de la classe de chaque élément composant la menu de la barre latérale
- * 
- * @author Olivier <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- */
 
 namespace Olix\BackOfficeBundle\Model;
 
-
+/**
+ * Interface de la classe de chaque élément composant la menu de la barre latérale
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ */
 interface MenuItemInterface extends \Countable, \IteratorAggregate
 {
-
     /**
      * @return string
      */
@@ -98,7 +96,7 @@ interface MenuItemInterface extends \Countable, \IteratorAggregate
      */
     public function hasParent(): bool;
 
- 
+
     /**
      * @return MenuItemInterface
      */
@@ -110,5 +108,4 @@ interface MenuItemInterface extends \Countable, \IteratorAggregate
      * @return MenuItemInterface
      */
     public function setParent(MenuItemInterface $parent = null): MenuItemInterface;
-
 }

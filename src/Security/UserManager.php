@@ -1,11 +1,4 @@
 <?php
-/**
- * Classe de la gestion des utilisateurs
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- */
 
 namespace Olix\BackOfficeBundle\Security;
 
@@ -20,15 +13,20 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 
-
+/**
+ * Classe de la gestion des utilisateurs
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ */
 class UserManager implements UserManagerInterface
 {
-
     /**
      * Configuration du bundle de la branche "security"
      * @var array
      */
-    protected $parameters= [
+    protected $parameters = [
         'menu_activ' => false,
         'class' => [
             'user' => 'App\Entity\User',
@@ -65,14 +63,18 @@ class UserManager implements UserManagerInterface
 
     /**
      * Constructeur
-     * 
+     *
      * @param ContainerInterface $container
      * @param ParameterBagInterface $parameterBag
      * @param EntityManagerInterface $doctrine
      * @param UserPasswordHasherInterface $passwordHasher
      */
-    public function __construct(ContainerInterface $container, ParameterBagInterface $parameterBag, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        ParameterBagInterface $parameterBag,
+        ManagerRegistry $doctrine,
+        UserPasswordHasherInterface $passwordHasher
+    ) {
         $this->container = $container;
         $this->doctrine = $doctrine;
         $this->passwordHasher = $passwordHasher;
@@ -91,7 +93,7 @@ class UserManager implements UserManagerInterface
 
     /**
      * Retourne la classe de l'utilisateur
-     * 
+     *
      * @return string
      */
     public function getClass(): string
@@ -102,7 +104,7 @@ class UserManager implements UserManagerInterface
 
     /**
      * Retourne l'utilisateur
-     * 
+     *
      * @return UserInterface
      */
     public function getUser(): UserInterface
@@ -113,13 +115,13 @@ class UserManager implements UserManagerInterface
 
     /**
      * Crée un nouvel objet utilisateur
-     * 
+     *
      * @return UserInterface
      */
     public function newUser(): UserInterface
     {
         $class = $this->getClass();
-        $this->user = new $class;
+        $this->user = new $class();
 
         return $this->user;
     }
@@ -127,7 +129,7 @@ class UserManager implements UserManagerInterface
 
     /**
      * Affecte un utilisateur dans le manager
-     * 
+     *
      * @param UserInterface $user
      * @return UserManagerInterface
      */
@@ -140,7 +142,7 @@ class UserManager implements UserManagerInterface
 
     /**
      * Affecte un utilisateur dans le manager via son identifiant
-     * 
+     *
      * @return UserInterface|null
      */
     public function setUserById(int $idf): ?UserInterface
@@ -152,7 +154,7 @@ class UserManager implements UserManagerInterface
 
     /**
      * Retourne tous les utilisateurs
-     * 
+     *
      * @return UserInterface[]
      */
     public function findAll(): array
@@ -163,19 +165,19 @@ class UserManager implements UserManagerInterface
 
     /**
      * Ajoute un nouvel utilisateur en base
-     * 
+     *
      * @param string $password
      */
     public function add(string $password): void
     {
-        $this->user->setPassword( $this->getHashedPassword($password) );
+        $this->user->setPassword($this->getHashedPassword($password));
         $this->update();
     }
 
 
     /**
      * Mets à jour les données de l'utilisateur
-     * 
+     *
      * @param string $password
      */
     public function update(string $password = null): void
@@ -200,7 +202,7 @@ class UserManager implements UserManagerInterface
 
     /**
      * Retourne un mot de passe haché
-     * 
+     *
      * @param string $plaintextPassword
      * @return string
      */
@@ -212,7 +214,7 @@ class UserManager implements UserManagerInterface
 
     /**
      * Crée le formulaire de création d'un utilisateur
-     * 
+     *
      * @param array $options
      * @return FormInterface
      */
@@ -224,7 +226,7 @@ class UserManager implements UserManagerInterface
 
     /**
      * Crée le formulaire de modification d'un utilisateur
-     * 
+     *
      * @param array $options
      * @return FormInterface
      */
@@ -237,7 +239,7 @@ class UserManager implements UserManagerInterface
 
     /**
      * Crée le formulaire de profile d'un utilisateur
-     * 
+     *
      * @param array $options
      * @return FormInterface
      */
@@ -250,7 +252,7 @@ class UserManager implements UserManagerInterface
 
     /**
      * Crée le formulaire de changement de mot de passe d'un utilisateur
-     * 
+     *
      * @param array $options
      * @return FormInterface
      */
@@ -262,7 +264,7 @@ class UserManager implements UserManagerInterface
 
     /**
      * Création d'un formulaire spécifique
-     * 
+     *
      * @param string $type : Nom de la classe fu formulaire
      * @param array $options
      * @return FormInterface
@@ -272,5 +274,4 @@ class UserManager implements UserManagerInterface
         $options = $options + [ 'data_class' => $this->getClass() ];
         return $this->container->get('form.factory')->create($type, $this->user, $options);
     }
-    
 }

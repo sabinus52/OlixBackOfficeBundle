@@ -1,51 +1,49 @@
 <?php
-/**
- * Evènements sur la liste des notifications de la barre de navigation
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- */
 
 namespace Olix\BackOfficeBundle\Event;
 
 use Olix\BackOfficeBundle\Model\NotificationInterface;
 
-
+/**
+ * Evènements sur la liste des notifications de la barre de navigation
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ */
 class NotificationsEvent extends BackOfficeEvent
 {
-
     /**
      * Liste des notifications
-     * 
+     *
      * @var NotificationInterface[]
      */
     protected $notifications = [];
 
     /**
      * Nombre max d'affichage de notifs dans la barre
-     * 
+     *
      * @var integer
      */
     protected $max = 3;
 
     /**
      * Nombre total de notifs
-     * 
+     *
      * @var integer
      */
     protected $total = 0;
 
     /**
      * Route vers une notif
-     * 
+     *
      * @var string
      */
     protected $route;
 
     /**
      * Route vers toutes les notifs
-     * 
+     *
      * @vaar string
      */
     protected $routeAll;
@@ -137,7 +135,7 @@ class NotificationsEvent extends BackOfficeEvent
 
     /**
      * Retourne les N notifications
-     * 
+     *
      * @return NotificationInterface[]
      */
     public function getNotifications(): array
@@ -148,7 +146,7 @@ class NotificationsEvent extends BackOfficeEvent
 
     /**
      * Ajoute un nouvelle notif
-     * 
+     *
      * @param NotificationInterface $item
      * @return NotificationsEvent
      */
@@ -158,5 +156,4 @@ class NotificationsEvent extends BackOfficeEvent
 
         return $this;
     }
-
 }

@@ -1,11 +1,4 @@
 <?php
-/**
- * Subscriber sur le menu de la barre latérale à hériter pour créer son propre menu
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- */
 
 namespace Olix\BackOfficeBundle\EventSubscriber;
 
@@ -18,13 +11,18 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Security;
 use Exception;
 
-
+/**
+ * Subscriber sur le menu de la barre latérale à hériter pour créer son propre menu
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ */
 abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFactoryInterface
 {
-
     /**
      * Configuration des options du bundle
-     * 
+     *
      * @var array
      */
     private $parameters = [
@@ -60,7 +58,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
 
     /**
      * Retourne la liste des évènements
-     * 
+     *
      * @return array
      */
     public static function getSubscribedEvents(): array
@@ -82,7 +80,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
         $this->build($event);
 
         // Add menu manage of users
-        if ( $this->security->isGranted('ROLE_ADMIN') && $this->parameters['menu_activ'] == true ) {
+        if ($this->security->isGranted('ROLE_ADMIN') && $this->parameters['menu_activ'] == true) {
             $event->addItem(new MenuItemModel('security', [
                 'label'         => 'Gestion des utilisateurs',
                 'route'         => 'olix_users__list',
@@ -96,7 +94,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
 
     /**
      * Correspondance de la route par récursivité pour activer le menu en cours
-     * 
+     *
      * @param string $route
      * @param MenuItemInterface[] $items
      */
@@ -104,12 +102,13 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
     {
         foreach ($items as $item) {
             if ($item->hasChildren()) {
-                if ($item->getRoute() == $route) $item->setIsActive(true); // TODO inclusio de chemin __
+                if ($item->getRoute() == $route) {
+                    $item->setIsActive(true); // TODO inclusio de chemin __
+                }
                 $this->activateByRoute($route, $item->getChildren());
             } elseif ($item->getRoute() == $route) {
                 $item->setIsActive(true);
             }
         }
     }
-
 }

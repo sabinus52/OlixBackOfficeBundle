@@ -1,11 +1,4 @@
 <?php
-/**
- * Formulaire de mise à jour du mot de passe de l'utilisateur
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- */
 
 namespace Olix\BackOfficeBundle\Form;
 
@@ -17,14 +10,18 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 /**
+ * Formulaire de mise à jour du mot de passe de l'utilisateur
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class UserPasswordType extends AbstractType
 {
-
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -40,7 +37,7 @@ class UserPasswordType extends AbstractType
 
 
     /**
-     * @var OptionsResolver $resolver
+     * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -48,5 +45,4 @@ class UserPasswordType extends AbstractType
             'data_class' => User::class,
         ]);
     }
-
 }

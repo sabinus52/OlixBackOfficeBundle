@@ -1,11 +1,4 @@
 <?php
-/**
- * Classe abstraite de l'entité de la table utilisateurs de connexion
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- */
 
 namespace Olix\BackOfficeBundle\Model;
 
@@ -13,16 +6,19 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-
 /**
+ * Classe abstraite de l'entité de la table utilisateurs de connexion
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
  * @ORM\MappedSuperclass
  * @SuppressWarnings(PHPMD.ShortVariable)
  */
 abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-
-    const AVATAR_PATH = 'bundles/olixbackoffice/images/avatar/';
-    const AVATAR_DEFAULT = 'default.png';
+    protected const AVATAR_PATH = 'bundles/olixbackoffice/images/avatar/';
+    protected const AVATAR_DEFAULT = 'default.png';
 
     /**
      * @var integer
@@ -189,7 +185,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function isExpired(): bool
     {
-        if ( null !== $this->expiresAt && $this->expiresAt->getTimestamp() < time() ) {
+        if (null !== $this->expiresAt && $this->expiresAt->getTimestamp() < time()) {
             return true;
         }
         return false;
@@ -220,9 +216,9 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getAvatar(): ?string
     {
-        if ( ! $this->avatar ) {
+        if (! $this->avatar) {
             return self::AVATAR_PATH . self::AVATAR_DEFAULT;
-        } elseif ( substr($this->avatar, 0, 4) == 'http' ) {
+        } elseif (substr($this->avatar, 0, 4) == 'http') {
             return $this->avatar;
         }
         return self::AVATAR_PATH . $this->avatar;
@@ -324,5 +320,4 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-
 }

@@ -1,12 +1,4 @@
 <?php
-/**
- * Déclaration de la configuration du bundle
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- * @see https://symfony.com/doc/current/bundles/configuration.html
- */
 
 namespace Olix\BackOfficeBundle\DependencyInjection;
 
@@ -14,16 +6,22 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-
+/**
+ * Déclaration de la configuration du bundle
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ * @see        https://symfony.com/doc/current/bundles/configuration.html
+ */
 class Configuration implements ConfigurationInterface
 {
-
     /**
      * Retourne les paramètres de la configuration complète du bundle
-     * 
+     *
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder() : TreeBuilder
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('olix_back_office');
 
@@ -40,10 +38,10 @@ class Configuration implements ConfigurationInterface
 
     /**
      * Retourne la configuration de la branche "options" du thème du layout
-     * 
+     *
      * @return NodeDefinition
      */
-    private function getOptionsConfig() : NodeDefinition
+    private function getOptionsConfig(): NodeDefinition
     {
         $treeBuilder = new TreeBuilder('options');
         $rootNode = $treeBuilder->getRootNode();
@@ -88,10 +86,10 @@ class Configuration implements ConfigurationInterface
 
     /**
      * Retourne la configuration de la branche "security" sur la gestions des utilisateurs
-     * 
+     *
      * @return NodeDefinition
      */
-    private function getSecurityConfig() : NodeDefinition
+    private function getSecurityConfig(): NodeDefinition
     {
         $treeBuilder = new TreeBuilder('security');
         $rootNode = $treeBuilder->getRootNode();
@@ -112,5 +110,4 @@ class Configuration implements ConfigurationInterface
 
         return $rootNode;
     }
-
 }

@@ -1,18 +1,16 @@
 <?php
-/**
- * Classe d'une notification dans la barre de navigation
- * 
- * @author Olivier <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- */
 
 namespace Olix\BackOfficeBundle\Model;
 
-
+/**
+ * Classe d'une notification dans la barre de navigation
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ */
 class NotificationModel implements NotificationInterface
 {
-
     /**
      * @var string
      */
@@ -39,10 +37,9 @@ class NotificationModel implements NotificationInterface
     protected $info;
 
 
-
     /**
      * Constructeur
-     * 
+     *
      * @param string|null $code : Code identifiant de la notif
      * @param array $options : Options de la notif
      */
@@ -139,5 +136,4 @@ class NotificationModel implements NotificationInterface
         $this->info = $info;
         return $this;
     }
-
 }

@@ -1,21 +1,19 @@
 <?php
-/**
- * Evènements sur le menu de la barre latérale
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- */
 
 namespace Olix\BackOfficeBundle\Event;
 
 use Olix\BackOfficeBundle\Model\MenuItemInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-
+/**
+ * Evènements sur le menu de la barre latérale
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ */
 class SidebarMenuEvent extends BackOfficeEvent
 {
-
     /**
      * @var MenuItemInterface[]
      */
@@ -48,7 +46,7 @@ class SidebarMenuEvent extends BackOfficeEvent
 
     /**
      * Retourne le menu de la barre latérale
-     * 
+     *
      * @return array
      */
     public function getSidebarMenu(): array
@@ -59,7 +57,7 @@ class SidebarMenuEvent extends BackOfficeEvent
 
     /**
      * Ajoute un nouvel élémént de menu
-     * 
+     *
      * @param MenuItemInterface $item
      * @return MenuEvent
      */
@@ -73,15 +71,15 @@ class SidebarMenuEvent extends BackOfficeEvent
 
     /**
      * Enlève un élément au menu
-     * 
+     *
      * @param MenuItemInterface|string $item
      * @return MenuEvent
      */
     public function removeItem($item): MenuEvent
     {
-        if ( $item instanceof MenuItemInterface && isset($this->rootItems[$item->getCode()]) ) {
+        if ($item instanceof MenuItemInterface && isset($this->rootItems[$item->getCode()])) {
             unset($this->rootItems[$item->getCode()]);
-        } elseif ( is_string($item) && isset($this->rootItems[$item]) ) {
+        } elseif (is_string($item) && isset($this->rootItems[$item])) {
             unset($this->rootItems[$item]);
         }
 
@@ -100,7 +98,7 @@ class SidebarMenuEvent extends BackOfficeEvent
 
     /**
      * Retourne le menu actif du niveau 1
-     * 
+     *
      * @return MenuItemInterface|null
      */
     public function getActive(): ?MenuItemInterface
@@ -113,5 +111,4 @@ class SidebarMenuEvent extends BackOfficeEvent
 
         return null;
     }
-
 }

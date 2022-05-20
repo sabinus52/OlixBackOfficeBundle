@@ -1,25 +1,23 @@
 <?php
-/**
- * Classe pour l'avatar de l'utilisateur en utilisant le service "Gravatar"
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- */
 
 namespace Olix\BackOfficeBundle\Helper;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
-
+/**
+ * Classe pour l'avatar de l'utilisateur en utilisant le service "Gravatar"
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ */
 class Gravatar
 {
-
     /**
      * Constantes des URL des avatars
      */
-    const HTTP_URL = 'http://www.gravatar.com/avatar/';
-    const HTTPS_URL = 'https://secure.gravatar.com/avatar/';
+    protected const HTTP_URL = 'http://www.gravatar.com/avatar/';
+    protected const HTTPS_URL = 'https://secure.gravatar.com/avatar/';
 
 
     /**
@@ -50,7 +48,7 @@ class Gravatar
 
     /**
      * Retourne la taille courante de l'avatar
-     * 
+     *
      * @return integer
      */
     public function getSize(): int
@@ -61,7 +59,7 @@ class Gravatar
 
     /**
      * Affecte la taille de l'image
-     * 
+     *
      * @param integer $size
      * @return Gravatar
      */
@@ -77,7 +75,7 @@ class Gravatar
 
     /**
      * Retourne l'image par défaut
-     * 
+     *
      * @return string
      */
     public function getDefaultImage(): string
@@ -88,7 +86,7 @@ class Gravatar
 
     /**
      * Affecte l'image par défaut
-     * 
+     *
      * @param string $image
      * @return Gravatar
      */
@@ -97,13 +95,13 @@ class Gravatar
         $validDefaults = array('404', 'mm', 'identicon', 'monsterid', 'wavatar', 'retro');
 
         // Verifie la bonne url
-        if ( ! filter_var($image, FILTER_VALIDATE_URL) ) {
+        if (! filter_var($image, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException('The default image specified is not a recognized gravatar "default" and is not a valid URL');
         }
-        
+
         $imgLower = strtolower($image);
         $this->defaultImage = (in_array($imgLower, $validDefaults)) ? $imgLower : rawurlencode($image);
-        
+
         return $this;
     }
 
@@ -120,7 +118,7 @@ class Gravatar
 
     /**
      * Affecte le rating
-     * 
+     *
      * @param string $rating
      * @return Gravatar
      */
@@ -128,8 +126,11 @@ class Gravatar
     {
         $rating = strtolower($rating);
         $validRatings = array('g', 'pg', 'r', 'x');
-        if ( ! in_array($rating, $validRatings) ) {
-            throw new InvalidArgumentException(sprintf('Invalid rating "%s" specified, only "g", "pg", "r", or "x" are allowed to be used.', $rating));
+        if (! in_array($rating, $validRatings)) {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid rating "%s" specified, only "g", "pg", "r", or "x" are allowed to be used.',
+                $rating
+            ));
         }
         $this->rating = $rating;
         return $this;
@@ -138,7 +139,7 @@ class Gravatar
 
     /**
      * Verifie si on utilise le SSL
-     * 
+     *
      * @return boolean
      */
     public function usingSecureImages(): bool
@@ -149,7 +150,7 @@ class Gravatar
 
     /**
      * Active le protocole SSL
-     * 
+     *
      * @return Gravatar
      */
     public function enableSecureImages(): self
@@ -161,7 +162,7 @@ class Gravatar
 
     /**
      * Desactive le protocole SSL
-     * 
+     *
      * @return Gravatar
      */
     public function disableSecureImages(): self
@@ -182,22 +183,22 @@ class Gravatar
 
     /**
      * Construit l'url de l'avatar à partir de l'émail
-     * 
+     *
      * @param string $email
      * @return string
      */
     protected function buildURL(string $email): string
     {
         $url = ( $this->usingSecureImages() ) ? static::HTTPS_URL : static::HTTP_URL;
-        $url.= (! empty($email)) ? $this->getEmailHash($email) : str_repeat('0', 32);
-        
-        return $url.$this->getGravatarParams($email);
+        $url .= (! empty($email)) ? $this->getEmailHash($email) : str_repeat('0', 32);
+
+        return $url . $this->getGravatarParams($email);
     }
 
 
     /**
      * Construit et retourne les paramètres pour l'url de l'avatar
-     * 
+     *
      * @param string $email
      * @return string
      */
@@ -206,19 +207,19 @@ class Gravatar
         $params = array();
         $params[] = 's=' . $this->getSize();
         $params[] = 'r=' . $this->getRating();
-        if( $this->getDefaultImage() ) {
+        if ($this->getDefaultImage()) {
             $params[] = 'd=' . $this->getDefaultImage();
         }
-        if ( empty($email) ) {
+        if (empty($email)) {
             $params[] = 'f=y'; // Force l'image par defaut
         }
-        return '?'.implode('&', $params);
+        return '?' . implode('&', $params);
     }
 
 
     /**
      * Retourne l'email avec hash
-     * 
+     *
      * @param string $email
      * @return string
      */
@@ -227,5 +228,4 @@ class Gravatar
         // Using md5 as per gravatar docs.
         return hash('md5', strtolower(trim($email)));
     }
-
 }

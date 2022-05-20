@@ -1,11 +1,5 @@
 <?php
-/**
- * Controller des pages de la gestion des utilisateurs
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- */
+
 namespace Olix\BackOfficeBundle\Controller;
 
 use Olix\BackOfficeBundle\Security\UserManager;
@@ -17,12 +11,17 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use \Exception;
+use Exception;
 
-
+/**
+ * Controller des pages de la gestion des utilisateurs
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ */
 class ManagerController extends AbstractController
 {
-
     /**
      * @var array
      */
@@ -33,7 +32,7 @@ class ManagerController extends AbstractController
 
     /**
      * Constructeur
-     * 
+     *
      * @param ContainerBag $parameterBag
      */
     public function __construct(ParameterBagInterface $parameterBag)
@@ -51,7 +50,7 @@ class ManagerController extends AbstractController
 
     /**
      * Affichage de la liste des utiliseurs
-     * 
+     *
      * @Route("/security/users", name="olix_users__list")
      * @Security("is_granted('ROLE_ADMIN')")
      */
@@ -61,7 +60,7 @@ class ManagerController extends AbstractController
 
         // Get all users
         $users = $manager->findAll();
-        
+
         return $this->render('@OlixBackOffice/Security/users-list.html.twig', [
             'users' => $users,
         ]);
@@ -70,7 +69,7 @@ class ManagerController extends AbstractController
 
     /**
      * Création d'un nouvel utilisateur
-     * 
+     *
      * @Route("/security/users/create", name="olix_users__create")
      * @Security("is_granted('ROLE_ADMIN')")
      */
@@ -85,7 +84,6 @@ class ManagerController extends AbstractController
         $form = $manager->createFormCreateUser();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             // Add this new user
             $manager->setUser($form->getData())->add($form->get('password')->getData());
 
@@ -100,7 +98,7 @@ class ManagerController extends AbstractController
 
     /**
      * Mo des avatars
-     * 
+     *
      * @Route("/security/users/edit/{id}", name="olix_users__edit")
      * @Security("is_granted('ROLE_ADMIN')")
      */
@@ -110,13 +108,14 @@ class ManagerController extends AbstractController
 
         // Get user from request
         $user = $manager->setUserById($request->get('id'));
-        if (! $user instanceof UserInterface) $this->redirectToRoute('olix_users__list');
+        if (! $user instanceof UserInterface) {
+            $this->redirectToRoute('olix_users__list');
+        }
 
         // Create form and upgrade on validation form
         $form = $manager->createFormEditUser();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             // Update datas of this user
             $manager->setUser($form->getData())->update();
 
@@ -132,7 +131,7 @@ class ManagerController extends AbstractController
 
     /**
      * Change le mot de passe de l'utilisateur
-     * 
+     *
      * @Route("/security/users/password/{id}", name="olix_users__password")
      * @Security("is_granted('ROLE_ADMIN')")
      */
@@ -142,19 +141,20 @@ class ManagerController extends AbstractController
 
         // Get user from request
         $user = $manager->setUserById($request->get('id'));
-        if (! $user instanceof UserInterface) $this->redirectToRoute('olix_users__list');
+        if (! $user instanceof UserInterface) {
+            $this->redirectToRoute('olix_users__list');
+        }
 
         // Create form and upgrade on validation form
         $form = $manager->createFormChangePassword();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             // Change password for this user
             $manager->update($form->get('password')->getData());
 
             return $this->redirectToRoute('olix_users__list');
         }
-        
+
         return $this->renderForm('@OlixBackOffice/Security/users-password.html.twig', [
             'form' => $form,
             'user' => $user,
@@ -164,7 +164,7 @@ class ManagerController extends AbstractController
 
     /**
      * Suppression d'un utilisateur
-     * 
+     *
      * @Route("/security/users/remove/{id}", name="olix_users__remove")
      * @Security("is_granted('ROLE_ADMIN')")
      */
@@ -174,7 +174,9 @@ class ManagerController extends AbstractController
 
         // Get user from request
         $user = $manager->setUserById($request->get('id'));
-        if (! $user instanceof UserInterface) $this->redirectToRoute('olix_users__list');
+        if (! $user instanceof UserInterface) {
+            $this->redirectToRoute('olix_users__list');
+        }
 
         // Remove this user
         $manager->remove();
@@ -188,10 +190,9 @@ class ManagerController extends AbstractController
      */
     protected function checkAccess(): bool
     {
-        if (! isset($this->parameters['menu_activ']) || $this->parameters['menu_activ'] != true ) {
+        if (! isset($this->parameters['menu_activ']) || $this->parameters['menu_activ'] != true) {
             throw new Exception("Asses denied", 1); // FIXME
         }
         return true;
     }
-
 }

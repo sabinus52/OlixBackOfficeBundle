@@ -1,12 +1,4 @@
 <?php
-/**
- * Extension des "filters" et "functions" personnalisés TWIG
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- * @see https://symfony.com/doc/current/templating/twig_extension.html
- */
 
 namespace Olix\BackOfficeBundle\Twig;
 
@@ -14,13 +6,19 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-
+/**
+ * Extension des "filters" et "functions" personnalisés TWIG
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ * @see        https://symfony.com/doc/current/templating/twig_extension.html
+ */
 class BackOfficeExtension extends AbstractExtension
 {
-
     /**
      * Déclaration des fonctions Twig
-     * 
+     *
      * @return TwigFunction[]
      */
     public function getFunctions()
@@ -35,5 +33,4 @@ class BackOfficeExtension extends AbstractExtension
             new TwigFunction('olixbo_notification', [EventsRuntime::class, 'getNotifications']),
         ];
     }
-    
 }

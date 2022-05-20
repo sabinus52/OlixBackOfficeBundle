@@ -1,11 +1,4 @@
 <?php
-/**
- * Classe pour l'authentification des utilisateurs
- *
- * @author Sabinus52 <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- */
 
 namespace Olix\BackOfficeBundle\Controller;
 
@@ -16,13 +9,18 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use LogicException;
 
-
+/**
+ * Classe pour l'authentification des utilisateurs
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ */
 class SecurityController extends AbstractController
 {
-
     /**
      * Connextion à l'interface
-     * 
+     *
      * @Route("/login", name="olix_login")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
@@ -42,12 +40,12 @@ class SecurityController extends AbstractController
 
     /**
      * Page de déconnexion
-     * 
+     *
      * @Route("/logout", name="olix_logout")
      */
     public function logout()
     {
-        throw new LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        throw new LogicException('This method can be blank - '
+            . 'it will be intercepted by the logout key on your firewall.');
     }
-
 }

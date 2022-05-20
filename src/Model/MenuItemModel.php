@@ -1,19 +1,18 @@
 <?php
-/**
- * Classe de chaque élément composant la menu de la barre latérale
- * 
- * @author Olivier <sabinus52@gmail.com>
- * @package Olix
- * @subpackage BackOfficeBundle
- */
 
 namespace Olix\BackOfficeBundle\Model;
 
 use ArrayIterator;
 
+/**
+ * Classe de chaque élément composant la menu de la barre latérale
+ *
+ * @package    Olix
+ * @subpackage BackOfficeBundle
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ */
 class MenuItemModel implements MenuItemInterface
 {
-
     /**
      * @var string
      */
@@ -72,7 +71,7 @@ class MenuItemModel implements MenuItemInterface
 
     /**
      * Constructeur
-     * 
+     *
      * @param string $code : Code identifiant ce menu
      * @param array $options : Options du menu
      */
@@ -169,7 +168,7 @@ class MenuItemModel implements MenuItemInterface
      */
     public function setIsActive(bool $isActive): MenuItemInterface
     {
-        if ( $this->hasParent() ) {
+        if ($this->hasParent()) {
             $this->getParent()->setIsActive($isActive);
         }
         $this->isActive = $isActive;
@@ -296,10 +295,10 @@ class MenuItemModel implements MenuItemInterface
      */
     public function removeChild($child): MenuItemInterface
     {
-        if ( $child instanceof MenuItemInterface && isset($this->children[$child->getCode()]) ) {
+        if ($child instanceof MenuItemInterface && isset($this->children[$child->getCode()])) {
             $this->children[$child->getCode()]->setParent(null);
             unset($this->children[$child->getCode()]);
-        } elseif ( is_string($child) && isset($this->children[$child]) ) {
+        } elseif (is_string($child) && isset($this->children[$child])) {
             $this->children[$child]->setParent(null);
             unset($this->children[$child]);
         }
@@ -366,5 +365,4 @@ class MenuItemModel implements MenuItemInterface
     {
         return new ArrayIterator($this->getChildren());
     }
-
 }
