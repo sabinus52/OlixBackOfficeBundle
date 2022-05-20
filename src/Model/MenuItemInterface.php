@@ -40,6 +40,12 @@ interface MenuItemInterface extends \Countable, \IteratorAggregate
      */
     public function isActive(): bool;
 
+    /**
+     * @param boolean $isActive
+     * @return MenuItemModel
+     */
+    public function setIsActive(bool $isActive): self;
+
 
     /**
      * @return string

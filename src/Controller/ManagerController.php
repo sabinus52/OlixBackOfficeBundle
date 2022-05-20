@@ -3,6 +3,7 @@
 namespace Olix\BackOfficeBundle\Controller;
 
 use Olix\BackOfficeBundle\Security\UserManager;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +34,7 @@ class ManagerController extends AbstractController
     /**
      * Constructeur
      *
-     * @param ContainerBag $parameterBag
+     * @param ParameterBagInterface $parameterBag
      */
     public function __construct(ParameterBagInterface $parameterBag)
     {
@@ -42,7 +43,7 @@ class ManagerController extends AbstractController
             throw new Exception('Parameter "olix_back_office" not defined', 1);
         }
         $parameters = $parameterBag->get('olix_back_office');
-        if (isset($parameters['security'])) {
+        if (array_key_exists('security', $parameters)) {
             $this->parameters = $parameters['security'];
         }
     }

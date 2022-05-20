@@ -2,6 +2,7 @@
 
 namespace Olix\BackOfficeBundle\Security;
 
+use Olix\BackOfficeBundle\Model\User;
 use Olix\BackOfficeBundle\Form\UserCreateType;
 use Olix\BackOfficeBundle\Form\UserPasswordType;
 use Psr\Container\ContainerInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 
 /**
  * Classe de la gestion des utilisateurs
@@ -41,7 +43,7 @@ class UserManager implements UserManagerInterface
     protected $container;
 
     /**
-     * @var EntityManagerInterface
+     * @var ManagerRegistry
      */
     protected $doctrine;
 
@@ -56,7 +58,7 @@ class UserManager implements UserManagerInterface
     protected $passwordHasher;
 
     /**
-     * @var UserInterface
+     * @var User
      */
     protected $user;
 
@@ -66,7 +68,7 @@ class UserManager implements UserManagerInterface
      *
      * @param ContainerInterface $container
      * @param ParameterBagInterface $parameterBag
-     * @param EntityManagerInterface $doctrine
+     * @param ManagerRegistry $doctrine
      * @param UserPasswordHasherInterface $passwordHasher
      */
     public function __construct(
@@ -78,14 +80,14 @@ class UserManager implements UserManagerInterface
         $this->container = $container;
         $this->doctrine = $doctrine;
         $this->passwordHasher = $passwordHasher;
-        $this->entityManager = $doctrine->getManager();
+        $this->entityManager = $doctrine->getManager(); // @phpstan-ignore-line
 
         // Get parameter olix_back_office.security
         if (! $parameterBag->has('olix_back_office')) {
             throw new Exception('Parameter "olix_back_office" not defined', 1);
         }
         $parameters = $parameterBag->get('olix_back_office');
-        if (isset($parameters['security'])) {
+        if (array_key_exists('security', $parameters)) {
             $this->parameters = $parameters['security'];
         }
     }
@@ -105,9 +107,9 @@ class UserManager implements UserManagerInterface
     /**
      * Retourne l'utilisateur
      *
-     * @return UserInterface
+     * @return User
      */
-    public function getUser(): UserInterface
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -130,10 +132,10 @@ class UserManager implements UserManagerInterface
     /**
      * Affecte un utilisateur dans le manager
      *
-     * @param UserInterface $user
-     * @return UserManagerInterface
+     * @param User $user
+     * @return UserManager
      */
-    public function setUser(UserInterface $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
         return $this;

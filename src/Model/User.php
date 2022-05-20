@@ -5,6 +5,7 @@ namespace Olix\BackOfficeBundle\Model;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use DateTime;
 
 /**
  * Classe abstraite de l'entité de la table utilisateurs de connexion
@@ -129,7 +130,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @var string $email
+     * @param string $email
      * @return User
      */
     public function setEmail(?string $email): self
@@ -149,7 +150,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @var string $name
+     * @param string $name
      * @return User
      */
     public function setName(?string $name): self
@@ -169,7 +170,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @var bool $enabled
+     * @param bool $enabled
      * @return User
      */
     public function setEnabled(bool $enabled): self
@@ -225,7 +226,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @var string|null $avatar
+     * @param string|null $avatar
      * @return User
      */
     public function setAvatar(?string $avatar): self
@@ -245,7 +246,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @var DateTime $lastLogin
+     * @param DateTime $lastLogin
      * @return User
      */
     public function setLastLogin(?\DateTimeInterface $lastLogin): self
@@ -270,7 +271,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @var array $roles
+     * @param array $roles
      * @return User
      */
     public function setRoles(array $roles): self
@@ -290,8 +291,8 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @var string $password
-     * @return string
+     * @param string $password
+     * @return User
      */
     public function setPassword(string $password): self
     {

@@ -2,6 +2,7 @@
 
 namespace Olix\BackOfficeBundle\Controller;
 
+use Olix\BackOfficeBundle\Model\User;
 use Olix\BackOfficeBundle\Helper\Gravatar;
 use Olix\BackOfficeBundle\Security\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,6 +32,7 @@ class ProfileController extends AbstractController
     public function profile(Request $request, UserManager $manager): Response
     {
         // Utilisation de la classe UserManager
+        /** @var User $user */
         $user = $this->getUser();
         $manager->setUser($user);
 
@@ -51,7 +53,7 @@ class ProfileController extends AbstractController
         $form2->handleRequest($request);
         if ($form2->isSubmitted() && $form2->isValid()) {
             // Change password for this user
-            $manager->changePassword($form2->get('password')->getData());
+            $manager->update($form2->get('password')->getData());
 
             return $this->redirectToRoute('olix_profile');
         }
@@ -75,6 +77,7 @@ class ProfileController extends AbstractController
         // Chargement des éléments
         $finder = new Finder();
         $gravatar = new Gravatar();
+        /** @var User $user */
         $user = $this->getUser();
         $result = array();
 
@@ -101,6 +104,8 @@ class ProfileController extends AbstractController
     {
         // Chargement des éléments
         $entityManager = $doctrine->getManager();
+
+        /** @var User $user */
         $user = $this->getUser();
 
         // Modifie l'avatar

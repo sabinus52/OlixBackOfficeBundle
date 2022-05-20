@@ -2,7 +2,7 @@
 
 namespace Olix\BackOfficeBundle\Form;
 
-use Olix\BackOfficeBundle\Entity\User;
+use Olix\BackOfficeBundle\Model\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

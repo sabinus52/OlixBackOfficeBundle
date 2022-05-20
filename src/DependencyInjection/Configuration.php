@@ -25,6 +25,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('olix_back_office');
 
+        // @phpstan-ignore-next-line
         $treeBuilder->getRootNode()
             ->children()
                 ->append($this->getOptionsConfig())
@@ -46,6 +47,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('options');
         $rootNode = $treeBuilder->getRootNode();
 
+        // @phpstan-ignore-next-line
         $rootNode
             ->children()
                 ->booleanNode('dark_mode')->defaultValue(false)->end()
@@ -94,6 +96,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('security');
         $rootNode = $treeBuilder->getRootNode();
 
+        // @phpstan-ignore-next-line
         $rootNode
             ->children()
                 ->booleanNode('menu_activ')->defaultValue(false)->end()

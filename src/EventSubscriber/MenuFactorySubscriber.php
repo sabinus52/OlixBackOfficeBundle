@@ -50,7 +50,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
             throw new Exception('Parameter "olix_back_office" not defined', 1);
         }
         $parameters = $parameterBag->get('olix_back_office');
-        if (isset($parameters['security'])) {
+        if (array_key_exists('security', $parameters)) {
             $this->parameters = $parameters['security'];
         }
     }
@@ -96,7 +96,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
      * Correspondance de la route par récursivité pour activer le menu en cours
      *
      * @param string $route
-     * @param MenuItemInterface[] $items
+     * @param array $items : MenuItemInterface[]
      */
     protected function activateByRoute(string $route, ?array $items): void
     {

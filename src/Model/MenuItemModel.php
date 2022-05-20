@@ -107,9 +107,9 @@ class MenuItemModel implements MenuItemInterface
 
     /**
      * @param string $label
-     * @return MenuItemInterface
+     * @return MenuItemModel
      */
-    public function setLabel(string $label): MenuItemInterface
+    public function setLabel(string $label): self
     {
         $this->label = $label;
         return $this;
@@ -126,9 +126,9 @@ class MenuItemModel implements MenuItemInterface
 
     /**
      * @param string $route
-     * @return MenuItemInterface
+     * @return MenuItemModel
      */
-    public function setRoute(?string $route): MenuItemInterface
+    public function setRoute(?string $route): self
     {
         $this->route = $route;
         return $this;
@@ -144,10 +144,10 @@ class MenuItemModel implements MenuItemInterface
     }
 
     /**
-     * @param array $args
-     * @return MenuItemInterface
+     * @param array $routeArgs
+     * @return MenuItemModel
     */
-    public function setRouteArgs(array $routeArgs): MenuItemInterface
+    public function setRouteArgs(array $routeArgs): self
     {
         $this->routeArgs = $routeArgs;
         return $this;
@@ -164,9 +164,9 @@ class MenuItemModel implements MenuItemInterface
 
     /**
      * @param boolean $isActive
-     * @return MenuItemInterface
+     * @return MenuItemModel
      */
-    public function setIsActive(bool $isActive): MenuItemInterface
+    public function setIsActive(bool $isActive): self
     {
         if ($this->hasParent()) {
             $this->getParent()->setIsActive($isActive);
@@ -186,9 +186,9 @@ class MenuItemModel implements MenuItemInterface
 
     /**
      * @param string $icon
-     * @return MenuItemInterface
+     * @return MenuItemModel
      */
-    public function setIcon(?string $icon): MenuItemInterface
+    public function setIcon(?string $icon): self
     {
         $this->icon = $icon;
         return $this;
@@ -205,9 +205,9 @@ class MenuItemModel implements MenuItemInterface
 
     /**
      * @param string $iconColor
-     * @return MenuItemInterface
+     * @return MenuItemModel
      */
-    public function setIconColor(?string $iconColor): MenuItemInterface
+    public function setIconColor(?string $iconColor): self
     {
         $this->iconColor = $iconColor;
         return $this;
@@ -224,9 +224,9 @@ class MenuItemModel implements MenuItemInterface
 
     /**
      * @param string $badge
-     * @return MenuItemInterface
+     * @return MenuItemModel
      */
-    public function setBadge(?string $badge): MenuItemInterface
+    public function setBadge(?string $badge): self
     {
         $this->badge = $badge;
         return $this;
@@ -243,9 +243,9 @@ class MenuItemModel implements MenuItemInterface
 
     /**
      * @param string $badgeColor
-     * @return MenuItemInterface
+     * @return MenuItemModel
      */
-    public function setBadgeColor(?string $badgeColor): MenuItemInterface
+    public function setBadgeColor(?string $badgeColor): self
     {
         $this->badgeColor = $badgeColor;
         return $this;
@@ -270,18 +270,18 @@ class MenuItemModel implements MenuItemInterface
 
     /**
      * @param string $code
-     * @return MenuItemInterface
+     * @return MenuItemModel
      */
-    public function getChild(string $code): MenuItemInterface
+    public function getChild(string $code): self
     {
         return $this->children[$code] ?? null;
     }
 
     /**
      * @param MenuItemInterface $child
-     * @return MenuItemInterface
+     * @return MenuItemModel
      */
-    public function addChild(MenuItemInterface $child): MenuItemInterface
+    public function addChild(MenuItemInterface $child): self
     {
         $child->setParent($this);
         $this->children[$child->getCode()] = $child;
@@ -291,9 +291,9 @@ class MenuItemModel implements MenuItemInterface
 
     /**
      * @param MenuItemInterface|string $child
-     * @return MenuItemInterface
+     * @return MenuItemModel
      */
-    public function removeChild($child): MenuItemInterface
+    public function removeChild($child): self
     {
         if ($child instanceof MenuItemInterface && isset($this->children[$child->getCode()])) {
             $this->children[$child->getCode()]->setParent(null);
@@ -308,7 +308,7 @@ class MenuItemModel implements MenuItemInterface
 
 
     /**
-     * @return MenuItemInterface|null
+     * @return MenuItemModel|null
      */
     public function getActiveChild(): ?MenuItemInterface
     {
@@ -340,9 +340,9 @@ class MenuItemModel implements MenuItemInterface
 
     /**
      * @param MenuItemInterface $parent
-     * @return MenuItemInterface
+     * @return MenuItemModel
      */
-    public function setParent(MenuItemInterface $parent = null): MenuItemInterface
+    public function setParent(MenuItemInterface $parent = null): self
     {
         $this->parent = $parent;
         return $this;

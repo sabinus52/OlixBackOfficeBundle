@@ -2,6 +2,7 @@
 
 namespace Olix\BackOfficeBundle\Listener;
 
+use Olix\BackOfficeBundle\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use DateTime;
@@ -43,6 +44,7 @@ class LoginListener
         $user = $event->getAuthenticationToken()->getUser();
 
         // Mise à jour de la date de login
+        /** @var User $user */
         $user->setLastLogin(new DateTime());
 
         // Persist the data to database.

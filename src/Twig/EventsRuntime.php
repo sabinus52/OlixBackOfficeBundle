@@ -5,6 +5,7 @@ namespace Olix\BackOfficeBundle\Twig;
 use Olix\BackOfficeBundle\Event\SidebarMenuEvent;
 use Olix\BackOfficeBundle\Event\BreadcrumbEvent;
 use Olix\BackOfficeBundle\Event\NotificationsEvent;
+use Olix\BackOfficeBundle\Model\MenuItemInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Twig\Extension\RuntimeExtensionInterface;
@@ -90,7 +91,7 @@ class EventsRuntime implements RuntimeExtensionInterface
     /**
      * Retourne la liste des notifications de la barre de navigation
      *
-     * @return array
+     * @return NotificationsEvent
      */
     public function getNotifications(): ?NotificationsEvent
     {

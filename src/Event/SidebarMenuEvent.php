@@ -59,9 +59,9 @@ class SidebarMenuEvent extends BackOfficeEvent
      * Ajoute un nouvel élémént de menu
      *
      * @param MenuItemInterface $item
-     * @return MenuEvent
+     * @return SidebarMenuEvent
      */
-    public function addItem(MenuItemInterface $item)
+    public function addItem(MenuItemInterface $item): self
     {
         $this->rootItems[$item->getCode()] = $item;
 
@@ -73,9 +73,9 @@ class SidebarMenuEvent extends BackOfficeEvent
      * Enlève un élément au menu
      *
      * @param MenuItemInterface|string $item
-     * @return MenuEvent
+     * @return SidebarMenuEvent
      */
-    public function removeItem($item): MenuEvent
+    public function removeItem($item): self
     {
         if ($item instanceof MenuItemInterface && isset($this->rootItems[$item->getCode()])) {
             unset($this->rootItems[$item->getCode()]);
@@ -90,7 +90,7 @@ class SidebarMenuEvent extends BackOfficeEvent
      * @param string $code
      * @return MenuItemInterface|null
      */
-    public function getItem($code)
+    public function getItem($code): ?MenuItemInterface
     {
         return $this->rootItems[$code] ?? null;
     }
