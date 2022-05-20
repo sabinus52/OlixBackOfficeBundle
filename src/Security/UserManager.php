@@ -26,7 +26,7 @@ class UserManager implements UserManagerInterface
 {
     /**
      * Configuration du bundle de la branche "security"
-     * @var array
+     * @var array<mixed>
      */
     protected $parameters = [
         'menu_activ' => false,
@@ -86,6 +86,7 @@ class UserManager implements UserManagerInterface
         if (! $parameterBag->has('olix_back_office')) {
             throw new Exception('Parameter "olix_back_office" not defined', 1);
         }
+        /** @var array<mixed> $parameters */
         $parameters = $parameterBag->get('olix_back_office');
         if (array_key_exists('security', $parameters)) {
             $this->parameters = $parameters['security'];
@@ -122,6 +123,7 @@ class UserManager implements UserManagerInterface
      */
     public function newUser(): UserInterface
     {
+        /** @var User $class */
         $class = $this->getClass();
         $this->user = new $class();
 
@@ -149,7 +151,8 @@ class UserManager implements UserManagerInterface
      */
     public function setUserById(int $idf): ?UserInterface
     {
-        $this->user = $this->doctrine->getRepository($this->getClass())->find($idf);
+        /** @var User $this->user */
+        $this->user = $this->doctrine->getRepository($this->getClass())->find($idf); // @phpstan-ignore-line
         return $this->user;
     }
 
@@ -161,7 +164,7 @@ class UserManager implements UserManagerInterface
      */
     public function findAll(): array
     {
-        return $this->doctrine->getRepository($this->getClass())->findAll();
+        return $this->doctrine->getRepository($this->getClass())->findAll(); // @phpstan-ignore-line
     }
 
 
@@ -217,7 +220,7 @@ class UserManager implements UserManagerInterface
     /**
      * Crée le formulaire de création d'un utilisateur
      *
-     * @param array $options
+     * @param array<mixed> $options
      * @return FormInterface
      */
     public function createFormCreateUser(array $options = []): FormInterface
@@ -229,7 +232,7 @@ class UserManager implements UserManagerInterface
     /**
      * Crée le formulaire de modification d'un utilisateur
      *
-     * @param array $options
+     * @param array<mixed> $options
      * @return FormInterface
      */
     public function createFormEditUser(array $options = []): FormInterface
@@ -242,7 +245,7 @@ class UserManager implements UserManagerInterface
     /**
      * Crée le formulaire de profile d'un utilisateur
      *
-     * @param array $options
+     * @param array<mixed> $options
      * @return FormInterface
      */
     public function createFormProfileUser(array $options = []): FormInterface
@@ -255,7 +258,7 @@ class UserManager implements UserManagerInterface
     /**
      * Crée le formulaire de changement de mot de passe d'un utilisateur
      *
-     * @param array $options
+     * @param array<mixed> $options
      * @return FormInterface
      */
     public function createFormChangePassword(array $options = []): FormInterface
@@ -268,7 +271,7 @@ class UserManager implements UserManagerInterface
      * Création d'un formulaire spécifique
      *
      * @param string $type : Nom de la classe fu formulaire
-     * @param array $options
+     * @param array<mixed> $options
      * @return FormInterface
      */
     protected function createForm(string $type, array $options = []): FormInterface

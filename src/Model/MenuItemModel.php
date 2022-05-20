@@ -29,7 +29,7 @@ class MenuItemModel implements MenuItemInterface
     protected $route = null;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $routeArgs = [];
 
@@ -59,7 +59,7 @@ class MenuItemModel implements MenuItemInterface
     protected $badgeColor = null;
 
     /**
-     * @var array
+     * @var MenuItemInterface[]
      */
     protected $children = [];
 
@@ -73,7 +73,7 @@ class MenuItemModel implements MenuItemInterface
      * Constructeur
      *
      * @param string $code : Code identifiant ce menu
-     * @param array $options : Options du menu
+     * @param array<mixed> $options : Options du menu
      */
     public function __construct(string $code, array $options = [])
     {
@@ -136,7 +136,7 @@ class MenuItemModel implements MenuItemInterface
 
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getRouteArgs(): array
     {
@@ -144,7 +144,7 @@ class MenuItemModel implements MenuItemInterface
     }
 
     /**
-     * @param array $routeArgs
+     * @param array<mixed> $routeArgs
      * @return MenuItemModel
     */
     public function setRouteArgs(array $routeArgs): self
@@ -261,7 +261,7 @@ class MenuItemModel implements MenuItemInterface
     }
 
     /**
-     * @return array
+     * @return MenuItemInterface[]
      */
     public function getChildren(): array
     {
@@ -270,9 +270,9 @@ class MenuItemModel implements MenuItemInterface
 
     /**
      * @param string $code
-     * @return MenuItemModel
+     * @return MenuItemInterface
      */
-    public function getChild(string $code): self
+    public function getChild(string $code): MenuItemInterface
     {
         return $this->children[$code] ?? null;
     }
@@ -308,7 +308,7 @@ class MenuItemModel implements MenuItemInterface
 
 
     /**
-     * @return MenuItemModel|null
+     * @return MenuItemInterface|null
      */
     public function getActiveChild(): ?MenuItemInterface
     {

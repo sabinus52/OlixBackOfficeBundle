@@ -43,7 +43,7 @@ class EventsRuntime implements RuntimeExtensionInterface
      * Retourne le menu de la barre latérale
      *
      * @param Request $request
-     * @return array
+     * @return MenuItemInterface[]
      */
     public function getSidebarMenu(Request $request): ?array
     {
@@ -62,7 +62,7 @@ class EventsRuntime implements RuntimeExtensionInterface
      * Retourne le fil d'ariane
      *
      * @param Request $request
-     * @return array
+     * @return MenuItemInterface[]
      */
     public function getBreadcrumb(Request $request): ?array
     {

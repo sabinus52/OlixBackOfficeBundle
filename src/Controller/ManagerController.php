@@ -24,7 +24,7 @@ use Exception;
 class ManagerController extends AbstractController
 {
     /**
-     * @var array
+     * @var array<mixed>
      */
     private $parameters = [
         'menu_activ' => false,
@@ -42,6 +42,8 @@ class ManagerController extends AbstractController
         if (! $parameterBag->has('olix_back_office')) {
             throw new Exception('Parameter "olix_back_office" not defined', 1);
         }
+
+        /** @var array<mixed> $parameters */
         $parameters = $parameterBag->get('olix_back_office');
         if (array_key_exists('security', $parameters)) {
             $this->parameters = $parameters['security'];

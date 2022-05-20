@@ -107,9 +107,11 @@ class ProfileController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
+        /** @var string $avatar */
+        $avatar = $request->query->get('avatar');
 
         // Modifie l'avatar
-        $user->setAvatar($request->query->get('avatar'));
+        $user->setAvatar($avatar);
         $entityManager->persist($user);
         $entityManager->flush();
 

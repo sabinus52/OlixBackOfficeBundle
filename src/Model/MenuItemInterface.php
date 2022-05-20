@@ -30,7 +30,7 @@ interface MenuItemInterface extends \Countable, \IteratorAggregate
 
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getRouteArgs(): array;
 
@@ -78,7 +78,7 @@ interface MenuItemInterface extends \Countable, \IteratorAggregate
 
 
     /**
-     * @return array
+     * @return MenuItemInterface[]
      */
     public function getChildren(): array;
 

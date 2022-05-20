@@ -41,7 +41,7 @@ class NotificationModel implements NotificationInterface
      * Constructeur
      *
      * @param string|null $code : Code identifiant de la notif
-     * @param array $options : Options de la notif
+     * @param array<mixed> $options : Options de la notif
      */
     public function __construct(?string $code = null, array $options = [])
     {

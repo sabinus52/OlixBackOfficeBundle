@@ -44,7 +44,7 @@ class NotificationsEvent extends BackOfficeEvent
     /**
      * Route vers toutes les notifs
      *
-     * @vaar string
+     * @var string
      */
     protected $routeAll;
 

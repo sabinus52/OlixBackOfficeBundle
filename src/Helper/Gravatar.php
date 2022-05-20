@@ -173,9 +173,10 @@ class Gravatar
 
 
     /**
+     * @param string $email
      * @see Gravatar::buildURL()
      */
-    public function get($email): string
+    public function get(string $email): string
     {
         return $this->buildURL($email);
     }

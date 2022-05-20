@@ -72,7 +72,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     protected $lastLogin;
 
     /**
-     * @var array liste des roles
+     * @var array<string> liste des roles
      * @ORM\Column(type="json")
      */
     protected $roles = [];
@@ -259,7 +259,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @see UserInterface
-     * @return array
+     * @return array<string>
      */
     public function getRoles(): array
     {
@@ -271,7 +271,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param array $roles
+     * @param array<string> $roles
      * @return User
      */
     public function setRoles(array $roles): self
@@ -316,7 +316,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;

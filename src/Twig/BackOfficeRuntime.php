@@ -18,13 +18,13 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
     /**
      * Configuration des options du thème
      *
-     * @var array
+     * @var array<mixed>
      */
     private $options;
 
 
     /**
-     * @param array $configs : Configuration du bundle 'olix_back_office'
+     * @param array<mixed> $configs : Configuration du bundle 'olix_back_office'
      */
     public function __construct(array $configs)
     {

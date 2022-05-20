@@ -47,7 +47,7 @@ class SidebarMenuEvent extends BackOfficeEvent
     /**
      * Retourne le menu de la barre latérale
      *
-     * @return array
+     * @return MenuItemInterface[]
      */
     public function getSidebarMenu(): array
     {

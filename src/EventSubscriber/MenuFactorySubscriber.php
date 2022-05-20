@@ -3,6 +3,7 @@
 namespace Olix\BackOfficeBundle\EventSubscriber;
 
 use Olix\BackOfficeBundle\Model\MenuItemModel;
+use Olix\BackOfficeBundle\Model\MenuItemInterface;
 use Olix\BackOfficeBundle\Event\SidebarMenuEvent;
 use Olix\BackOfficeBundle\Event\BreadcrumbEvent;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,7 +24,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
     /**
      * Configuration des options du bundle
      *
-     * @var array
+     * @var array<mixed>
      */
     private $parameters = [
         'menu_activ' => false,
@@ -49,6 +50,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
         if (! $parameterBag->has('olix_back_office')) {
             throw new Exception('Parameter "olix_back_office" not defined', 1);
         }
+        /** @var array<mixed> $parameters */
         $parameters = $parameterBag->get('olix_back_office');
         if (array_key_exists('security', $parameters)) {
             $this->parameters = $parameters['security'];
@@ -59,7 +61,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
     /**
      * Retourne la liste des évènements
      *
-     * @return array
+     * @return array<mixed>
      */
     public static function getSubscribedEvents(): array
     {
@@ -75,7 +77,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
      *
      * @param SidebarMenuEvent $event
      */
-    public function onBuildSidebar(SidebarMenuEvent $event)
+    public function onBuildSidebar(SidebarMenuEvent $event): void
     {
         $this->build($event);
 
@@ -96,7 +98,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
      * Correspondance de la route par récursivité pour activer le menu en cours
      *
      * @param string $route
-     * @param array $items : MenuItemInterface[]
+     * @param MenuItemInterface[] $items : MenuItemInterface[]
      */
     protected function activateByRoute(string $route, ?array $items): void
     {
