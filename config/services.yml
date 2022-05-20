@@ -16,3 +16,20 @@ services:
         arguments: [ '@event_dispatcher' ]
         tags:
             - { name: twig.runtime }
+
+    Olix\BackOfficeBundle\Security\UserChecker:
+
+    Olix\BackOfficeBundle\Security\UserManager:
+        arguments: [ '@service_container', '@parameter_bag', '@doctrine', '@security.user_password_hasher' ]
+
+    Olix\BackOfficeBundle\Listener\LoginListener:
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+
+    Olix\BackOfficeBundle\Controller\:
+        resource: '../src/Controller'
+        arguments: ['@parameter_bag']
+        tags: ['controller.service_arguments']
+        calls:
+            - ['setContainer', ['@service_container']]

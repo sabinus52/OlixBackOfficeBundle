@@ -19,12 +19,12 @@ class SidebarMenuEvent extends BackOfficeEvent
     /**
      * @var MenuItemInterface[]
      */
-    private $rootItems = [];
+    protected $rootItems = [];
 
     /**
      * @var Request
      */
-    private $request;
+    protected $request;
 
 
 

@@ -45,6 +45,10 @@
                         {% include '@OlixBackOffice/Navbar/notifications.html.twig' %}
                     {% endblock %}
 
+                    {% block navbar_user %}
+                        {% include '@OlixBackOffice/Navbar/user.html.twig' %}
+                    {% endblock %}
+
                     {% block fullscreen %}
                         <li class="nav-item"><a class="nav-link" data-widget="fullscreen" href="#" role="button"><i class="fas fa-expand-arrows-alt"></i></a></li>
                     {% endblock %}

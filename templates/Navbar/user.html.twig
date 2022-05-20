@@ -1,0 +1,19 @@
+{% if app.user and is_granted('IS_AUTHENTICATED_FULLY') %}
+    <li class="nav-item dropdown user-menu">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+            <img src="{{ asset(app.user.avatar) }}" class="user-image img-circle elevation-2" alt="{{ app.user.username }}">
+            <span class="d-none d-md-inline">{{ app.user.username }}</span>
+        </a>
+
+        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <li class="user-header bg-primary">
+                <img src="{{ asset(app.user.avatar) }}" class="img-circle elevation-2" alt="{{ app.user.username }}">
+                <p>{{ app.user.name|default(app.user.username) }}<small>{{ app.user.email }}</small></p>
+            </li>
+            <li class="user-footer">
+                <a href="{{ path('olix_profile') }}" class="btn btn-secondary btn-flat">Profile</a>
+                <a href="{{ path('olix_logout') }}" class="btn btn-danger btn-flat float-right">Sign out</a>
+            </li>
+        </ul>
+    </li>
+{% endif %}

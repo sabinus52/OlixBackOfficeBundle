@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Gestion des utilisateurs{% endblock %}
+
+{% block content_title %}Liste des utilisateurs{% endblock %}
+{% block content_subtitle %}{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body table-responsive p-0">
+
+                    <table class="table table-hover text-nowrap table-valign-middle">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Login</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th class="text-center">Statut</th>
+                                <th class="text-center">Dernière connection</th>
+                                <th class="text-right"><a class="btn btn-success btn-sm" href="{{ path('olix_users__create') }}"><i class="fas fa-plus"></i> Ajouter</a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for item in users %}
+                            <tr>
+                                <td class="avatar"><img src="{{ asset(item.avatar) }}"></td>
+                                <td>{{ item.userIdentifier }}</td>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.email }}</td>
+                                <td class="text-center">{% if not item.isEnabled %}
+                                        <span class="badge bg-red">DISABLED</span>
+                                    {% elseif item.isExpired %}
+                                        <span class="badge bg-red">EXPIRED</span>
+                                    {% elseif item.expiresAt %}
+                                        <span class="badge bg-orange">Expires at {{ item.expiresAt|date('d/m/Y') }}</span>
+                                    {% else %}
+                                        <span class="badge bg-green">ACTIVE</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">{{ item.lastLogin|date('d/m/Y h:i') }}</td>
+                                <td class="text-right olix-actions">
+                                    <a class="btn btn-secondary btn-sm" href="{{ path('olix_users__password', { id: item.id }) }}"><i class="fas fa-key"></i> Mot de passe</a>
+                                    <a class="btn btn-info btn-sm" href="{{ path('olix_users__edit', { id: item.id }) }}"><i class="fas fa-pencil-alt"></i> Modifier</a>
+                                    <a class="btn btn-danger btn-sm delete" href="{{ path('olix_users__remove', { id: item.id }) }}"><i class="fas fa-trash"></i> Supprimer</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

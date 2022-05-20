@@ -30,6 +30,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder->getRootNode()
             ->children()
                 ->append($this->getOptionsConfig())
+                ->append($this->getSecurityConfig())
             ->end()
         ->end();
 
@@ -76,6 +77,34 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->booleanNode('fixed')->defaultValue(false)->end()
+                    ->end()
+                ->end()
+            ->end()
+        ->end();
+
+        return $rootNode;
+    }
+
+
+    /**
+     * Retourne la configuration de la branche "security" sur la gestions des utilisateurs
+     * 
+     * @return NodeDefinition
+     */
+    private function getSecurityConfig() : NodeDefinition
+    {
+        $treeBuilder = new TreeBuilder('security');
+        $rootNode = $treeBuilder->getRootNode();
+
+        $rootNode
+            ->children()
+                ->booleanNode('menu_activ')->defaultValue(false)->end()
+                ->arrayNode('class')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('user')->defaultValue('App\Entity\User')->end()
+                        ->scalarNode('form_user')->defaultValue('Olix\BackOfficeBundle\Form\UserEditType')->end()
+                        ->scalarNode('form_profile')->defaultValue('Olix\BackOfficeBundle\Form\UserProfileType')->end()
                     ->end()
                 ->end()
             ->end()

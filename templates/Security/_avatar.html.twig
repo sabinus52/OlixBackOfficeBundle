@@ -1,0 +1,22 @@
+<h4>Hommes</h4>
+{% for avatar in avatars.males %}
+    <a href="{{ path("olix_profile_avatar_change") ~ "?avatar=" ~ avatar }}" class="avatar"><img alt="" src="{{ asset('bundles/olixbackoffice/images/avatar/' ~ avatar) }}"></a>
+{% endfor %}
+<h4>Femmes</h4>
+{% for avatar in avatars.females %}
+    <a href="{{ path("olix_profile_avatar_change") ~ "?avatar=" ~ avatar }}" class="avatar"><img alt="" src="{{ asset('bundles/olixbackoffice/images/avatar/' ~ avatar) }}"></a>
+{% endfor %}
+<h4>Gravatar &amp; divers</h4>
+<a href="{{ path("olix_profile_avatar_change") ~ "?avatar=" ~ gravatar|url_encode }}" class="avatar"><img alt="" src="{{ gravatar }}"></a>
+{% for avatar in avatars.others %}
+    <a href="{{ path("olix_profile_avatar_change") ~ "?avatar=" ~ avatar }}" class="avatar"><img alt="" src="{{ asset('bundles/olixbackoffice/images/avatar/' ~ avatar) }}"></a>
+{% endfor %}
+<h4>Url</h4>
+<div>
+    <form action="{{ path('olix_profile_avatar_change') }}" method="get">
+        <div class="form-row">
+            <div class="col-11"><input type="text" name="avatar" class="form-control" value=""></div>
+            <div class="col-1"><button type="submit" class="btn btn-default">Ok</button></div>
+        </div>
+    </form>
+</div>
