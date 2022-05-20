@@ -9,6 +9,7 @@
 
 namespace Olix\BackOfficeBundle\Model;
 
+use ArrayIterator;
 
 class MenuItemModel implements MenuItemInterface
 {
@@ -363,7 +364,7 @@ class MenuItemModel implements MenuItemInterface
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->getChildren());
+        return new ArrayIterator($this->getChildren());
     }
 
 }

@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\MappedSuperclass
+ * @SuppressWarnings(PHPMD.ShortVariable)
  */
 abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -223,9 +224,8 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
             return self::AVATAR_PATH . self::AVATAR_DEFAULT;
         } elseif ( substr($this->avatar, 0, 4) == 'http' ) {
             return $this->avatar;
-        } else {
-            return self::AVATAR_PATH . $this->avatar;
         }
+        return self::AVATAR_PATH . $this->avatar;
     }
 
     /**

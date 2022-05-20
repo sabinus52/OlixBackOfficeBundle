@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use \Exception;
 
 
 class ManagerController extends AbstractController
@@ -38,13 +39,12 @@ class ManagerController extends AbstractController
     public function __construct(ParameterBagInterface $parameterBag)
     {
         // Get parameter "olix_back_office.security"
-        if ($parameterBag->has('olix_back_office')) {
-            $parameters = $parameterBag->get('olix_back_office');
-            if (isset($parameters['security'])) {
-                $this->parameters = $parameters['security'];
-            }
-        } else {
-            throw new \Exception('Parameter "olix_back_office" not defined', 1);
+        if (! $parameterBag->has('olix_back_office')) {
+            throw new Exception('Parameter "olix_back_office" not defined', 1);
+        }
+        $parameters = $parameterBag->get('olix_back_office');
+        if (isset($parameters['security'])) {
+            $this->parameters = $parameters['security'];
         }
     }
 
@@ -150,7 +150,7 @@ class ManagerController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             // Change password for this user
-            $manager->changePassword($form->get('password')->getData());
+            $manager->update($form->get('password')->getData());
 
             return $this->redirectToRoute('olix_users__list');
         }
@@ -188,11 +188,10 @@ class ManagerController extends AbstractController
      */
     protected function checkAccess(): bool
     {
-        if (isset($this->parameters['menu_activ']) && $this->parameters['menu_activ'] == true) {
-            return true;
-        } else {
-            throw new \Exception("Asses denied", 1); // FIXME
+        if (! isset($this->parameters['menu_activ']) || $this->parameters['menu_activ'] != true ) {
+            throw new Exception("Asses denied", 1); // FIXME
         }
+        return true;
     }
 
 }

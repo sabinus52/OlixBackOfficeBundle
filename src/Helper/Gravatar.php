@@ -94,19 +94,15 @@ class Gravatar
      */
     public function setDefaultImage(string $image): self
     {
-        $imgLower = strtolower($image);
-        
         $validDefaults = array('404', 'mm', 'identicon', 'monsterid', 'wavatar', 'retro');
-        if ( ! in_array($imgLower, $validDefaults) ) {
-            // Verifie la bonne url
-            if ( ! filter_var($image, FILTER_VALIDATE_URL) ) {
-                throw new InvalidArgumentException('The default image specified is not a recognized gravatar "default" and is not a valid URL');
-            } else {
-                $this->defaultImage = rawurlencode($image);
-            }
-        } else {
-            $this->defaultImage = $imgLower;
+
+        // Verifie la bonne url
+        if ( ! filter_var($image, FILTER_VALIDATE_URL) ) {
+            throw new InvalidArgumentException('The default image specified is not a recognized gravatar "default" and is not a valid URL');
         }
+        
+        $imgLower = strtolower($image);
+        $this->defaultImage = (in_array($imgLower, $validDefaults)) ? $imgLower : rawurlencode($image);
         
         return $this;
     }
@@ -193,12 +189,7 @@ class Gravatar
     protected function buildURL(string $email): string
     {
         $url = ( $this->usingSecureImages() ) ? static::HTTPS_URL : static::HTTP_URL;
-        
-        if ( ! empty($email) ) {
-            $url .= $this->getEmailHash($email);
-        } else {
-            $url .= str_repeat('0', 32);
-        }
+        $url.= (! empty($email)) ? $this->getEmailHash($email) : str_repeat('0', 32);
         
         return $url.$this->getGravatarParams($email);
     }

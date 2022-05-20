@@ -11,6 +11,7 @@ namespace Olix\BackOfficeBundle\Listener;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use DateTime;
 
 
 class LoginListener
@@ -19,17 +20,17 @@ class LoginListener
     /**
      * @var EntityManagerInterface
      */
-    private $em;
+    private $entityManager;
 
 
     /**
      * Constructeur
      * 
-     * @param EntityManagerInterface $em
+     * @param EntityManagerInterface $entityManager
      */
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->em = $em;
+        $this->entityManager = $entityManager;
     }
 
 
@@ -44,11 +45,11 @@ class LoginListener
         $user = $event->getAuthenticationToken()->getUser();
 
         // Mise à jour de la date de login
-        $user->setLastLogin(new \DateTime());
+        $user->setLastLogin(new DateTime());
 
         // Persist the data to database.
-        $this->em->persist($user);
-        $this->em->flush();
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
     }
 
 }

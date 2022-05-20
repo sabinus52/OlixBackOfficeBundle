@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Security;
+use Exception;
 
 
 abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFactoryInterface
@@ -47,13 +48,12 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
         $this->security = $security;
 
         // Get parameter "olix_back_office.security"
-        if ($parameterBag->has('olix_back_office')) {
-            $parameters = $parameterBag->get('olix_back_office');
-            if (isset($parameters['security'])) {
-                $this->parameters = $parameters['security'];
-            }
-        } else {
-            throw new \Exception('Parameter "olix_back_office" not defined', 1);
+        if (! $parameterBag->has('olix_back_office')) {
+            throw new Exception('Parameter "olix_back_office" not defined', 1);
+        }
+        $parameters = $parameterBag->get('olix_back_office');
+        if (isset($parameters['security'])) {
+            $this->parameters = $parameters['security'];
         }
     }
 

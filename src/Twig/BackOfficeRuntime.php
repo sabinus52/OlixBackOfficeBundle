@@ -12,7 +12,9 @@ namespace Olix\BackOfficeBundle\Twig;
 
 use Twig\Extension\RuntimeExtensionInterface;
 
-
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class BackOfficeRuntime implements RuntimeExtensionInterface
 {
 
@@ -38,7 +40,7 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
      * 
      * @return string
      */
-    public function getClassBody() : string
+    public function getClassBody(): string
     {
         $classes = [];
         if ( isset($this->options['boxed']) && $this->options['boxed'] == true ) {
@@ -72,7 +74,7 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
      * 
      * @return string
      */
-    public function getClassNavbar() : string
+    public function getClassNavbar(): string
     {
         $classes = [];
         if ( isset($this->options['navbar']['theme']) && $this->options['navbar']['theme'] == 'dark' ) {
@@ -92,7 +94,7 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
      * 
      * @return string
      */
-    public function getClassSidebar() : string
+    public function getClassSidebar(): string
     {
         $classes = [];
         if ( isset($this->options['sidebar']['theme']) && $this->options['sidebar']['theme'] == 'light' ) {
@@ -113,7 +115,7 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
      * 
      * @return string
      */
-    public function getClassMenu() : string
+    public function getClassMenu(): string
     {
         $classes = [];
         if ( isset($this->options['sidebar']['flat']) && $this->options['sidebar']['flat'] == true ) {

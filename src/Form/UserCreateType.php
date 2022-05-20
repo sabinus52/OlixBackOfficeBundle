@@ -18,6 +18,9 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ */
 class UserCreateType extends AbstractType
 {
 

@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
 
 class UserManager implements UserManagerInterface
@@ -47,6 +48,11 @@ class UserManager implements UserManagerInterface
     protected $doctrine;
 
     /**
+     * @var EntityManagerInterface
+     */
+    protected $entityManager;
+
+    /**
      * @var UserPasswordHasherInterface
      */
     protected $passwordHasher;
@@ -70,15 +76,15 @@ class UserManager implements UserManagerInterface
         $this->container = $container;
         $this->doctrine = $doctrine;
         $this->passwordHasher = $passwordHasher;
+        $this->entityManager = $doctrine->getManager();
 
         // Get parameter olix_back_office.security
-        if ($parameterBag->has('olix_back_office')) {
-            $parameters = $parameterBag->get('olix_back_office');
-            if (isset($parameters['security'])) {
-                $this->parameters = $parameters['security'];
-            }
-        } else {
-            throw new \Exception('Parameter "olix_back_office" not defined', 1);
+        if (! $parameterBag->has('olix_back_office')) {
+            throw new Exception('Parameter "olix_back_office" not defined', 1);
+        }
+        $parameters = $parameterBag->get('olix_back_office');
+        if (isset($parameters['security'])) {
+            $this->parameters = $parameters['security'];
         }
     }
 
@@ -137,9 +143,9 @@ class UserManager implements UserManagerInterface
      * 
      * @return UserInterface|null
      */
-    public function setUserById(int $id): ?UserInterface
+    public function setUserById(int $idf): ?UserInterface
     {
-        $this->user = $this->doctrine->getRepository($this->getClass())->find($id);
+        $this->user = $this->doctrine->getRepository($this->getClass())->find($idf);
         return $this->user;
     }
 
@@ -163,28 +169,22 @@ class UserManager implements UserManagerInterface
     public function add(string $password): void
     {
         $this->user->setPassword( $this->getHashedPassword($password) );
-        $this->doctrine->getRepository($this->getClass())->add($this->user);
+        $this->update();
     }
 
 
     /**
      * Mets à jour les données de l'utilisateur
-     */
-    public function update(): void
-    {
-        $this->doctrine->getRepository($this->getClass())->update($this->user);
-    }
-
-
-    /**
-     * Mets à jour le mot de passe de l'utilisateur
      * 
      * @param string $password
      */
-    public function changePassword(string $password): void
+    public function update(string $password = null): void
     {
-        $this->user->setPassword( $this->getHashedPassword($password) );
-        $this->doctrine->getRepository($this->getClass())->update($this->user);
+        if ($password) {
+            $this->user->setPassword($this->getHashedPassword($password));
+        }
+        $this->entityManager->persist($this->user);
+        $this->entityManager->flush();
     }
 
 
@@ -193,7 +193,8 @@ class UserManager implements UserManagerInterface
      */
     public function remove(): void
     {
-        $this->doctrine->getRepository($this->getClass())->remove($this->user);
+        $this->entityManager->remove($this->user);
+        $this->entityManager->flush();
     }
 
 
