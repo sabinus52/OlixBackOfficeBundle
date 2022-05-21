@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  *  This file is part of OlixBackOfficeBundle.
  *  (c) Sabinus52 <sabinus52@gmail.com>
@@ -107,9 +109,10 @@ class ManagerController extends AbstractController
     public function editUser(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
+        $idUser = (int) $request->get('id');
 
         // Get user from request
-        $user = $manager->setUserById($request->get('id'));
+        $user = $manager->setUserById($idUser);
         if (!$user instanceof UserInterface) {
             $this->redirectToRoute('olix_users__list');
         }
@@ -139,9 +142,10 @@ class ManagerController extends AbstractController
     public function changePassword(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
+        $idUser = (int) $request->get('id');
 
         // Get user from request
-        $user = $manager->setUserById($request->get('id'));
+        $user = $manager->setUserById($idUser);
         if (!$user instanceof UserInterface) {
             $this->redirectToRoute('olix_users__list');
         }
@@ -171,9 +175,10 @@ class ManagerController extends AbstractController
     public function removeUser(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
+        $idUser = (int) $request->get('id');
 
         // Get user from request
-        $user = $manager->setUserById($request->get('id'));
+        $user = $manager->setUserById($idUser);
         if (!$user instanceof UserInterface) {
             $this->redirectToRoute('olix_users__list');
         }

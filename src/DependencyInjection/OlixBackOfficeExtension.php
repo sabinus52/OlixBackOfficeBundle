@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  *  This file is part of OlixBackOfficeBundle.
  *  (c) Sabinus52 <sabinus52@gmail.com>
@@ -28,7 +30,7 @@ class OlixBackOfficeExtension extends Extension
      *
      * @phpstan-ignore-next-line
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         // Chargement du fichier de configuration des services
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  *  This file is part of OlixBackOfficeBundle.
  *  (c) Sabinus52 <sabinus52@gmail.com>
@@ -10,6 +12,7 @@
 namespace Olix\BackOfficeBundle\Model;
 
 use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -168,7 +171,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function isEnabled(): bool
     {
-        return $this->enabled;
+        return (bool) $this->enabled;
     }
 
     /**
@@ -198,7 +201,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return \DateTime
      */
-    public function getExpiresAt(): ?\DateTimeInterface
+    public function getExpiresAt(): ?DateTimeInterface
     {
         return $this->expiresAt;
     }
@@ -208,7 +211,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @return User
      */
-    public function setExpiresAt(?\DateTimeInterface $date = null): self
+    public function setExpiresAt(?DateTimeInterface $date = null): self
     {
         $this->expiresAt = $date;
 
@@ -245,7 +248,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return DateTime|null
      */
-    public function getLastLogin(): ?\DateTimeInterface
+    public function getLastLogin(): ?DateTimeInterface
     {
         return $this->lastLogin;
     }
@@ -255,7 +258,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @return User
      */
-    public function setLastLogin(?\DateTimeInterface $lastLogin): self
+    public function setLastLogin(?DateTimeInterface $lastLogin): self
     {
         $this->lastLogin = $lastLogin;
 
