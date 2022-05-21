@@ -1,17 +1,22 @@
 <?php
 
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Olix\BackOfficeBundle\Model;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use DateTime;
 
 /**
- * Classe abstraite de l'entité de la table utilisateurs de connexion
+ * Classe abstraite de l'entité de la table utilisateurs de connexion.
  *
- * @package    Olix
- * @subpackage BackOfficeBundle
  * @author     Sabinus52 <sabinus52@gmail.com>
  * @ORM\MappedSuperclass
  * @SuppressWarnings(PHPMD.ShortVariable)
@@ -22,7 +27,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     protected const AVATAR_DEFAULT = 'default.png';
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -49,7 +54,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @var bool
-     * @ORM\Column(type="smallint", options={"default" : 1})
+     * @ORM\Column(type="smallint", options={"default": 1})
      */
     protected $enabled = true;
 
@@ -83,7 +88,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     protected $password;
 
-
     /**
      * @return int|null
      */
@@ -91,7 +95,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->id;
     }
-
 
     /**
      * @deprecated since Symfony 5.3, use getUserIdentifier instead
@@ -108,18 +111,17 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
     /**
      * A visual identifier that represents this user.
      *
      * @see UserInterface
+     *
      * @return string
      */
     public function getUserIdentifier(): string
     {
         return (string) $this->username;
     }
-
 
     /**
      * @return string|null
@@ -131,6 +133,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @param string $email
+     *
      * @return User
      */
     public function setEmail(?string $email): self
@@ -139,7 +142,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 
     /**
      * @return string|null
@@ -151,6 +153,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @param string $name
+     *
      * @return User
      */
     public function setName(?string $name): self
@@ -159,7 +162,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 
     /**
      * @return bool
@@ -171,6 +173,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @param bool $enabled
+     *
      * @return User
      */
     public function setEnabled(bool $enabled): self
@@ -180,7 +183,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
     /**
      * @return bool
      */
@@ -189,6 +191,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (null !== $this->expiresAt && $this->expiresAt->getTimestamp() < time()) {
             return true;
         }
+
         return false;
     }
 
@@ -202,6 +205,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @param \DateTime $date
+     *
      * @return User
      */
     public function setExpiresAt(?\DateTimeInterface $date = null): self
@@ -211,22 +215,24 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
     /**
      * @return string|null
      */
     public function getAvatar(): ?string
     {
-        if (! $this->avatar) {
-            return self::AVATAR_PATH . self::AVATAR_DEFAULT;
-        } elseif (substr($this->avatar, 0, 4) == 'http') {
+        if (!$this->avatar) {
+            return self::AVATAR_PATH.self::AVATAR_DEFAULT;
+        }
+        if ('http' === substr($this->avatar, 0, 4)) {
             return $this->avatar;
         }
-        return self::AVATAR_PATH . $this->avatar;
+
+        return self::AVATAR_PATH.$this->avatar;
     }
 
     /**
      * @param string|null $avatar
+     *
      * @return User
      */
     public function setAvatar(?string $avatar): self
@@ -235,7 +241,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 
     /**
      * @return DateTime|null
@@ -247,6 +252,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @param DateTime $lastLogin
+     *
      * @return User
      */
     public function setLastLogin(?\DateTimeInterface $lastLogin): self
@@ -256,9 +262,9 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
     /**
      * @see UserInterface
+     *
      * @return array<string>
      */
     public function getRoles(): array
@@ -272,17 +278,19 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @param array<string> $roles
+     *
      * @return User
      */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
         return $this;
     }
 
-
     /**
      * @see PasswordAuthenticatedUserInterface
+     *
      * @return string
      */
     public function getPassword(): string
@@ -292,20 +300,22 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @param string $password
+     *
      * @return User
      */
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
         return $this;
     }
-
 
     /**
      * Returning a salt is only needed, if you are not using a modern
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
      *
      * @see UserInterface
+     *
      * @return string|null
      */
     public function getSalt(): ?string

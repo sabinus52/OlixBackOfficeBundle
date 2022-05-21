@@ -1,25 +1,29 @@
 <?php
 
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Olix\BackOfficeBundle\Controller;
 
+use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use LogicException;
 
 /**
- * Classe pour l'authentification des utilisateurs
+ * Classe pour l'authentification des utilisateurs.
  *
- * @package    Olix
- * @subpackage BackOfficeBundle
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
 class SecurityController extends AbstractController
 {
     /**
-     * Connextion à l'interface
+     * Connextion à l'interface.
      *
      * @Route("/login", name="olix_login")
      */
@@ -33,19 +37,17 @@ class SecurityController extends AbstractController
 
         return $this->render('@OlixBackOffice/Security/login.html.twig', [
             'last_username' => $lastUsername,
-            'error'         => $error,
+            'error' => $error,
         ]);
     }
 
-
     /**
-     * Page de déconnexion
+     * Page de déconnexion.
      *
      * @Route("/logout", name="olix_logout")
      */
     public function logout(): void
     {
-        throw new LogicException('This method can be blank - '
-            . 'it will be intercepted by the logout key on your firewall.');
+        throw new LogicException('This method can be blank - '.'it will be intercepted by the logout key on your firewall.');
     }
 }

@@ -1,27 +1,32 @@
 <?php
 
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Olix\BackOfficeBundle\Twig;
 
 use Twig\Extension\RuntimeExtensionInterface;
 
 /**
- * Runtime des "filters" et "functions" personnalisés TWIG (pour la performance)
+ * Runtime des "filters" et "functions" personnalisés TWIG (pour la performance).
  *
- * @package    Olix
- * @subpackage BackOfficeBundle
  * @author     Sabinus52 <sabinus52@gmail.com>
+ *
  * @see        https://symfony.com/doc/current/templating/twig_extension.html#creating-lazy-loaded-twig-extensions
  * @SuppressWarnings(PHPMD)
  */
 class BackOfficeRuntime implements RuntimeExtensionInterface
 {
     /**
-     * Configuration des options du thème
+     * Configuration des options du thème.
      *
      * @var array<mixed>
      */
     private $options;
-
 
     /**
      * @param array<mixed> $configs : Configuration du bundle 'olix_back_office'
@@ -31,102 +36,102 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
         $this->options = (isset($configs['options'])) ? $configs['options'] : [];
     }
 
-
     /**
-     * Retourne la liste des classes pour la balise BODY
+     * Retourne la liste des classes pour la balise BODY.
      *
      * @return string
      */
     public function getClassBody(): string
     {
         $classes = [];
-        if (isset($this->options['boxed']) && $this->options['boxed'] == true) {
+        if (isset($this->options['boxed']) && true === $this->options['boxed']) {
             $classes[] = 'layout-boxed';
         } else {
-            if (isset($this->options['navbar']['fixed']) && $this->options['navbar']['fixed'] == true) {
+            if (isset($this->options['navbar']['fixed']) && true === $this->options['navbar']['fixed']) {
                 $classes[] = 'layout-navbar-fixed';
             }
-            if (isset($this->options['sidebar']['fixed']) && $this->options['sidebar']['fixed'] == true) {
+            if (isset($this->options['sidebar']['fixed']) && true === $this->options['sidebar']['fixed']) {
                 $classes[] = 'layout-fixed';
             }
         }
-        if (isset($this->options['footer']['fixed']) && $this->options['footer']['fixed'] == true) {
+        if (isset($this->options['footer']['fixed']) && true === $this->options['footer']['fixed']) {
             $classes[] = 'layout-footer-fixed';
         }
-        if (isset($this->options['sidebar']['collapsed']) && $this->options['sidebar']['collapsed'] == true) {
+        if (isset($this->options['sidebar']['collapsed']) && true === $this->options['sidebar']['collapsed']) {
             $classes[] = 'sidebar-collapse';
         }
-        if (isset($this->options['sidebar']['color']) && $this->options['sidebar']['color'] != '') {
-            $classes[] = 'accent-' . $this->options['sidebar']['color'];
+        if (isset($this->options['sidebar']['color']) && '' !== $this->options['sidebar']['color']) {
+            $classes[] = 'accent-'.$this->options['sidebar']['color'];
         }
-        if (isset($this->options['dark_mode']) && $this->options['dark_mode'] != '') {
+        if (isset($this->options['dark_mode']) && true === $this->options['dark_mode']) {
             $classes[] = 'dark-mode';
         }
+
         return implode(' ', $classes);
     }
 
-
     /**
-     * Retourne la liste des classes pour la barre de navigation
+     * Retourne la liste des classes pour la barre de navigation.
      *
      * @return string
      */
     public function getClassNavbar(): string
     {
         $classes = [];
-        if (isset($this->options['navbar']['theme']) && $this->options['navbar']['theme'] == 'dark') {
+        if (isset($this->options['navbar']['theme']) && 'dark' === $this->options['navbar']['theme']) {
             $classes[] = 'navbar-dark';
         } else {
             $classes[] = 'navbar-light';
         }
-        if (isset($this->options['navbar']['color']) && $this->options['navbar']['color'] != '') {
-            $classes[] = 'navbar-' . $this->options['navbar']['color'];
+        if (isset($this->options['navbar']['color']) && '' !== $this->options['navbar']['color']) {
+            $classes[] = 'navbar-'.$this->options['navbar']['color'];
         }
+
         return implode(' ', $classes);
     }
 
-
     /**
-     * Retourne la liste des classes pour la barre latérale
+     * Retourne la liste des classes pour la barre latérale.
      *
      * @return string
      */
     public function getClassSidebar(): string
     {
         $classes = [];
-        if (isset($this->options['sidebar']['theme']) && $this->options['sidebar']['theme'] == 'light') {
-            if (isset($this->options['sidebar']['color']) && $this->options['sidebar']['color'] != '') {
-                $classes[] = 'sidebar-light-' . $this->options['sidebar']['color'];
+        if (isset($this->options['sidebar']['theme']) && 'light' === $this->options['sidebar']['theme']) {
+            if (isset($this->options['sidebar']['color']) && '' !== $this->options['sidebar']['color']) {
+                $classes[] = 'sidebar-light-'.$this->options['sidebar']['color'];
             }
         } else {
-            if (isset($this->options['sidebar']['color']) && $this->options['sidebar']['color'] != '') {
-                $classes[] = 'sidebar-dark-' . $this->options['sidebar']['color'];
+            if (isset($this->options['sidebar']['color']) && '' !== $this->options['sidebar']['color']) {
+                $classes[] = 'sidebar-dark-'.$this->options['sidebar']['color'];
             }
         }
+
         return implode(' ', $classes);
     }
 
-
     /**
-     * Retourne la liste des classes pour le menu de la barre de navigation
+     * Retourne la liste des classes pour le menu de la barre de navigation.
      *
      * @return string
      */
     public function getClassMenu(): string
     {
         $classes = [];
-        if (isset($this->options['sidebar']['flat']) && $this->options['sidebar']['flat'] == true) {
+        if (isset($this->options['sidebar']['flat']) && true === $this->options['sidebar']['flat']) {
             $classes[] = 'nav-flat';
         }
-        if (isset($this->options['sidebar']['legacy']) && $this->options['sidebar']['legacy'] == true) {
+        if (isset($this->options['sidebar']['legacy']) && true === $this->options['sidebar']['legacy']) {
             $classes[] = 'nav-legacy';
         }
-        if (isset($this->options['sidebar']['compact']) && $this->options['sidebar']['compact'] == true) {
+        if (isset($this->options['sidebar']['compact']) && true === $this->options['sidebar']['compact']) {
             $classes[] = 'nav-compact';
         }
-        if (isset($this->options['sidebar']['child_indent']) && $this->options['sidebar']['child_indent'] == true) {
+        if (isset($this->options['sidebar']['child_indent']) && true === $this->options['sidebar']['child_indent']) {
             $classes[] = 'nav-child-indent';
         }
+
         return implode(' ', $classes);
     }
 }

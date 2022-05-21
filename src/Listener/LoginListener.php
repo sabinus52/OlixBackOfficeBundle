@@ -1,17 +1,22 @@
 <?php
 
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Olix\BackOfficeBundle\Listener;
 
-use Olix\BackOfficeBundle\Model\User;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
+use Olix\BackOfficeBundle\Model\User;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
- * Listener sur la connexion de l'utilisateur
+ * Listener sur la connexion de l'utilisateur.
  *
- * @package    Olix
- * @subpackage BackOfficeBundle
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
 class LoginListener
@@ -21,9 +26,8 @@ class LoginListener
      */
     private $entityManager;
 
-
     /**
-     * Constructeur
+     * Constructeur.
      *
      * @param EntityManagerInterface $entityManager
      */
@@ -32,9 +36,8 @@ class LoginListener
         $this->entityManager = $entityManager;
     }
 
-
     /**
-     * Evenement au moment de la connexion de l'utilisateur
+     * Evenement au moment de la connexion de l'utilisateur.
      *
      * @param InteractiveLoginEvent $event
      */

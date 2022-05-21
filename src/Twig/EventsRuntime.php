@@ -1,35 +1,40 @@
 <?php
 
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Olix\BackOfficeBundle\Twig;
 
-use Olix\BackOfficeBundle\Event\SidebarMenuEvent;
 use Olix\BackOfficeBundle\Event\BreadcrumbEvent;
 use Olix\BackOfficeBundle\Event\NotificationsEvent;
+use Olix\BackOfficeBundle\Event\SidebarMenuEvent;
 use Olix\BackOfficeBundle\Model\MenuItemInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Twig\Extension\RuntimeExtensionInterface;
 
 /**
- * Runtime des "functions" personnalisés TWIG pour les évènements
+ * Runtime des "functions" personnalisés TWIG pour les évènements.
  *
- * @package    Olix
- * @subpackage BackOfficeBundle
  * @author     Sabinus52 <sabinus52@gmail.com>
+ *
  * @see        https://symfony.com/doc/current/templating/twig_extension.html#creating-lazy-loaded-twig-extensions
  */
 class EventsRuntime implements RuntimeExtensionInterface
 {
     /**
-     * Dispatcher (listener)
+     * Dispatcher (listener).
      *
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
 
-
     /**
-     * Constructor
+     * Constructor.
      *
      * @param EventDispatcherInterface $dispatcher
      */
@@ -38,11 +43,11 @@ class EventsRuntime implements RuntimeExtensionInterface
         $this->eventDispatcher = $dispatcher;
     }
 
-
     /**
-     * Retourne le menu de la barre latérale
+     * Retourne le menu de la barre latérale.
      *
      * @param Request $request
+     *
      * @return MenuItemInterface[]
      */
     public function getSidebarMenu(Request $request): ?array
@@ -57,11 +62,11 @@ class EventsRuntime implements RuntimeExtensionInterface
         return $event->getSidebarMenu();
     }
 
-
     /**
-     * Retourne le fil d'ariane
+     * Retourne le fil d'ariane.
      *
      * @param Request $request
+     *
      * @return MenuItemInterface[]
      */
     public function getBreadcrumb(Request $request): ?array
@@ -87,9 +92,8 @@ class EventsRuntime implements RuntimeExtensionInterface
         return $list;
     }
 
-
     /**
-     * Retourne la liste des notifications de la barre de navigation
+     * Retourne la liste des notifications de la barre de navigation.
      *
      * @return NotificationsEvent
      */
@@ -99,9 +103,7 @@ class EventsRuntime implements RuntimeExtensionInterface
             return null;
         }
 
-        /** @var NotificationsEvent $event */
-        $event = $this->eventDispatcher->dispatch(new NotificationsEvent());
-
-        return $event;
+        /** @var NotificationsEvent */
+        return $this->eventDispatcher->dispatch(new NotificationsEvent());
     }
 }

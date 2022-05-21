@@ -1,12 +1,17 @@
 <?php
 
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Olix\BackOfficeBundle\Model;
 
 /**
- * Classe d'une notification dans la barre de navigation
+ * Classe d'une notification dans la barre de navigation.
  *
- * @package    Olix
- * @subpackage BackOfficeBundle
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
 class NotificationModel implements NotificationInterface
@@ -36,11 +41,10 @@ class NotificationModel implements NotificationInterface
      */
     protected $info;
 
-
     /**
-     * Constructeur
+     * Constructeur.
      *
-     * @param string|null $code : Code identifiant de la notif
+     * @param string|null  $code    : Code identifiant de la notif
      * @param array<mixed> $options : Options de la notif
      */
     public function __construct(?string $code = null, array $options = [])
@@ -52,7 +56,6 @@ class NotificationModel implements NotificationInterface
         $this->info = $options['info'] ?? null;
     }
 
-
     /**
      * @return string
      */
@@ -60,7 +63,6 @@ class NotificationModel implements NotificationInterface
     {
         return $this->code;
     }
-
 
     /**
      * @return string
@@ -72,14 +74,15 @@ class NotificationModel implements NotificationInterface
 
     /**
      * @param string $icon
+     *
      * @return NotificationInterface
      */
     public function setIcon(string $icon): NotificationInterface
     {
         $this->icon = $icon;
+
         return $this;
     }
-
 
     /**
      * @return string|null
@@ -91,14 +94,15 @@ class NotificationModel implements NotificationInterface
 
     /**
      * @param string $color
+     *
      * @return NotificationInterface
      */
     public function setColor(?string $color): NotificationInterface
     {
         $this->color = $color;
+
         return $this;
     }
-
 
     /**
      * @return string
@@ -110,14 +114,15 @@ class NotificationModel implements NotificationInterface
 
     /**
      * @param string $message
+     *
      * @return NotificationInterface
      */
     public function setMessage(string $message): NotificationInterface
     {
         $this->message = $message;
+
         return $this;
     }
-
 
     /**
      * @return string|null
@@ -129,11 +134,13 @@ class NotificationModel implements NotificationInterface
 
     /**
      * @param string $info
+     *
      * @return NotificationInterface
      */
     public function setInfo(?string $info): NotificationInterface
     {
         $this->info = $info;
+
         return $this;
     }
 }

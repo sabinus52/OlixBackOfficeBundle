@@ -1,5 +1,12 @@
 <?php
 
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Olix\BackOfficeBundle\Security;
 
 use Olix\BackOfficeBundle\Model\User;
@@ -8,11 +15,10 @@ use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Classe pour checker l'autorisation des utilsateurs
+ * Classe pour checker l'autorisation des utilsateurs.
  *
- * @package    Olix
- * @subpackage BackOfficeBundle
  * @author     Sabinus52 <sabinus52@gmail.com>
+ *
  * @see        https://symfony.com/doc/current/security/user_checkers.html
  */
 class UserChecker implements UserCheckerInterface
@@ -27,7 +33,6 @@ class UserChecker implements UserCheckerInterface
         }
     }
 
-
     /**
      * @param UserInterface $user
      */
@@ -38,7 +43,7 @@ class UserChecker implements UserCheckerInterface
         }
 
         // user account is not activ
-        if (! $user->isEnabled()) {
+        if (!$user->isEnabled()) {
             throw new CustomUserMessageAccountStatusException('Account has disabled.');
         }
 

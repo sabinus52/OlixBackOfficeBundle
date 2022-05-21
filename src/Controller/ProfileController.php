@@ -1,30 +1,34 @@
 <?php
 
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Olix\BackOfficeBundle\Controller;
 
-use Olix\BackOfficeBundle\Model\User;
+use Doctrine\Persistence\ManagerRegistry;
 use Olix\BackOfficeBundle\Helper\Gravatar;
+use Olix\BackOfficeBundle\Model\User;
 use Olix\BackOfficeBundle\Security\UserManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Finder\Finder;
-use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
- * Contrôleur des pages du profil de l'utilisateur
+ * Contrôleur des pages du profil de l'utilisateur.
  *
- * @package    Olix
- * @subpackage BackOfficeBundle
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
 class ProfileController extends AbstractController
 {
     /**
-     * Page de profile
+     * Page de profile.
      *
      * @Route("/profile", name="olix_profile")
      * @Security("is_granted('ROLE_USER')")
@@ -65,9 +69,8 @@ class ProfileController extends AbstractController
         ]);
     }
 
-
     /**
-     * Affichage des avatars
+     * Affichage des avatars.
      *
      * @Route("/profile/avatar", name="olix_profile_avatar")
      * @Security("is_granted('ROLE_USER')")
@@ -79,10 +82,10 @@ class ProfileController extends AbstractController
         $gravatar = new Gravatar();
         /** @var User $user */
         $user = $this->getUser();
-        $result = array();
+        $result = [];
 
         // Charge la liste des images avatar
-        $finder->files()->in(__DIR__ . '/../../public/images/avatar')->name('*.png');
+        $finder->files()->in(__DIR__.'/../../public/images/avatar')->name('*.png');
         foreach ($finder as $files) {
             $result[$files->getRelativePath()][] = $files->getRelativePathname();
         }
@@ -93,9 +96,8 @@ class ProfileController extends AbstractController
         ]);
     }
 
-
     /**
-     * Change l'avatar de l'utilisateur
+     * Change l'avatar de l'utilisateur.
      *
      * @Route("/profile/avatar/change", name="olix_profile_avatar_change")
      * @Security("is_granted('ROLE_USER')")

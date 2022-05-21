@@ -1,16 +1,20 @@
 <?php
 
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Olix\BackOfficeBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Olix\AdminLteFullBundle\DependencyInjection\OlixAdminFullExtension;
 
 /**
- * Classe racine du bundle
+ * Classe racine du bundle.
  *
- * @package    Olix
- * @subpackage BackOfficeBundle
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
 class OlixBackOfficeBundle extends Bundle
@@ -20,7 +24,6 @@ class OlixBackOfficeBundle extends Bundle
         parent::build($container);
         $ext = new \Olix\AdminLteFullBundle\DependencyInjection\OlixAdminLteFullExtension([],$container);
     }*/
-
 
     public function getPath(): string
     {

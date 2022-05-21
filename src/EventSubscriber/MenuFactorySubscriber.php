@@ -1,28 +1,33 @@
 <?php
 
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Olix\BackOfficeBundle\EventSubscriber;
 
-use Olix\BackOfficeBundle\Model\MenuItemModel;
-use Olix\BackOfficeBundle\Model\MenuItemInterface;
-use Olix\BackOfficeBundle\Event\SidebarMenuEvent;
-use Olix\BackOfficeBundle\Event\BreadcrumbEvent;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use Olix\BackOfficeBundle\Event\BreadcrumbEvent;
+use Olix\BackOfficeBundle\Event\SidebarMenuEvent;
+use Olix\BackOfficeBundle\Model\MenuItemInterface;
+use Olix\BackOfficeBundle\Model\MenuItemModel;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Security;
-use Exception;
 
 /**
- * Subscriber sur le menu de la barre latérale à hériter pour créer son propre menu
+ * Subscriber sur le menu de la barre latérale à hériter pour créer son propre menu.
  *
- * @package    Olix
- * @subpackage BackOfficeBundle
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
 abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFactoryInterface
 {
     /**
-     * Configuration des options du bundle
+     * Configuration des options du bundle.
      *
      * @var array<mixed>
      */
@@ -40,14 +45,13 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
      */
     private $security;
 
-
     public function __construct(ParameterBagInterface $parameterBag, EntityManagerInterface $entityManager, Security $security)
     {
         $this->entityManager = $entityManager;
         $this->security = $security;
 
         // Get parameter "olix_back_office.security"
-        if (! $parameterBag->has('olix_back_office')) {
+        if (!$parameterBag->has('olix_back_office')) {
             throw new Exception('Parameter "olix_back_office" not defined', 1);
         }
         /** @var array<mixed> $parameters */
@@ -57,9 +61,8 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
         }
     }
 
-
     /**
-     * Retourne la liste des évènements
+     * Retourne la liste des évènements.
      *
      * @return array<mixed>
      */
@@ -67,10 +70,9 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
     {
         return [
             SidebarMenuEvent::class => ['onBuildSidebar', 100],
-            BreadcrumbEvent::class  => ['onBuildSidebar', 100],
+            BreadcrumbEvent::class => ['onBuildSidebar', 100],
         ];
     }
-
 
     /**
      * Generate the main menu.
@@ -82,33 +84,32 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
         $this->build($event);
 
         // Add menu manage of users
-        if ($this->security->isGranted('ROLE_ADMIN') && $this->parameters['menu_activ'] == true) {
+        if ($this->security->isGranted('ROLE_ADMIN') && true === $this->parameters['menu_activ']) {
             $event->addItem(new MenuItemModel('security', [
-                'label'         => 'Gestion des utilisateurs',
-                'route'         => 'olix_users__list',
-                'icon'          => 'fas fa-users',
+                'label' => 'Gestion des utilisateurs',
+                'route' => 'olix_users__list',
+                'icon' => 'fas fa-users',
             ]));
         }
 
         $this->activateByRoute($event->getRequest()->get('_route'), $event->getSidebarMenu());
     }
 
-
     /**
-     * Correspondance de la route par récursivité pour activer le menu en cours
+     * Correspondance de la route par récursivité pour activer le menu en cours.
      *
-     * @param string $route
+     * @param string              $route
      * @param MenuItemInterface[] $items : MenuItemInterface[]
      */
     protected function activateByRoute(string $route, ?array $items): void
     {
         foreach ($items as $item) {
             if ($item->hasChildren()) {
-                if ($item->getRoute() == $route) {
+                if ($item->getRoute() === $route) {
                     $item->setIsActive(true); // TODO inclusio de chemin __
                 }
                 $this->activateByRoute($route, $item->getChildren());
-            } elseif ($item->getRoute() == $route) {
+            } elseif ($item->getRoute() === $route) {
                 $item->setIsActive(true);
             }
         }

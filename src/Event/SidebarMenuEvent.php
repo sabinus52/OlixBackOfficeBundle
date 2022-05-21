@@ -1,15 +1,20 @@
 <?php
 
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Olix\BackOfficeBundle\Event;
 
 use Olix\BackOfficeBundle\Model\MenuItemInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Evènements sur le menu de la barre latérale
+ * Evènements sur le menu de la barre latérale.
  *
- * @package    Olix
- * @subpackage BackOfficeBundle
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
 class SidebarMenuEvent extends BackOfficeEvent
@@ -24,8 +29,6 @@ class SidebarMenuEvent extends BackOfficeEvent
      */
     protected $request;
 
-
-
     /**
      * @param Request $request
      */
@@ -33,7 +36,6 @@ class SidebarMenuEvent extends BackOfficeEvent
     {
         $this->request = $request;
     }
-
 
     /**
      * @return Request
@@ -43,9 +45,8 @@ class SidebarMenuEvent extends BackOfficeEvent
         return $this->request;
     }
 
-
     /**
-     * Retourne le menu de la barre latérale
+     * Retourne le menu de la barre latérale.
      *
      * @return MenuItemInterface[]
      */
@@ -54,11 +55,11 @@ class SidebarMenuEvent extends BackOfficeEvent
         return $this->rootItems;
     }
 
-
     /**
-     * Ajoute un nouvel élémént de menu
+     * Ajoute un nouvel élémént de menu.
      *
      * @param MenuItemInterface $item
+     *
      * @return SidebarMenuEvent
      */
     public function addItem(MenuItemInterface $item): self
@@ -68,11 +69,11 @@ class SidebarMenuEvent extends BackOfficeEvent
         return $this;
     }
 
-
     /**
-     * Enlève un élément au menu
+     * Enlève un élément au menu.
      *
      * @param MenuItemInterface|string $item
+     *
      * @return SidebarMenuEvent
      */
     public function removeItem($item): self
@@ -88,6 +89,7 @@ class SidebarMenuEvent extends BackOfficeEvent
 
     /**
      * @param string $code
+     *
      * @return MenuItemInterface|null
      */
     public function getItem($code): ?MenuItemInterface
@@ -95,9 +97,8 @@ class SidebarMenuEvent extends BackOfficeEvent
         return $this->rootItems[$code] ?? null;
     }
 
-
     /**
-     * Retourne le menu actif du niveau 1
+     * Retourne le menu actif du niveau 1.
      *
      * @return MenuItemInterface|null
      */

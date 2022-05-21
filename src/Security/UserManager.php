@@ -1,31 +1,36 @@
 <?php
 
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Olix\BackOfficeBundle\Security;
 
-use Olix\BackOfficeBundle\Model\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Olix\BackOfficeBundle\Form\UserCreateType;
 use Olix\BackOfficeBundle\Form\UserPasswordType;
+use Olix\BackOfficeBundle\Model\User;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 
 /**
- * Classe de la gestion des utilisateurs
+ * Classe de la gestion des utilisateurs.
  *
- * @package    Olix
- * @subpackage BackOfficeBundle
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
 class UserManager implements UserManagerInterface
 {
     /**
-     * Configuration du bundle de la branche "security"
+     * Configuration du bundle de la branche "security".
+     *
      * @var array<mixed>
      */
     protected $parameters = [
@@ -62,13 +67,12 @@ class UserManager implements UserManagerInterface
      */
     protected $user;
 
-
     /**
-     * Constructeur
+     * Constructeur.
      *
-     * @param ContainerInterface $container
-     * @param ParameterBagInterface $parameterBag
-     * @param ManagerRegistry $doctrine
+     * @param ContainerInterface          $container
+     * @param ParameterBagInterface       $parameterBag
+     * @param ManagerRegistry             $doctrine
      * @param UserPasswordHasherInterface $passwordHasher
      */
     public function __construct(
@@ -83,7 +87,7 @@ class UserManager implements UserManagerInterface
         $this->entityManager = $doctrine->getManager(); // @phpstan-ignore-line
 
         // Get parameter olix_back_office.security
-        if (! $parameterBag->has('olix_back_office')) {
+        if (!$parameterBag->has('olix_back_office')) {
             throw new Exception('Parameter "olix_back_office" not defined', 1);
         }
         /** @var array<mixed> $parameters */
@@ -93,9 +97,8 @@ class UserManager implements UserManagerInterface
         }
     }
 
-
     /**
-     * Retourne la classe de l'utilisateur
+     * Retourne la classe de l'utilisateur.
      *
      * @return string
      */
@@ -104,9 +107,8 @@ class UserManager implements UserManagerInterface
         return $this->parameters['class']['user'];
     }
 
-
     /**
-     * Retourne l'utilisateur
+     * Retourne l'utilisateur.
      *
      * @return User
      */
@@ -115,9 +117,8 @@ class UserManager implements UserManagerInterface
         return $this->user;
     }
 
-
     /**
-     * Crée un nouvel objet utilisateur
+     * Crée un nouvel objet utilisateur.
      *
      * @return UserInterface
      */
@@ -130,22 +131,22 @@ class UserManager implements UserManagerInterface
         return $this->user;
     }
 
-
     /**
-     * Affecte un utilisateur dans le manager
+     * Affecte un utilisateur dans le manager.
      *
      * @param User $user
+     *
      * @return UserManager
      */
     public function setUser(User $user): self
     {
         $this->user = $user;
+
         return $this;
     }
 
-
     /**
-     * Affecte un utilisateur dans le manager via son identifiant
+     * Affecte un utilisateur dans le manager via son identifiant.
      *
      * @return UserInterface|null
      */
@@ -153,12 +154,12 @@ class UserManager implements UserManagerInterface
     {
         /** @var User $this->user */
         $this->user = $this->doctrine->getRepository($this->getClass())->find($idf); // @phpstan-ignore-line
+
         return $this->user;
     }
 
-
     /**
-     * Retourne tous les utilisateurs
+     * Retourne tous les utilisateurs.
      *
      * @return UserInterface[]
      */
@@ -167,9 +168,8 @@ class UserManager implements UserManagerInterface
         return $this->doctrine->getRepository($this->getClass())->findAll(); // @phpstan-ignore-line
     }
 
-
     /**
-     * Ajoute un nouvel utilisateur en base
+     * Ajoute un nouvel utilisateur en base.
      *
      * @param string $password
      */
@@ -179,9 +179,8 @@ class UserManager implements UserManagerInterface
         $this->update();
     }
 
-
     /**
-     * Mets à jour les données de l'utilisateur
+     * Mets à jour les données de l'utilisateur.
      *
      * @param string $password
      */
@@ -194,9 +193,8 @@ class UserManager implements UserManagerInterface
         $this->entityManager->flush();
     }
 
-
     /**
-     * Supprime un utilisateur en base
+     * Supprime un utilisateur en base.
      */
     public function remove(): void
     {
@@ -204,11 +202,11 @@ class UserManager implements UserManagerInterface
         $this->entityManager->flush();
     }
 
-
     /**
-     * Retourne un mot de passe haché
+     * Retourne un mot de passe haché.
      *
      * @param string $plaintextPassword
+     *
      * @return string
      */
     protected function getHashedPassword(string $plaintextPassword): string
@@ -216,11 +214,11 @@ class UserManager implements UserManagerInterface
         return $this->passwordHasher->hashPassword($this->user, $plaintextPassword);
     }
 
-
     /**
-     * Crée le formulaire de création d'un utilisateur
+     * Crée le formulaire de création d'un utilisateur.
      *
      * @param array<mixed> $options
+     *
      * @return FormInterface
      */
     public function createFormCreateUser(array $options = []): FormInterface
@@ -228,37 +226,39 @@ class UserManager implements UserManagerInterface
         return $this->createForm(UserCreateType::class, $options);
     }
 
-
     /**
-     * Crée le formulaire de modification d'un utilisateur
+     * Crée le formulaire de modification d'un utilisateur.
      *
      * @param array<mixed> $options
+     *
      * @return FormInterface
      */
     public function createFormEditUser(array $options = []): FormInterface
     {
         $class = $this->parameters['class']['form_user'];
+
         return $this->createForm($class, $options);
     }
 
-
     /**
-     * Crée le formulaire de profile d'un utilisateur
+     * Crée le formulaire de profile d'un utilisateur.
      *
      * @param array<mixed> $options
+     *
      * @return FormInterface
      */
     public function createFormProfileUser(array $options = []): FormInterface
     {
         $class = $this->parameters['class']['form_profile'];
+
         return $this->createForm($class, $options);
     }
 
-
     /**
-     * Crée le formulaire de changement de mot de passe d'un utilisateur
+     * Crée le formulaire de changement de mot de passe d'un utilisateur.
      *
      * @param array<mixed> $options
+     *
      * @return FormInterface
      */
     public function createFormChangePassword(array $options = []): FormInterface
@@ -266,17 +266,18 @@ class UserManager implements UserManagerInterface
         return $this->createForm(UserPasswordType::class, $options);
     }
 
-
     /**
-     * Création d'un formulaire spécifique
+     * Création d'un formulaire spécifique.
      *
-     * @param string $type : Nom de la classe fu formulaire
+     * @param string       $type    : Nom de la classe fu formulaire
      * @param array<mixed> $options
+     *
      * @return FormInterface
      */
     protected function createForm(string $type, array $options = []): FormInterface
     {
-        $options = $options + [ 'data_class' => $this->getClass() ];
+        $options = $options + ['data_class' => $this->getClass()];
+
         return $this->container->get('form.factory')->create($type, $this->user, $options);
     }
 }
