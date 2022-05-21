@@ -1,70 +1,74 @@
 <?php
+
+declare(strict_types=1);
+
 /**
- * Tests unitaires pour les notifications
- *
- * @author Olivier <sabinus52@gmail.com>
- *
- * @package Olix
- * @subpackage AdminBundle
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Tests\Model;
 
-use PHPUnit\Framework\TestCase;
 use Olix\BackOfficeBundle\Model\NotificationModel;
-use Olix\BackOfficeBundle\Model\NotificationInterface;
+use PHPUnit\Framework\TestCase;
 
-
-class NotificationTest extends TestCase
+/**
+ * Test unitaires pour la sidebar.
+ *
+ * @author     Sabinus52 <sabinus52@gmail.com>
+ *
+ * @covers \Notification
+ *
+ * @internal
+ */
+final class NotificationTest extends TestCase
 {
-
     /**
-     * @var NotificationInterface
+     * @var NotificationModel
      */
     protected $notice0;
+    /**
+     * @var NotificationModel
+     */
     protected $notice1;
-
 
     protected function setUp(): void
     {
         $this->notice0 = new NotificationModel(null);
         $this->notice1 = new NotificationModel('not', [
-            'icon'      => 'triangle',
-            'color'     => 'red',
-            'message'   => 'Coucou attention',
-            'info'      => '3 min',
+            'icon' => 'triangle',
+            'color' => 'red',
+            'message' => 'Coucou attention',
+            'info' => '3 min',
         ]);
     }
 
-
     protected function tearDown(): void
     {
-        $this->notice0 = null;
-        $this->notice1 = null;
     }
 
-
-    public function testGetSet()
+    public function testGetSet(): void
     {
-        $this->assertSame('not', $this->notice1->getCode());
-        $this->assertSame('triangle', $this->notice1->getIcon());
-        $this->assertSame('red', $this->notice1->getColor());
-        $this->assertSame('Coucou attention', $this->notice1->getMessage());
-        $this->assertSame('3 min', $this->notice1->getInfo());
+        static::assertSame('not', $this->notice1->getCode());
+        static::assertSame('triangle', $this->notice1->getIcon());
+        static::assertSame('red', $this->notice1->getColor());
+        static::assertSame('Coucou attention', $this->notice1->getMessage());
+        static::assertSame('3 min', $this->notice1->getInfo());
 
-        $this->assertNull($this->notice0->getCode());
-        $this->assertSame('fas fa-exclamation-triangle', $this->notice0->getIcon());
-        $this->assertNull($this->notice0->getColor());
-        $this->assertSame('', $this->notice0->getMessage());
-        $this->assertNull($this->notice0->getInfo());
+        static::assertNull($this->notice0->getCode());
+        static::assertSame('fas fa-exclamation-triangle', $this->notice0->getIcon());
+        static::assertNull($this->notice0->getColor());
+        static::assertSame('', $this->notice0->getMessage());
+        static::assertNull($this->notice0->getInfo());
         $this->notice0->setIcon('circle');
-        $this->assertSame('circle', $this->notice0->getIcon());
+        static::assertSame('circle', $this->notice0->getIcon());
         $this->notice0->setColor('green');
-        $this->assertSame('green', $this->notice0->getColor());
+        static::assertSame('green', $this->notice0->getColor());
         $this->notice0->setMessage('Coucou attention');
-        $this->assertSame('Coucou attention', $this->notice0->getMessage());
+        static::assertSame('Coucou attention', $this->notice0->getMessage());
         $this->notice0->setInfo('---');
-        $this->assertSame('---', $this->notice0->getInfo());
+        static::assertSame('---', $this->notice0->getInfo());
     }
-
 }

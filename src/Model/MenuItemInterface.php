@@ -81,6 +81,13 @@ interface MenuItemInterface extends \Countable, \IteratorAggregate
     public function getChildren(): array;
 
     /**
+     * @param string $code
+     *
+     * @return MenuItemInterface
+     */
+    public function getChild(string $code): self;
+
+    /**
      * @param MenuItemInterface $child
      *
      * @return MenuItemInterface
@@ -88,11 +95,11 @@ interface MenuItemInterface extends \Countable, \IteratorAggregate
     public function addChild(self $child): self;
 
     /**
-     * @param MenuItemInterface $child
+     * @param MenuItemInterface|string $child
      *
      * @return MenuItemInterface
      */
-    public function removeChild(self $child): self;
+    public function removeChild($child): self;
 
     /**
      * @return bool
