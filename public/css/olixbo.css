@@ -4,3 +4,7 @@
     border: 2px solid #abb5bd;
     padding: 1px;
 }
+
+legend.col-form-label {
+    font-weight: 700;
+}
