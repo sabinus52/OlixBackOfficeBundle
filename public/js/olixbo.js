@@ -23,4 +23,12 @@
         return false;
     })
 
+
+    /**
+     * Chargement des éléments de type "Bootstrap-Switch"
+     */
+    $('input[data-toggle="switch"]').each(function(){
+        $(this).bootstrapSwitch('state', $(this).prop('checked'));
+    })
+
 })();
