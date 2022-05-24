@@ -31,4 +31,13 @@
         $(this).bootstrapSwitch('state', $(this).prop('checked'));
     })
 
+
+    /**
+     * Chargement des éléments de type "Select2"
+     */
+    $('.select2').select2();
+    $(document).on('select2:open', () => {
+        document.querySelector('.select2-container--open .select2-search__field').focus();
+    });
+
 })();

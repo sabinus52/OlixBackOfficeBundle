@@ -43,3 +43,47 @@
     {%- set attr = attr|merge({'data-toggle': 'switch'}) -%}
     <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
 {%- endblock olix_switch_widget %}
+
+
+{% block olix_select2_widget -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' select2')|trim}) -%}
+    {% if color != 'default' %}
+        {%- set attr = attr|merge({class: (attr.class ~ ' select2-' ~ color)|trim, 'data-dropdown-css-class': 'select2-' ~ color}) -%}
+    {% endif %}
+    {% if multiple == true and color != 'default' %}
+        <div class="select2-{{ color }}">{{- block('choice_widget') -}}</div>
+    {% else %}
+        {{- block('choice_widget') -}}
+    {% endif %}
+
+    {% if ajax_route is defined and ajax_route is not null %}
+        {# For remote datas #}
+        <script type="text/javascript">
+        window.addEventListener("load", function(){
+
+            $('#{{ id }}').select2({
+                ajax: {
+                    url: '{{ path(ajax_route) }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            term: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.results,
+                            pagination: {
+                                more: (params.page * {{ ajax_count }}) < data.total
+                            }
+                        };
+                    }
+                }
+            });
+
+        });
+        </script>
+    {% endif %}
+{%- endblock olix_select2_widget %}
