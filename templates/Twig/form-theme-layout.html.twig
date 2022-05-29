@@ -116,6 +116,11 @@
 {% block olix_duallistbox_widget -%}
     {%- set attr = attr|merge({class: (attr.class|default('') ~ ' duallistbox')|trim}) -%}
     {{- block('choice_widget') -}}
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            $('#{{ id }}').bootstrapDualListbox({{ ojs_options|json_encode|raw }});
+        });
+    </script>
 {%- endblock olix_duallistbox_widget %}
 
 
