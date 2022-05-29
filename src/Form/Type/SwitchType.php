@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Olix\BackOfficeBundle\Form\Type;
 
 use Olix\BackOfficeBundle\Form\Model\SwitchModelType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 /**
  * Widget de formulaire de type switch équivalent à une case à cocher.
@@ -24,15 +24,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class SwitchType extends SwitchModelType
 {
     /**
-     * @param OptionsResolver $resolver
+     * {@inheritDoc}
      */
-    public function configureOptions(OptionsResolver $resolver): void
+    public function getParent(): string
     {
-        $resolver->setDefaults([
-            'attr' => [
-                'data-on-text' => 'OUI',
-                'data-off-text' => 'NON',
-            ],
-        ]);
+        return CheckboxType::class;
     }
 }

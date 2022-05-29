@@ -20,6 +20,12 @@ use Symfony\Component\Form\AbstractType;
  */
 abstract class AbstractModelType extends AbstractType
 {
+    protected const COLORS = [
+        'primary', 'blue', 'secondary', 'success', 'green', 'info', 'cyan', 'warning', 'yellow', 'danger', 'red',
+        'black', 'gray-dark', 'gray', 'light', 'default',
+        'indigo', 'navy', 'purple', 'fuchsia', 'pink', 'maroon', 'orange', 'lime', 'teal', 'olive',
+    ];
+
     /**
      * Retourne toutes les options javascript d'un widget.
      * Parameters starts with "ojs_".

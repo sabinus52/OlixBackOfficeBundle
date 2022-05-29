@@ -62,6 +62,11 @@
 {% block olix_switch_widget -%}
     {%- set attr = attr|merge({'data-toggle': 'switch'}) -%}
     <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            $('#{{ id }}').bootstrapSwitch({{ ojs_options|json_encode|raw }});
+        });
+    </script>
 {%- endblock olix_switch_widget %}
 
 
