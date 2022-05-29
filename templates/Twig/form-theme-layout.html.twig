@@ -30,6 +30,27 @@
 {%- endblock tel_widget %}
 
 
+{% block olix_input_widget -%}
+    {% if right_symbol or left_symbol %}
+        <div class="input-group">
+    {% endif %}
+    {% if left_symbol %}
+        <div class="input-group-prepend">
+            <span class="input-group-text">{{ left_symbol|raw }}</i></span>
+        </div>
+    {% endif %}
+    {{- block('form_widget') -}}
+    {% if right_symbol %}
+        <div class="input-group-prepend">
+            <span class="input-group-text">{{ right_symbol|raw }}</i></span>
+        </div>
+    {% endif %}
+    {% if right_symbol or left_symbol %}
+        </div>
+    {% endif %}
+{%- endblock olix_input_widget %}
+
+
 {% block olix_switch_label -%}
     {{- block('form_label') -}}
 {%- endblock olix_switch_label %}
