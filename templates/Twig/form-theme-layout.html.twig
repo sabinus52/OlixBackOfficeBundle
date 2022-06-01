@@ -80,36 +80,53 @@
         {{- block('choice_widget') -}}
     {% endif %}
 
-    {% if ajax_route is defined and ajax_route is not null %}
-        {# For remote datas #}
-        <script type="text/javascript">
-        window.addEventListener("load", function(){
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function(){
 
-            $('#{{ id }}').select2({
-                ajax: {
-                    url: '{{ path(ajax_route) }}',
-                    dataType: 'json',
-                    data: function (params) {
-                        return {
-                            term: params.term,
-                            page: params.page
-                        };
-                    },
-                    processResults: function (data, params) {
-                        params.page = params.page || 1;
-                        return {
-                            results: data.results,
-                            pagination: {
-                                more: (params.page * {{ ajax_count }}) < data.total
+            $('#{{ id }}').select2(
+                $.extend( {},
+                {{ ojs_options|json_encode|raw }}
+                {% if ajax_route is defined and ajax_route is not null %}
+                    ,{
+                        ajax: {
+                            url: '{{ path(ajax_route, ajax_param) }}',
+                            dataType: 'json',
+                            delay: {{ ajax_delay }},
+                            cache: {{ ajax_cache }},
+                            data: function (params) {
+                                return {
+                                    term: params.term
+                                    {% if ajax_scroll %},page: params.page || 1{% endif %}
+                                };
+                            },
+                            processResults: function (data, params) {
+                                let results, more = false, response = {};
+                                params.page = params.page || 1;
+                                if ($.isArray(data)) {
+                                    results = data;
+                                } else if (typeof data === 'object') {
+                                    // assume remote result was proper object
+                                    results = data.results;
+                                    more = data.more;
+                                } else {
+                                    // failsafe
+                                    results = [];
+                                }
+                                response.results = results;
+                                {% if ajax_scroll %}response.pagination = { more: more };{% endif %}
+                                return response;
                             }
-                        };
+                        }
                     }
-                }
+                {% endif %}
+            ));
+
+            $(document).on('select2:open', () => {
+                document.querySelector('.select2-container--open .select2-search__field').focus();
             });
 
         });
-        </script>
-    {% endif %}
+    </script>
 {%- endblock olix_select2_widget %}
 
 
