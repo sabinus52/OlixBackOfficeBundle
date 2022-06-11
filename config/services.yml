@@ -33,3 +33,8 @@ services:
         tags: ['controller.service_arguments']
         calls:
             - ['setContainer', ['@service_container']]
+
+    Olix\BackOfficeBundle\Form\Type\Select2AjaxType:
+        arguments: [ '@doctrine' ]
+        tags:
+            - { name: form.type }
