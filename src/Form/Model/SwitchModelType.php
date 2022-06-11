@@ -46,7 +46,7 @@ abstract class SwitchModelType extends AbstractModelType
             'ojs_off_color' => 'default',
             'ojs_on_text' => 'OUI',
             'ojs_off_text' => 'NON',
-            'ojs_size' => null,
+            'ojs_size' => 'normal',
             'ojs_indeterminate' => false,
             'ojs_label_text' => '&nbsp;',
         ]);
