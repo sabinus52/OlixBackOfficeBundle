@@ -5,5 +5,15 @@
 <script src="{{ asset('bundles/olixbackoffice/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
 <script src="{{ asset('bundles/olixbackoffice/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
 <script src="{{ asset('bundles/olixbackoffice/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
+<script src="{{ asset('bundles/olixbackoffice/plugins/toastr/toastr.min.js') }}"></script>
 <script src="{{ asset('bundles/olixbackoffice/js/adminlte.min.js') }}"></script>
 <script src="{{ asset('bundles/olixbackoffice/js/olixbo.js') }}"></script>
+<script type="text/javascript">
+{% if app.session and app.session.started and app.session.flashbag.peekAll|length > 0 %}
+    {% for type, messages in app.session.flashbag.all %}
+        {% for message in messages %}
+            toastr.{{ type }}('{{ message|trans({},'flashmessages') }}')
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+</script>
