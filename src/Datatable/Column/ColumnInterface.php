@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable\Column;
@@ -23,6 +23,8 @@ interface ColumnInterface
 
     /**
      * Validates $dql. Normally a non-empty string is expected.
+     *
+     * @param mixed $dql
      *
      * @return bool
      */

@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable\Filter;
@@ -18,6 +18,10 @@ use Doctrine\ORM\QueryBuilder;
 use Olix\BackOfficeBundle\Datatable\OptionsTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 abstract class AbstractFilter implements FilterInterface
 {
     use OptionsTrait;
@@ -83,9 +87,9 @@ abstract class AbstractFilter implements FilterInterface
         $this->initOptions();
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Options
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return $this
@@ -115,9 +119,9 @@ abstract class AbstractFilter implements FilterInterface
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Getters && Setters
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return string
@@ -259,9 +263,9 @@ abstract class AbstractFilter implements FilterInterface
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Helper
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Add an or condition.
@@ -270,6 +274,7 @@ abstract class AbstractFilter implements FilterInterface
      * @param string $searchField
      * @param string $searchTypeOfField
      * @param int    $parameterCounter
+     * @param mixed  $searchValue
      *
      * @return Composite
      */
@@ -285,6 +290,7 @@ abstract class AbstractFilter implements FilterInterface
      * @param string $searchField
      * @param string $searchTypeOfField
      * @param int    $parameterCounter
+     * @param mixed  $searchValue
      *
      * @return Composite
      */
@@ -296,7 +302,7 @@ abstract class AbstractFilter implements FilterInterface
         // Only StringExpression can be searched with LIKE (https://github.com/doctrine/doctrine2/issues/6363)
         if (
             // Not a StringExpression
-            ! preg_match('/text|string|date|time|array|json|json_array|simple_array/', $searchTypeOfField)
+            !preg_match('/text|string|date|time|array|json|json_array|simple_array/', $searchTypeOfField)
             // Subqueries can't be search with LIKE
             || preg_match('/SELECT.+FROM.+/is', $searchField)
             // CASE WHEN can't be search with LIKE
@@ -430,6 +436,8 @@ abstract class AbstractFilter implements FilterInterface
      *
      * @param string $searchField
      * @param int    $parameterCounter
+     * @param mixed  $from
+     * @param mixed  $to
      *
      * @return Andx
      */

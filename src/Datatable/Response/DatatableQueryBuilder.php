@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable\Response;
@@ -30,6 +30,10 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * @todo: remove phpcs warnings
+ */
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
  */
 class DatatableQueryBuilder
 {
@@ -183,9 +187,9 @@ class DatatableQueryBuilder
      */
     private $useCountResultCacheArgs = [false];
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Ctor. && Init column arrays
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @throws Exception
@@ -220,9 +224,9 @@ class DatatableQueryBuilder
         $this->initColumnArrays();
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Public
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Build query.
@@ -306,7 +310,7 @@ class DatatableQueryBuilder
         $query->useQueryCache($this->useCountQueryCache);
         \call_user_func_array([$query, 'useResultCache'], $this->useCountResultCacheArgs);
 
-        return ! $qb->getDQLPart('groupBy')
+        return !$qb->getDQLPart('groupBy')
             ? (int) $query->getSingleScalarResult()
             : \count($query->getResult());
     }
@@ -410,7 +414,7 @@ class DatatableQueryBuilder
                     $currentAlias = ($previousPart === $this->entityShortName ? '' : $previousPart.'_').$currentPart;
                     $currentAlias = $this->getSafeName($currentAlias);
 
-                    if (! \array_key_exists($previousAlias.'.'.$currentPart, $this->joins)) {
+                    if (!\array_key_exists($previousAlias.'.'.$currentPart, $this->joins)) {
                         $this->addJoin($previousAlias.'.'.$currentPart, $currentAlias, $this->accessor->getValue($column, 'joinType'));
                     }
 
@@ -427,7 +431,7 @@ class DatatableQueryBuilder
                     foreach ($orderColumns as $orderColumn) {
                         $orderParts = explode('.', $orderColumn);
                         if (\count($orderParts) < 2) {
-                            if (! isset($this->columnNames[$orderColumn]) || null === $this->accessor->getValue($this->columns[$this->columnNames[$orderColumn]], 'customDql')) {
+                            if (!isset($this->columnNames[$orderColumn]) || null === $this->accessor->getValue($this->columns[$this->columnNames[$orderColumn]], 'customDql')) {
                                 $orderColumn = $this->entityShortName.'.'.$orderColumn;
                             }
                         }
@@ -456,9 +460,9 @@ class DatatableQueryBuilder
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Private/Public - Setup query
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Set select from.
@@ -608,9 +612,9 @@ class DatatableQueryBuilder
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Private - Helper
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Set identifier from association.
@@ -649,7 +653,7 @@ class DatatableQueryBuilder
     private function addSelectColumn($columnTableName, $data)
     {
         if (isset($this->selectColumns[$columnTableName])) {
-            if (! \in_array($data, $this->selectColumns[$columnTableName], true)) {
+            if (!\in_array($data, $this->selectColumns[$columnTableName], true)) {
                 $this->selectColumns[$columnTableName][] = $data;
             }
         } else {

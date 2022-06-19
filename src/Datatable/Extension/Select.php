@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable\Extension;
@@ -14,13 +14,17 @@ namespace Olix\BackOfficeBundle\Datatable\Extension;
 use Olix\BackOfficeBundle\Datatable\OptionsTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 class Select
 {
     use OptionsTrait;
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // DataTables - Select Extension - select
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Indicate if the selected items will be removed when clicking outside of the table.
@@ -69,9 +73,9 @@ class Select
         $this->initOptions();
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Options
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Configure options.
@@ -103,9 +107,9 @@ class Select
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Getters && Setters
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return bool|null

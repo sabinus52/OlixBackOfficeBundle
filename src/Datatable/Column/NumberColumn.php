@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable\Column;
@@ -14,6 +14,10 @@ namespace Olix\BackOfficeBundle\Datatable\Column;
 use Olix\BackOfficeBundle\Datatable\Helper;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 class NumberColumn extends Column
 {
     /**
@@ -40,9 +44,9 @@ class NumberColumn extends Column
      */
     protected $currency;
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // ColumnInterface
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * {@inheritdoc}
@@ -99,9 +103,9 @@ class NumberColumn extends Column
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Options
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return $this
@@ -124,7 +128,7 @@ class NumberColumn extends Column
         $resolver->setAllowedTypes('currency', ['null', 'string']);
 
         $resolver->setAllowedValues('formatter', function ($formatter) {
-            if (! $formatter instanceof \NumberFormatter) {
+            if (!$formatter instanceof \NumberFormatter) {
                 return false;
             }
 
@@ -134,9 +138,9 @@ class NumberColumn extends Column
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Getters && Setters
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return \NumberFormatter
@@ -196,9 +200,9 @@ class NumberColumn extends Column
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Helper
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Render template.

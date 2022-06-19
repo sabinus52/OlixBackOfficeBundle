@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable\Column;
@@ -17,6 +17,10 @@ use Olix\BackOfficeBundle\Datatable\Filter\TextFilter;
 use Olix\BackOfficeBundle\Datatable\Helper;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 class DateTimeColumn extends AbstractColumn
 {
     use EditableTrait;
@@ -41,9 +45,9 @@ class DateTimeColumn extends AbstractColumn
      */
     protected $timeago;
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // ColumnInterface
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * {@inheritdoc}
@@ -129,9 +133,9 @@ class DateTimeColumn extends AbstractColumn
         return null;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Options
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return $this
@@ -155,9 +159,9 @@ class DateTimeColumn extends AbstractColumn
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Getters && Setters
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Get date format.
@@ -180,7 +184,7 @@ class DateTimeColumn extends AbstractColumn
      */
     public function setDateFormat($dateFormat)
     {
-        if (empty($dateFormat) || ! \is_string($dateFormat)) {
+        if (empty($dateFormat) || !\is_string($dateFormat)) {
             throw new Exception('DateTimeColumn::setDateFormat(): A non-empty string is expected.');
         }
 
@@ -209,9 +213,9 @@ class DateTimeColumn extends AbstractColumn
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Helper
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Render template.

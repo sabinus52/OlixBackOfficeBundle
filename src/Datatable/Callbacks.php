@@ -1,25 +1,29 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 class Callbacks
 {
     use OptionsTrait;
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // DataTables - Callbacks
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Callback for whenever a TR element is created for the table's body.
@@ -124,9 +128,9 @@ class Callbacks
         $this->initOptions();
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Options
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Configure options.
@@ -170,9 +174,9 @@ class Callbacks
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Getters && Setters
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return array|null

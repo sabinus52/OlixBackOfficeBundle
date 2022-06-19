@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable\Response;
@@ -19,6 +19,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 class DatatableResponse
 {
     /**
@@ -59,9 +63,9 @@ class DatatableResponse
         $this->datatableQueryBuilder = null;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Getters && Setters
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @throws Exception
@@ -91,9 +95,9 @@ class DatatableResponse
         return $this->datatableQueryBuilder ?: $this->createDatatableQueryBuilder();
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Response
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Get response data as array.
@@ -145,9 +149,9 @@ class DatatableResponse
         return new JsonResponse($this->getData($countAllResults, $outputWalkers, $fetchJoinCollection));
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Private
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Create a new DatatableQueryBuilder instance.

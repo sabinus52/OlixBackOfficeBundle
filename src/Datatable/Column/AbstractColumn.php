@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable\Column;
@@ -21,6 +21,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 abstract class AbstractColumn implements ColumnInterface
 {
     // Use an 'add_if' option to check in ColumnBuilder if the Column can be added.
@@ -28,9 +32,9 @@ abstract class AbstractColumn implements ColumnInterface
 
     use OptionsTrait;
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Column Types
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Identifies a Data Column.
@@ -52,14 +56,14 @@ abstract class AbstractColumn implements ColumnInterface
      */
     public const VIRTUAL_COLUMN = 'virtual';
 
-    //--------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------
     // DataTables - Columns Options
     // ----------------------------
     // All Column Options are initialized with 'null' - except 'searchable', 'orderable', and 'visible'.
     // These 'null' initialized options uses the default value of the DataTables plugin.
     // 'searchable', 'orderable', and 'visible' are required in the QueryBuilder and are therefore
     // pre-assigned with a value (true or false).
-    //--------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------
 
     /**
      * Change the cell type created for the column - either TD cells or TH cells.
@@ -177,9 +181,9 @@ abstract class AbstractColumn implements ColumnInterface
      */
     protected $width;
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Custom Options
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Join type (default: 'leftJoin'), if the column represents an association.
@@ -207,9 +211,9 @@ abstract class AbstractColumn implements ColumnInterface
      */
     protected $dql;
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Extensions Options
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Set column's visibility priority.
@@ -220,9 +224,9 @@ abstract class AbstractColumn implements ColumnInterface
      */
     protected $responsivePriority;
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Other Properties
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * True if DQL option is provided.
@@ -296,9 +300,9 @@ abstract class AbstractColumn implements ColumnInterface
      * @var bool
      */
     protected $sentInResponse;
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Options
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return $this
@@ -355,9 +359,9 @@ abstract class AbstractColumn implements ColumnInterface
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // ColumnInterface
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * {@inheritdoc}
@@ -430,7 +434,7 @@ abstract class AbstractColumn implements ColumnInterface
     /**
      * {@inheritdoc}
      */
-    public function renderCellContent(array &$row)
+    public function renderCellContent(array &$row): void
     {
         $this->isToManyAssociation() ? $this->renderToMany($row) : $this->renderSingleField($row);
     }
@@ -473,9 +477,9 @@ abstract class AbstractColumn implements ColumnInterface
         return false;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Getters && Setters
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return string|null

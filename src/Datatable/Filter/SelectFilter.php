@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable\Filter;
@@ -16,6 +16,10 @@ use Doctrine\ORM\QueryBuilder;
 use Exception;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 class SelectFilter extends AbstractFilter
 {
     /**
@@ -42,9 +46,9 @@ class SelectFilter extends AbstractFilter
      */
     protected $multiple;
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // FilterInterface
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * {@inheritdoc}
@@ -76,9 +80,9 @@ class SelectFilter extends AbstractFilter
         return $this->getExpression($andExpr, $qb, $this->searchType, $searchField, $searchValue, $searchTypeOfField, $parameterCounter);
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Options
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return $this
@@ -104,9 +108,9 @@ class SelectFilter extends AbstractFilter
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Getters && Setters
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return array
@@ -164,9 +168,9 @@ class SelectFilter extends AbstractFilter
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Private
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @throws Exception

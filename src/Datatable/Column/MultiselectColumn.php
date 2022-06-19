@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable\Column;
@@ -16,6 +16,10 @@ use Olix\BackOfficeBundle\Datatable\Action\MultiselectAction;
 use Olix\BackOfficeBundle\Datatable\RenderIfTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 class MultiselectColumn extends ActionColumn
 {
     // Render a Checkbox only if conditions are TRUE.
@@ -53,9 +57,9 @@ class MultiselectColumn extends ActionColumn
      */
     protected $renderActionsToId;
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // ColumnInterface
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * {@inheritdoc}
@@ -76,7 +80,7 @@ class MultiselectColumn extends ActionColumn
     /**
      * {@inheritdoc}
      */
-    public function addDataToOutputArray(array &$row)
+    public function addDataToOutputArray(array &$row): void
     {
         $row['sg_datatables_cbox'] = $this->callRenderIfClosure($row);
     }
@@ -84,7 +88,7 @@ class MultiselectColumn extends ActionColumn
     /**
      * {@inheritdoc}
      */
-    public function renderSingleField(array &$row)
+    public function renderSingleField(array &$row): void
     {
         $value = $row[$this->value];
 
@@ -132,9 +136,9 @@ class MultiselectColumn extends ActionColumn
         return parent::MULTISELECT_COLUMN;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Options
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Configure options.
@@ -165,9 +169,9 @@ class MultiselectColumn extends ActionColumn
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Getters && Setters
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @throws Exception

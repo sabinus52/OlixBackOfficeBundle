@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable\Response;
@@ -17,6 +17,10 @@ use Olix\BackOfficeBundle\Datatable\DatatableInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 class DatatableFormatter
 {
     /**
@@ -41,14 +45,14 @@ class DatatableFormatter
         $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Formatter
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Create the output array.
      */
-    public function runFormatter(Paginator $paginator, DatatableInterface $datatable)
+    public function runFormatter(Paginator $paginator, DatatableInterface $datatable): void
     {
         $lineFormatter = $datatable->getLineFormatter();
         $columns = $datatable->getColumnBuilder()->getColumns();
@@ -106,7 +110,7 @@ class DatatableFormatter
             }
 
             foreach ($columns as $column) {
-                if (! $column->getSentInResponse()) {
+                if (!$column->getSentInResponse()) {
                     unset($row[$column->getDql()]);
                 }
             }
@@ -115,9 +119,9 @@ class DatatableFormatter
         }
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Getters && Setters
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return array

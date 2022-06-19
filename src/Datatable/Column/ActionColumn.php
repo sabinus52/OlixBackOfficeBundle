@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable\Column;
@@ -18,6 +18,10 @@ use Olix\BackOfficeBundle\Datatable\Helper;
 use Olix\BackOfficeBundle\Datatable\HtmlContainerTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 class ActionColumn extends AbstractColumn
 {
     /*
@@ -34,9 +38,9 @@ class ActionColumn extends AbstractColumn
      */
     protected $actions;
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // ColumnInterface
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * {@inheritdoc}
@@ -57,7 +61,7 @@ class ActionColumn extends AbstractColumn
     /**
      * {@inheritdoc}
      */
-    public function addDataToOutputArray(array &$row)
+    public function addDataToOutputArray(array &$row): void
     {
         $actionRowItems = [];
 
@@ -72,7 +76,7 @@ class ActionColumn extends AbstractColumn
     /**
      * {@inheritdoc}
      */
-    public function renderSingleField(array &$row)
+    public function renderSingleField(array &$row): void
     {
         $parameters = [];
         $attributes = [];
@@ -89,7 +93,7 @@ class ActionColumn extends AbstractColumn
                         $path = Helper::getDataPropertyPath($value);
                         $entry = $this->accessor->getValue($row, $path);
 
-                        if (! empty($entry)) {
+                        if (!empty($entry)) {
                             $parameters[$actionKey][$key] = $entry;
                         } else {
                             $parameters[$actionKey][$key] = $value;
@@ -149,7 +153,7 @@ class ActionColumn extends AbstractColumn
     /**
      * {@inheritdoc}
      */
-    public function renderToMany(array &$row)
+    public function renderToMany(array &$row): void
     {
         throw new Exception('ActionColumn::renderToMany(): This function should never be called.');
     }
@@ -170,9 +174,9 @@ class ActionColumn extends AbstractColumn
         return parent::ACTION_COLUMN;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Options
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return $this
@@ -210,9 +214,9 @@ class ActionColumn extends AbstractColumn
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Getters && Setters
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return Action[]

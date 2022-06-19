@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable;
@@ -23,6 +23,10 @@ use Symfony\Component\Translation\TranslatorInterface as LegacyTranslatorInterfa
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 abstract class AbstractDatatable implements DatatableInterface
 {
     /**
@@ -137,7 +141,7 @@ abstract class AbstractDatatable implements DatatableInterface
      */
     protected $accessor;
 
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Used to generate unique names.
@@ -168,7 +172,7 @@ abstract class AbstractDatatable implements DatatableInterface
         $this->authorizationChecker = $authorizationChecker;
         $this->securityToken = $securityToken;
 
-        if (! ($translator instanceof LegacyTranslatorInterface) && ! ($translator instanceof TranslatorInterface)) {
+        if (!($translator instanceof LegacyTranslatorInterface) && !($translator instanceof TranslatorInterface)) {
             throw new \InvalidArgumentException(sprintf('The $translator argument of %s must be an instance of %s or %s, a %s was given.', static::class, LegacyTranslatorInterface::class, TranslatorInterface::class, \get_class($translator)));
         }
         $this->translator = $translator;
@@ -190,9 +194,9 @@ abstract class AbstractDatatable implements DatatableInterface
         $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // DatatableInterface
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * {@inheritdoc}
@@ -306,16 +310,16 @@ abstract class AbstractDatatable implements DatatableInterface
         return $this->getName().($this->getUniqueId() > 1 ? '-'.$this->getUniqueId() : '');
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Private
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Checks the name only contains letters, numbers, underscores or dashes.
      *
      * @throws LogicException
      */
-    private function validateName()
+    private function validateName(): void
     {
         $name = $this->getName();
         if (1 !== preg_match(self::NAME_REGEX, $name)) {

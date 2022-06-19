@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable\Column;
@@ -15,6 +15,10 @@ use Exception;
 use Olix\BackOfficeBundle\Datatable\Factory;
 use Olix\BackOfficeBundle\Datatable\Filter\FilterInterface;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 trait FilterableTrait
 {
     /**
@@ -25,9 +29,9 @@ trait FilterableTrait
      */
     protected $filter;
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Getters && Setters
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Get Filter instance.
@@ -52,11 +56,11 @@ trait FilterableTrait
             throw new Exception('AbstractColumn::setFilter(): Two arguments expected.');
         }
 
-        if (! isset($filterClassAndOptions[0]) || ! \is_string($filterClassAndOptions[0]) && ! $filterClassAndOptions[0] instanceof FilterInterface) {
+        if (!isset($filterClassAndOptions[0]) || !\is_string($filterClassAndOptions[0]) && !$filterClassAndOptions[0] instanceof FilterInterface) {
             throw new Exception('AbstractColumn::setFilter(): Set a Filter class.');
         }
 
-        if (! isset($filterClassAndOptions[1]) || ! \is_array($filterClassAndOptions[1])) {
+        if (!isset($filterClassAndOptions[1]) || !\is_array($filterClassAndOptions[1])) {
             throw new Exception('AbstractColumn::setFilter(): Set an options array.');
         }
 

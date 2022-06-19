@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable\Column;
@@ -19,6 +19,10 @@ use Olix\BackOfficeBundle\Datatable\Factory;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 class ColumnBuilder
 {
     /**
@@ -102,9 +106,9 @@ class ColumnBuilder
         $this->entityClassName = $metadata->getName();
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Builder
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * Add Column.
@@ -153,9 +157,9 @@ class ColumnBuilder
         return $this;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Getters && Setters
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @return array
@@ -185,9 +189,9 @@ class ColumnBuilder
         return \array_key_exists($columnType, $this->uniqueColumns) ? $this->uniqueColumns[$columnType] : null;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Helper
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @param string $entityName
@@ -249,7 +253,7 @@ class ColumnBuilder
         // the Column 'data' property has normally the same value as 'dql'
         $column->setData($dql);
 
-        if (! isset($options['dql'])) {
+        if (!isset($options['dql'])) {
             $column->setCustomDql(false);
             $column->setDql($dql);
         } else {

@@ -1,12 +1,12 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable;
@@ -20,6 +20,10 @@ use Symfony\Component\Translation\TranslatorInterface as LegacyTranslatorInterfa
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 class DatatableFactory
 {
     /**
@@ -75,7 +79,7 @@ class DatatableFactory
         $this->authorizationChecker = $authorizationChecker;
         $this->securityToken = $securityToken;
 
-        if (! ($translator instanceof LegacyTranslatorInterface) && ! ($translator instanceof TranslatorInterface)) {
+        if (!($translator instanceof LegacyTranslatorInterface) && !($translator instanceof TranslatorInterface)) {
             throw new \InvalidArgumentException(sprintf('The $translator argument of %s must be an instance of %s or %s, a %s was given.', static::class, LegacyTranslatorInterface::class, TranslatorInterface::class, \get_class($translator)));
         }
         $this->translator = $translator;
@@ -84,9 +88,9 @@ class DatatableFactory
         $this->twig = $twig;
     }
 
-    //-------------------------------------------------
+    // -------------------------------------------------
     // Create Datatable
-    //-------------------------------------------------
+    // -------------------------------------------------
 
     /**
      * @param string $class
@@ -97,7 +101,7 @@ class DatatableFactory
      */
     public function create($class)
     {
-        if (! \is_string($class)) {
+        if (!\is_string($class)) {
             $type = \gettype($class);
 
             throw new Exception("DatatableFactory::create(): String expected, {$type} given");

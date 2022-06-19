@@ -1,16 +1,20 @@
 <?php
 
-/*
- * This file is part of the SgDatatablesBundle package.
- *
- * (c) stwe <https://github.com/stwe/DatatablesBundle>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+declare(strict_types=1);
+
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Datatable;
 
+/**
+ * @see https://github.com/stwe/DatatablesBundle
+ * @SuppressWarnings(PHPMD)
+ */
 class Helper
 {
     /**
@@ -22,7 +26,7 @@ class Helper
      */
     public static function generateUniqueID($prefix = '')
     {
-        $id = sha1(microtime(true).mt_rand(10000, 90000));
+        $id = sha1(microtime(true).random_int(10000, 90000));
 
         return $prefix ? $prefix.'-'.$id : $id;
     }
