@@ -38,3 +38,13 @@ services:
         arguments: [ '@doctrine' ]
         tags:
             - { name: form.type }
+
+    Olix\BackOfficeBundle\Twig\DatatableRuntime:
+        public: false
+        tags:
+            - { name: twig.runtime }
+
+    Olix\BackOfficeBundle\Datatable\Response\DatatableResponse:
+        public: true
+        arguments:
+            - '@request_stack'
