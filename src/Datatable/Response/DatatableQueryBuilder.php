@@ -50,7 +50,7 @@ class DatatableQueryBuilder
     /**
      * $_GET or $_POST parameters.
      *
-     * @var array
+     * @var array<mixed>
      */
     private $requestParams;
 
@@ -84,6 +84,8 @@ class DatatableQueryBuilder
 
     /**
      * The root ID of the entity.
+     *
+     * @var string
      */
     private $rootEntityIdentifier;
 
@@ -105,35 +107,35 @@ class DatatableQueryBuilder
     /**
      * All Columns of the Datatable.
      *
-     * @var array
+     * @var array<mixed>
      */
     private $columns;
 
     /**
      * Contains all Columns to create a SELECT FROM statement.
      *
-     * @var array
+     * @var array<mixed>
      */
     private $selectColumns;
 
     /**
      * Contains an information for each Column, whether to search in it.
      *
-     * @var array
+     * @var array<mixed>
      */
     private $searchColumns;
 
     /**
      * Contains an information about each column, whether it is sortable.
      *
-     * @var array
+     * @var array<mixed>
      */
     private $orderColumns;
 
     /**
      * Contains all informations to create joins.
      *
-     * @var array
+     * @var array<mixed>
      */
     private $joins;
 
@@ -176,14 +178,14 @@ class DatatableQueryBuilder
      * Arguments to pass when configuring result cache on query for records retrieval. Those arguments are used when
      * calling useResultCache method on Query object when one is created.
      *
-     * @var array
+     * @var array<mixed>
      */
     private $useResultCacheArgs = [false];
     /**
      * Arguments to pass when configuring result cache on query for counting records. Those arguments are used when
      * calling useResultCache method on Query object when one is created.
      *
-     * @var array
+     * @var array<mixed>
      */
     private $useCountResultCacheArgs = [false];
 
@@ -192,6 +194,9 @@ class DatatableQueryBuilder
     // -------------------------------------------------
 
     /**
+     * @param array<mixed>       $requestParams
+     * @param DatatableInterface $datatable
+     *
      * @throws Exception
      */
     public function __construct(array $requestParams, DatatableInterface $datatable)
@@ -210,7 +215,7 @@ class DatatableQueryBuilder
         $this->accessor = PropertyAccess::createPropertyAccessor();
 
         $this->columns = $datatable->getColumnBuilder()->getColumns();
-        $this->columnNames = $datatable->getColumnBuilder()->getColumnNames();
+        $this->columnNames = $datatable->getColumnBuilder()->getColumnNames(); // @phpstan-ignore-line
 
         $this->selectColumns = [];
         $this->searchColumns = [];
@@ -518,6 +523,7 @@ class DatatableQueryBuilder
                     $searchValue = $globalSearch;
                     $searchTypeOfField = $column->getTypeOfField();
                     foreach ($searchFields as $searchField) {
+                        /** @phpstan-ignore-next-line */
                         $orExpr = $filter->addOrExpression($orExpr, $qb, $searchType, $searchField, $searchValue, $searchTypeOfField, $key);
                     }
                 }
@@ -621,7 +627,7 @@ class DatatableQueryBuilder
      *
      * @author Gaultier Boniface <https://github.com/wysow>
      *
-     * @param array|string       $association
+     * @param string|null        $association
      * @param string             $key
      * @param ClassMetadata|null $metadata
      *
@@ -645,8 +651,8 @@ class DatatableQueryBuilder
     /**
      * Add select column.
      *
-     * @param string $columnTableName
-     * @param string $data
+     * @param string|null $columnTableName
+     * @param string      $data
      *
      * @return $this
      */
@@ -666,9 +672,9 @@ class DatatableQueryBuilder
     /**
      * Add order column.
      *
-     * @param object $column
-     * @param string $columnTableName
-     * @param string $data
+     * @param object      $column
+     * @param string|null $columnTableName
+     * @param string      $data
      *
      * @return $this
      */
@@ -682,9 +688,9 @@ class DatatableQueryBuilder
     /**
      * Add search column.
      *
-     * @param object $column
-     * @param string $columnTableName
-     * @param string $data
+     * @param object      $column
+     * @param string|null $columnTableName
+     * @param string      $data
      *
      * @return $this
      */
@@ -741,7 +747,7 @@ class DatatableQueryBuilder
     private function getMetadata($entityName)
     {
         try {
-            $metadata = $this->em->getMetadataFactory()->getMetadataFor($entityName);
+            $metadata = $this->em->getMetadataFactory()->getMetadataFor($entityName); // @phpstan-ignore-line
         } catch (MappingException $e) {
             throw new Exception('DatatableQueryBuilder::getMetadata(): Given object '.$entityName.' is not a Doctrine Entity.');
         }
@@ -752,7 +758,7 @@ class DatatableQueryBuilder
     /**
      * Get safe name.
      *
-     * @param $name
+     * @param string $name
      *
      * @return string
      */
@@ -761,13 +767,18 @@ class DatatableQueryBuilder
         try {
             $reservedKeywordsList = $this->em->getConnection()->getDatabasePlatform()->getReservedKeywordsList();
             $isReservedKeyword = $reservedKeywordsList->isKeyword($name);
-        } catch (DBALException $exception) {
+        } catch (DBALException $exception) { /** @phpstan-ignore-line */
             $isReservedKeyword = false;
         }
 
         return $isReservedKeyword ? "_{$name}" : $name;
     }
 
+    /**
+     * @param ClassMetadata $metadata
+     *
+     * @return string
+     */
     private function getIdentifier(ClassMetadata $metadata)
     {
         $identifiers = $metadata->getIdentifierFieldNames();

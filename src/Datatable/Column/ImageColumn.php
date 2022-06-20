@@ -131,7 +131,7 @@ class ImageColumn extends AbstractColumn
             } else {
                 // create an entry for the placeholder image
                 $currentPath = $path.'[0]'.$value;
-                $content = $this->renderImageTemplate(null, '-gallery-image');
+                $content = $this->renderImageTemplate(null, '-gallery-image'); // @phpstan-ignore-line
                 $this->accessor->setValue($row, $currentPath, $content);
             }
         }

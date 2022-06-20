@@ -33,6 +33,8 @@ class Column extends AbstractColumn
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<mixed> $row
      */
     public function renderSingleField(array &$row)
     {
@@ -50,6 +52,8 @@ class Column extends AbstractColumn
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<mixed> $row
      */
     public function renderToMany(array &$row)
     {
@@ -95,6 +99,8 @@ class Column extends AbstractColumn
 
     /**
      * {@inheritdoc}
+     *
+     * @return string|null
      */
     public function renderPostCreateDatatableJsContent()
     {

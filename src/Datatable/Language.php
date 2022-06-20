@@ -22,7 +22,7 @@ class Language
     use OptionsTrait;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $languageCDNFile = [
         'af' => 'Afrikaans.json',
@@ -146,7 +146,7 @@ class Language
     // -------------------------------------------------
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getLanguageCDNFile()
     {

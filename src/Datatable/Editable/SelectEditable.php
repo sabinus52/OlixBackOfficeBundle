@@ -20,7 +20,7 @@ class SelectEditable extends AbstractEditable
      * Source data for list.
      * Default: array().
      *
-     * @var array
+     * @var array<mixed>
      */
     protected $source;
 
@@ -59,7 +59,7 @@ class SelectEditable extends AbstractEditable
     // -------------------------------------------------
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getSource()
     {
@@ -67,6 +67,8 @@ class SelectEditable extends AbstractEditable
     }
 
     /**
+     * @param array<mixed> $source
+     *
      * @throws Exception
      *
      * @return $this

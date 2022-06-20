@@ -19,7 +19,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Translation\TranslatorInterface as LegacyTranslatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -146,7 +145,7 @@ abstract class AbstractDatatable implements DatatableInterface
     /**
      * Used to generate unique names.
      *
-     * @var array
+     * @var array<mixed>
      */
     protected static $uniqueCounter = [];
 
@@ -172,8 +171,8 @@ abstract class AbstractDatatable implements DatatableInterface
         $this->authorizationChecker = $authorizationChecker;
         $this->securityToken = $securityToken;
 
-        if (!($translator instanceof LegacyTranslatorInterface) && !($translator instanceof TranslatorInterface)) {
-            throw new \InvalidArgumentException(sprintf('The $translator argument of %s must be an instance of %s or %s, a %s was given.', static::class, LegacyTranslatorInterface::class, TranslatorInterface::class, \get_class($translator)));
+        if (!($translator instanceof TranslatorInterface)) {
+            throw new \InvalidArgumentException(sprintf('The $translator argument of %s must be an instance of %s, a %s was given.', static::class, TranslatorInterface::class, \get_class($translator)));
         }
         $this->translator = $translator;
         $this->router = $router;

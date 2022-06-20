@@ -70,6 +70,8 @@ interface ColumnInterface
      * Sometimes it is necessary to add some special data to the output array.
      * For example, the visibility of actions.
      *
+     * @param array<mixed> $row
+     *
      * @return $this
      */
     public function addDataToOutputArray(array &$row);
@@ -77,11 +79,17 @@ interface ColumnInterface
     /**
      * Render images or any other special content.
      * This function works similar to the DataTables Plugin 'columns.render'.
+     *
+     * @param array<mixed> $row
+     *
+     * @return string
      */
     public function renderCellContent(array &$row);
 
     /**
      * Render single field.
+     *
+     * @param array<mixed> $row
      *
      * @return $this
      */
@@ -89,6 +97,8 @@ interface ColumnInterface
 
     /**
      * Render toMany.
+     *
+     * @param array<mixed> $row
      *
      * @return $this
      */
@@ -105,13 +115,15 @@ interface ColumnInterface
      * Implementation of the 'Draw Event' - fired once the table has completed a draw.
      * With this function can javascript execute after drawing the whole table.
      * Used - for example - for the Editable function.
+     *
+     * @return string|null
      */
     public function renderPostCreateDatatableJsContent();
 
     /**
      * The allowed Column positions as array.
      *
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function allowedPositions();
 
@@ -124,6 +136,8 @@ interface ColumnInterface
 
     /**
      * Does special content need to be rendered for editable?
+     *
+     * @param array<mixed> $row
      *
      * @return bool
      */

@@ -35,7 +35,7 @@ class ColumnBuilder
     /**
      * The Twig Environment.
      *
-     * @var Twig_Environment
+     * @var Environment
      */
     private $twig;
 
@@ -63,7 +63,7 @@ class ColumnBuilder
     /**
      * The generated Columns.
      *
-     * @var array
+     * @var array<mixed>
      */
     private $columns;
 
@@ -71,14 +71,14 @@ class ColumnBuilder
      * This variable stores the array of column names as keys and column ids as values
      * in order to perform search column id by name.
      *
-     * @var array
+     * @var array<mixed>
      */
     private $columnNames;
 
     /**
      * Unique Columns.
      *
-     * @var array
+     * @var array<mixed>
      */
     private $uniqueColumns;
 
@@ -115,6 +115,7 @@ class ColumnBuilder
      *
      * @param string|null            $dql
      * @param ColumnInterface|string $class
+     * @param array<mixed>           $options
      *
      * @throws Exception
      *
@@ -162,7 +163,7 @@ class ColumnBuilder
     // -------------------------------------------------
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getColumns()
     {
@@ -170,7 +171,7 @@ class ColumnBuilder
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getColumnNames()
     {
@@ -203,7 +204,7 @@ class ColumnBuilder
     private function getMetadata($entityName)
     {
         try {
-            $metadata = $this->em->getMetadataFactory()->getMetadataFor($entityName);
+            $metadata = $this->em->getMetadataFactory()->getMetadataFor($entityName); // @phpstan-ignore-line
         } catch (MappingException $e) {
             throw new Exception('DatatableQueryBuilder::getMetadata(): Given object '.$entityName.' is not a Doctrine Entity.');
         }
@@ -244,7 +245,8 @@ class ColumnBuilder
     /**
      * Handle dql properties.
      *
-     * @param string $dql
+     * @param string       $dql
+     * @param array<mixed> $options
      *
      * @return $this
      */
@@ -295,7 +297,7 @@ class ColumnBuilder
                 while (\count($parts) > 1) {
                     $currentPart = array_shift($parts);
 
-                    // @noinspection PhpUndefinedMethodInspection
+                    // @phpstan-ignore-next-line
                     $column->addTypeOfAssociation($metadata->getAssociationMapping($currentPart)['type']);
                     $metadata = $this->getMetadataFromAssociation($currentPart, $metadata);
                 }
@@ -330,7 +332,7 @@ class ColumnBuilder
 
             // Use the Column-Index as data source for Columns with 'dql' === null
             if (null === $column->getDql() && null === $column->getData()) {
-                $column->setData($index);
+                $column->setData($index); // @phpstan-ignore-line
             }
 
             if (true === $column->isUnique()) {

@@ -120,7 +120,7 @@ class Select
     }
 
     /**
-     * @param string|null $blurable
+     * @param bool|null $blurable
      *
      * @return $this
      */

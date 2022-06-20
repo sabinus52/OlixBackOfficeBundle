@@ -132,7 +132,7 @@ abstract class AbstractColumn implements ColumnInterface
      * DataTables default: Takes the index value of the column automatically.
      * Default: null.
      *
-     * @var array|int|null
+     * @var array<mixed>|int|null
      */
     protected $orderData;
 
@@ -141,7 +141,7 @@ abstract class AbstractColumn implements ColumnInterface
      * DataTables default: ['asc', 'desc']
      * Default: null.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $orderSequence;
 
@@ -240,7 +240,7 @@ abstract class AbstractColumn implements ColumnInterface
      * The Twig Environment to render Twig templates in Column rowes.
      * Is set in the ColumnBuilder.
      *
-     * @var Twig_Environment
+     * @var Environment
      */
     protected $twig;
 
@@ -280,7 +280,7 @@ abstract class AbstractColumn implements ColumnInterface
      * The type of association.
      * Is set in the ColumnBuilder.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $typeOfAssociation;
 
@@ -388,7 +388,9 @@ abstract class AbstractColumn implements ColumnInterface
      */
     public function isAssociation()
     {
-        return false === strstr($this->dql, '.') ? false : true;
+        $dql = (null === $this->dql) ? '' : $this->dql;
+
+        return false === strstr($dql, '.') ? false : true;
     }
 
     /**
@@ -425,22 +427,30 @@ abstract class AbstractColumn implements ColumnInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<mixed> $row
      */
     public function addDataToOutputArray(array &$row)
     {
-        return null;
+        return null; // @phpstan-ignore-line
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<mixed> $row
+     *
+     * @return string
      */
-    public function renderCellContent(array &$row): void
+    public function renderCellContent(array &$row)
     {
-        $this->isToManyAssociation() ? $this->renderToMany($row) : $this->renderSingleField($row);
+        $this->isToManyAssociation() ? $this->renderToMany($row) : $this->renderSingleField($row); // @phpstan-ignore-line
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @return string|null
      */
     public function renderPostCreateDatatableJsContent()
     {
@@ -449,6 +459,8 @@ abstract class AbstractColumn implements ColumnInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return array<int>|null
      */
     public function allowedPositions()
     {
@@ -465,6 +477,8 @@ abstract class AbstractColumn implements ColumnInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<mixed> $row
      */
     public function isEditableContentRequired(array $row)
     {
@@ -622,7 +636,7 @@ abstract class AbstractColumn implements ColumnInterface
     }
 
     /**
-     * @return array|int|null
+     * @return array<mixed>|int|null
      */
     public function getOrderData()
     {
@@ -634,7 +648,7 @@ abstract class AbstractColumn implements ColumnInterface
     }
 
     /**
-     * @param array|int|null $orderData
+     * @param array<mixed>|int|null $orderData
      *
      * @return $this
      */
@@ -646,7 +660,7 @@ abstract class AbstractColumn implements ColumnInterface
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getOrderSequence()
     {
@@ -658,7 +672,7 @@ abstract class AbstractColumn implements ColumnInterface
     }
 
     /**
-     * @param array|null $orderSequence
+     * @param array<mixed>|null $orderSequence
      *
      * @return $this
      */
@@ -864,7 +878,7 @@ abstract class AbstractColumn implements ColumnInterface
     }
 
     /**
-     * @return Twig_Environment
+     * @return Environment
      */
     public function getTwig()
     {
@@ -960,7 +974,7 @@ abstract class AbstractColumn implements ColumnInterface
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getTypeOfAssociation()
     {
@@ -968,7 +982,7 @@ abstract class AbstractColumn implements ColumnInterface
     }
 
     /**
-     * @param array|null $typeOfAssociation
+     * @param array<mixed>|null $typeOfAssociation
      *
      * @return $this
      */

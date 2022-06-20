@@ -29,14 +29,14 @@ class Button
     /**
      * Function describing the action to take on activation.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $action;
 
     /**
      * Ensure that any requirements have been satisfied before initialising a button.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $available;
 
@@ -50,7 +50,7 @@ class Button
     /**
      * Function that is called when the button is destroyed.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $destroy;
 
@@ -71,7 +71,7 @@ class Button
     /**
      * Button initialisation callback function.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $init;
 
@@ -117,7 +117,7 @@ class Button
     /**
      * Button options.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $buttonOptions;
 
@@ -175,7 +175,7 @@ class Button
     // -------------------------------------------------
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getAction()
     {
@@ -183,7 +183,7 @@ class Button
     }
 
     /**
-     * @param array|null $action
+     * @param array<mixed>|null $action
      *
      * @return $this
      */
@@ -199,7 +199,7 @@ class Button
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getAvailable()
     {
@@ -207,7 +207,7 @@ class Button
     }
 
     /**
-     * @param array|null $available
+     * @param array<mixed>|null $available
      *
      * @return $this
      */
@@ -243,7 +243,7 @@ class Button
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getDestroy()
     {
@@ -251,7 +251,7 @@ class Button
     }
 
     /**
-     * @param array|null $destroy
+     * @param array<mixed>|null $destroy
      *
      * @return $this
      */
@@ -307,7 +307,7 @@ class Button
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getInit()
     {
@@ -315,7 +315,7 @@ class Button
     }
 
     /**
-     * @param array|null $init
+     * @param array<mixed>|null $init
      *
      * @return $this
      */
@@ -431,7 +431,7 @@ class Button
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getButtonOptions()
     {
@@ -439,7 +439,7 @@ class Button
     }
 
     /**
-     * @param array|null $buttonOptions
+     * @param array<mixed>|null $buttonOptions
      *
      * @return $this
      */

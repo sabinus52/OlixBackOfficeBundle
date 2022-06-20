@@ -45,7 +45,7 @@ class Ajax
      * Data to be sent.
      * Default: null.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $data;
 
@@ -145,7 +145,7 @@ class Ajax
     }
 
     /**
-     * @param $method
+     * @param mixed $method
      *
      * @return \Olix\BackOfficeBundle\Datatable\Ajax
      *
@@ -157,7 +157,7 @@ class Ajax
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getData()
     {
@@ -169,7 +169,7 @@ class Ajax
     }
 
     /**
-     * @param array|null $data
+     * @param array<mixed>|null $data
      *
      * @return $this
      */

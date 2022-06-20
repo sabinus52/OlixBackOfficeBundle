@@ -39,7 +39,7 @@ class RowGroup
      * Provide a function that can be used to control the data shown in the start grouping row.
      * Optional.
      *
-     * @var array
+     * @var array<mixed>
      */
     protected $startRender;
 
@@ -47,7 +47,7 @@ class RowGroup
      * Provide a function that can be used to control the data shown in the end grouping row.
      * Optional.
      *
-     * @var array
+     * @var array<mixed>
      */
     protected $endRender;
 
@@ -161,7 +161,7 @@ class RowGroup
     }
 
     /**
-     * @return string
+     * @return array<mixed>
      */
     public function getStartRender()
     {
@@ -169,7 +169,7 @@ class RowGroup
     }
 
     /**
-     * @param string $startRender
+     * @param array<mixed> $startRender
      *
      * @return RowGroup
      */
@@ -191,7 +191,7 @@ class RowGroup
     }
 
     /**
-     * @return string
+     * @return array<mixed>
      */
     public function getEndRender()
     {
@@ -199,7 +199,7 @@ class RowGroup
     }
 
     /**
-     * @param string $endRender
+     * @param array<mixed> $endRender
      *
      * @return RowGroup
      */

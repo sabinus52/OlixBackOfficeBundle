@@ -35,7 +35,7 @@ class DatatableResponse
     /**
      * $_GET or $_POST parameters.
      *
-     * @var array
+     * @var array<mixed>
      */
     private $requestParams;
 
@@ -108,7 +108,7 @@ class DatatableResponse
      *
      * @throws Exception
      *
-     * @return array
+     * @return array<mixed>
      */
     public function getData($countAllResults = true, $outputWalkers = false, $fetchJoinCollection = true)
     {
@@ -175,7 +175,7 @@ class DatatableResponse
     /**
      * Get request params.
      *
-     * @return array
+     * @return array<mixed>
      */
     private function getRequestParams()
     {
@@ -206,7 +206,7 @@ class DatatableResponse
         /** @var ColumnInterface $column */
         foreach ($columns as $column) {
             $allowedPositions = $column->allowedPositions();
-            /** @noinspection PhpUndefinedMethodInspection */
+            /** @phpstan-ignore-next-line */
             $index = $column->getIndex();
             if (\is_array($allowedPositions)) {
                 $allowedPositions = array_flip($allowedPositions);

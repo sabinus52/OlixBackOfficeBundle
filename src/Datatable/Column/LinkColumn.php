@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Datatable\Column;
 
+use Closure;
 use Olix\BackOfficeBundle\Datatable\Filter\TextFilter;
 use Olix\BackOfficeBundle\Datatable\Helper;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -35,7 +36,7 @@ class LinkColumn extends AbstractColumn
     /**
      * The route params.
      *
-     * @var array|Closure
+     * @var array<mixed>|Closure
      */
     protected $routeParams;
 
@@ -69,6 +70,8 @@ class LinkColumn extends AbstractColumn
 
     /**
      * Boolean to indicate if it's an email link.
+     *
+     * @var bool
      */
     protected $email;
 
@@ -150,9 +153,10 @@ class LinkColumn extends AbstractColumn
                         $currentPath = $path.'['.$key.']'.$value;
                         $currentObjectPath = Helper::getPropertyPathObjectNotation($path, $key, $value);
 
+                        /** @phpstan-ignore-next-line */
                         $content = $this->renderTemplate(
                             $this->accessor->getValue($row, $currentPath),
-                            $row[$this->editable->getPk()],
+                            $row[$this->editable->getPk()], // @phpstan-ignore-line
                             $currentObjectPath
                         );
 
@@ -212,6 +216,8 @@ class LinkColumn extends AbstractColumn
 
     /**
      * {@inheritdoc}
+     *
+     * @return string|null
      */
     public function renderPostCreateDatatableJsContent()
     {
@@ -283,7 +289,7 @@ class LinkColumn extends AbstractColumn
     /**
      * Get route params.
      *
-     * @return array|Closure
+     * @return array<mixed>|Closure
      */
     public function getRouteParams()
     {
@@ -293,7 +299,7 @@ class LinkColumn extends AbstractColumn
     /**
      * Set route params.
      *
-     * @param array|Closure $routeParams
+     * @param array<mixed>|Closure $routeParams
      *
      * @return $this
      */
@@ -311,19 +317,19 @@ class LinkColumn extends AbstractColumn
      */
     public function getEmptyValue()
     {
-        return $this->emptyValue;
+        return $this->emptyValue; // @phpstan-ignore-line
     }
 
     /**
      * Set empty value.
      *
-     * @param array|Closure $emptyValue
+     * @param array<mixed>|Closure $emptyValue
      *
      * @return $this
      */
     public function setEmptyValue($emptyValue)
     {
-        $this->emptyValue = $emptyValue;
+        $this->emptyValue = $emptyValue; // @phpstan-ignore-line
 
         return $this;
     }
@@ -371,7 +377,7 @@ class LinkColumn extends AbstractColumn
     /**
      * Get filter function.
      *
-     * @return string
+     * @return Closure|null
      */
     public function getFilterFunction()
     {
@@ -387,7 +393,7 @@ class LinkColumn extends AbstractColumn
      */
     public function setFilterFunction($filterFunction)
     {
-        $this->filterFunction = $filterFunction;
+        $this->filterFunction = $filterFunction; // @phpstan-ignore-line
 
         return $this;
     }

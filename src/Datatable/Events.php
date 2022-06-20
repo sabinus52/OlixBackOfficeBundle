@@ -31,105 +31,105 @@ class Events
     /**
      * Fired when the column widths are recalculated.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $columnSizing;
 
     /**
      * Fired when the visibility of a column changes.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $columnVisibility;
 
     /**
      * Fired when a table is destroyed.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $destroy;
 
     /**
      * An error has occurred during DataTables processing of data.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $error;
 
     /**
      * Fired when the page length is changed.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $length;
 
     /**
      * Fired when the data contained in the table is ordered.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $order;
 
     /**
      * Fired when the table's paging is updated.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $page;
 
     /**
      * Triggered immediately before data load.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $preInit;
 
     /**
      * Fired before an Ajax request is made.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $preXhr;
 
     /**
      * Fired when DataTables is processing data.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $processing;
 
     /**
      * Fired when the table is filtered.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $search;
 
     /**
      * Fired once state has been loaded and applied.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $stateLoaded;
 
     /**
      * Fired when loading state from storage.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $stateLoadParams;
 
     /**
      * Fired when saving table state information.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $stateSaveParams;
 
     /**
      * Fired when an Ajax request is completed.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $xhr;
 
@@ -191,7 +191,7 @@ class Events
     // -------------------------------------------------
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getColumnSizing()
     {
@@ -199,7 +199,7 @@ class Events
     }
 
     /**
-     * @param array|null $columnSizing
+     * @param array<mixed>|null $columnSizing
      *
      * @return $this
      */
@@ -215,7 +215,7 @@ class Events
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getColumnVisibility()
     {
@@ -223,7 +223,7 @@ class Events
     }
 
     /**
-     * @param array|null $columnVisibility
+     * @param array<mixed>|null $columnVisibility
      *
      * @return $this
      */
@@ -239,7 +239,7 @@ class Events
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getDestroy()
     {
@@ -247,7 +247,7 @@ class Events
     }
 
     /**
-     * @param array|null $destroy
+     * @param array<mixed>|null $destroy
      *
      * @return $this
      */
@@ -263,7 +263,7 @@ class Events
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getError()
     {
@@ -271,7 +271,7 @@ class Events
     }
 
     /**
-     * @param array|null $error
+     * @param array<mixed>|null $error
      *
      * @return $this
      */
@@ -287,7 +287,7 @@ class Events
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getLength()
     {
@@ -295,7 +295,7 @@ class Events
     }
 
     /**
-     * @param array|null $length
+     * @param array<mixed>|null $length
      *
      * @return $this
      */
@@ -311,7 +311,7 @@ class Events
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getOrder()
     {
@@ -319,7 +319,7 @@ class Events
     }
 
     /**
-     * @param array|null $order
+     * @param array<mixed>|null $order
      *
      * @return $this
      */
@@ -335,7 +335,7 @@ class Events
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getPage()
     {
@@ -343,7 +343,7 @@ class Events
     }
 
     /**
-     * @param array|null $page
+     * @param array<mixed>|null $page
      *
      * @return $this
      */
@@ -359,7 +359,7 @@ class Events
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getPreInit()
     {
@@ -367,7 +367,7 @@ class Events
     }
 
     /**
-     * @param array|null $preInit
+     * @param array<mixed>|null $preInit
      *
      * @return $this
      */
@@ -383,7 +383,7 @@ class Events
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getPreXhr()
     {
@@ -391,7 +391,7 @@ class Events
     }
 
     /**
-     * @param array|null $preXhr
+     * @param array<mixed>|null $preXhr
      *
      * @return $this
      */
@@ -407,7 +407,7 @@ class Events
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getProcessing()
     {
@@ -415,7 +415,7 @@ class Events
     }
 
     /**
-     * @param array|null $processing
+     * @param array<mixed>|null $processing
      *
      * @return $this
      */
@@ -431,7 +431,7 @@ class Events
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getSearch()
     {
@@ -439,7 +439,7 @@ class Events
     }
 
     /**
-     * @param array|null $search
+     * @param array<mixed>|null $search
      *
      * @return $this
      */
@@ -455,7 +455,7 @@ class Events
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getStateLoaded()
     {
@@ -463,7 +463,7 @@ class Events
     }
 
     /**
-     * @param array|null $stateLoaded
+     * @param array<mixed>|null $stateLoaded
      *
      * @return $this
      */
@@ -479,7 +479,7 @@ class Events
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getStateLoadParams()
     {
@@ -487,7 +487,7 @@ class Events
     }
 
     /**
-     * @param array|null $stateLoadParams
+     * @param array<mixed>|null $stateLoadParams
      *
      * @return $this
      */
@@ -503,7 +503,7 @@ class Events
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getStateSaveParams()
     {
@@ -511,7 +511,7 @@ class Events
     }
 
     /**
-     * @param array|null $stateSaveParams
+     * @param array<mixed>|null $stateSaveParams
      *
      * @return $this
      */
@@ -527,7 +527,7 @@ class Events
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getXhr()
     {
@@ -535,7 +535,7 @@ class Events
     }
 
     /**
-     * @param array|null $xhr
+     * @param array<mixed>|null $xhr
      *
      * @return $this
      */

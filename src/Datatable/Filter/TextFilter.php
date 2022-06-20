@@ -37,6 +37,7 @@ class TextFilter extends AbstractFilter
      */
     public function addAndExpression(Andx $andExpr, QueryBuilder $qb, $searchField, $searchValue, $searchTypeOfField, &$parameterCounter)
     {
+        // @phpstan-ignore-next-line
         return $this->getExpression($andExpr, $qb, $this->searchType, $searchField, $searchValue, $searchTypeOfField, $parameterCounter);
     }
 

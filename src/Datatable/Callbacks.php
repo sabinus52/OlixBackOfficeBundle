@@ -28,98 +28,98 @@ class Callbacks
     /**
      * Callback for whenever a TR element is created for the table's body.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $createdRow;
 
     /**
      * Function that is called every time DataTables performs a draw.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $drawCallback;
 
     /**
      * Footer display callback function.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $footerCallback;
 
     /**
      * Number formatting callback function.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $formatNumber;
 
     /**
      * Header display callback function.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $headerCallback;
 
     /**
      * Table summary information display callback.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $infoCallback;
 
     /**
      * Initialisation complete callback.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $initComplete;
 
     /**
      * Pre-draw callback.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $preDrawCallback;
 
     /**
      * Row draw callback.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $rowCallback;
 
     /**
      * Callback that defines where and how a saved state should be loaded.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $stateLoadCallback;
 
     /**
      * State loaded callback.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $stateLoaded;
 
     /**
      * State loaded - data manipulation callback.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $stateLoadParams;
 
     /**
      * Callback that defines how the table state is stored and where.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $stateSaveCallback;
 
     /**
      * State save - data manipulation callback.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $stateSaveParams;
 
@@ -179,7 +179,7 @@ class Callbacks
     // -------------------------------------------------
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getCreatedRow()
     {
@@ -187,7 +187,7 @@ class Callbacks
     }
 
     /**
-     * @param array|null $createdRow
+     * @param array<mixed>|null $createdRow
      *
      * @return $this
      */
@@ -203,7 +203,7 @@ class Callbacks
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getDrawCallback()
     {
@@ -211,7 +211,7 @@ class Callbacks
     }
 
     /**
-     * @param array|null $drawCallback
+     * @param array<mixed>|null $drawCallback
      *
      * @return $this
      */
@@ -227,7 +227,7 @@ class Callbacks
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getFooterCallback()
     {
@@ -235,7 +235,7 @@ class Callbacks
     }
 
     /**
-     * @param array|null $footerCallback
+     * @param array<mixed>|null $footerCallback
      *
      * @return $this
      */
@@ -251,7 +251,7 @@ class Callbacks
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getFormatNumber()
     {
@@ -259,7 +259,7 @@ class Callbacks
     }
 
     /**
-     * @param array|null $formatNumber
+     * @param array<mixed>|null $formatNumber
      *
      * @return $this
      */
@@ -275,7 +275,7 @@ class Callbacks
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getHeaderCallback()
     {
@@ -283,7 +283,7 @@ class Callbacks
     }
 
     /**
-     * @param array|null $headerCallback
+     * @param array<mixed>|null $headerCallback
      *
      * @return $this
      */
@@ -299,7 +299,7 @@ class Callbacks
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getInfoCallback()
     {
@@ -307,7 +307,7 @@ class Callbacks
     }
 
     /**
-     * @param array|null $infoCallback
+     * @param array<mixed>|null $infoCallback
      *
      * @return $this
      */
@@ -323,7 +323,7 @@ class Callbacks
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getInitComplete()
     {
@@ -331,7 +331,7 @@ class Callbacks
     }
 
     /**
-     * @param array|null $initComplete
+     * @param array<mixed>|null $initComplete
      *
      * @return $this
      */
@@ -347,7 +347,7 @@ class Callbacks
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getPreDrawCallback()
     {
@@ -355,7 +355,7 @@ class Callbacks
     }
 
     /**
-     * @param array|null $preDrawCallback
+     * @param array<mixed>|null $preDrawCallback
      *
      * @return $this
      */
@@ -371,7 +371,7 @@ class Callbacks
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getRowCallback()
     {
@@ -379,7 +379,7 @@ class Callbacks
     }
 
     /**
-     * @param array|null $rowCallback
+     * @param array<mixed>|null $rowCallback
      *
      * @return $this
      */
@@ -395,7 +395,7 @@ class Callbacks
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getStateLoadCallback()
     {
@@ -403,7 +403,7 @@ class Callbacks
     }
 
     /**
-     * @param array|null $stateLoadCallback
+     * @param array<mixed>|null $stateLoadCallback
      *
      * @return $this
      */
@@ -419,7 +419,7 @@ class Callbacks
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getStateLoaded()
     {
@@ -427,7 +427,7 @@ class Callbacks
     }
 
     /**
-     * @param array|null $stateLoaded
+     * @param array<mixed>|null $stateLoaded
      *
      * @return $this
      */
@@ -443,7 +443,7 @@ class Callbacks
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getStateLoadParams()
     {
@@ -451,7 +451,7 @@ class Callbacks
     }
 
     /**
-     * @param array|null $stateLoadParams
+     * @param array<mixed>|null $stateLoadParams
      *
      * @return $this
      */
@@ -467,7 +467,7 @@ class Callbacks
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getStateSaveCallback()
     {
@@ -475,7 +475,7 @@ class Callbacks
     }
 
     /**
-     * @param array|null $stateSaveCallback
+     * @param array<mixed>|null $stateSaveCallback
      *
      * @return $this
      */
@@ -491,7 +491,7 @@ class Callbacks
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getStateSaveParams()
     {
@@ -499,7 +499,7 @@ class Callbacks
     }
 
     /**
-     * @param array|null $stateSaveParams
+     * @param array<mixed>|null $stateSaveParams
      *
      * @return $this
      */

@@ -31,7 +31,7 @@ class Buttons
      * List of built-in buttons to show.
      * Default: null.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $showButtons;
 
@@ -39,7 +39,7 @@ class Buttons
      * List of buttons to be created.
      * Default: null.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $createButtons;
 
@@ -73,7 +73,7 @@ class Buttons
     // -------------------------------------------------
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getShowButtons()
     {
@@ -85,7 +85,7 @@ class Buttons
     }
 
     /**
-     * @param array|null $showButtons
+     * @param array<mixed>|null $showButtons
      *
      * @return $this
      */
@@ -97,7 +97,7 @@ class Buttons
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getCreateButtons()
     {
@@ -105,7 +105,7 @@ class Buttons
     }
 
     /**
-     * @param array|null $createButtons
+     * @param array<mixed>|null $createButtons
      *
      * @throws Exception
      *

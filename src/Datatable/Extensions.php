@@ -33,7 +33,7 @@ class Extensions
      * The Buttons extension.
      * Default: null.
      *
-     * @var array|bool|Buttons|null
+     * @var array<mixed>|bool|Buttons|null
      */
     protected $buttons;
 
@@ -42,7 +42,7 @@ class Extensions
      * Automatically optimise the layout for different screen sizes.
      * Default: null.
      *
-     * @var array|bool|Responsive|null
+     * @var array<mixed>|bool|Responsive|null
      */
     protected $responsive;
 
@@ -51,7 +51,7 @@ class Extensions
      * Select adds item selection capabilities to a DataTable.
      * Default: null.
      *
-     * @var array|bool|Select|null
+     * @var array<mixed>|bool|Select|null
      */
     protected $select;
 
@@ -60,7 +60,7 @@ class Extensions
      * Automatically group rows.
      * Default: null.
      *
-     * @var array|bool|RowGroup|null
+     * @var array<mixed>|bool|RowGroup|null
      */
     protected $rowGroup;
 
@@ -98,7 +98,7 @@ class Extensions
     // -------------------------------------------------
 
     /**
-     * @return array|bool|Buttons|null
+     * @return array<mixed>|bool|Buttons|null
      */
     public function getButtons()
     {
@@ -106,7 +106,7 @@ class Extensions
     }
 
     /**
-     * @param array|bool|null $buttons
+     * @param array<mixed>|bool|null $buttons
      *
      * @return $this
      */
@@ -123,7 +123,7 @@ class Extensions
     }
 
     /**
-     * @return array|bool|Responsive|null
+     * @return array<mixed>|bool|Responsive|null
      */
     public function getResponsive()
     {
@@ -131,7 +131,7 @@ class Extensions
     }
 
     /**
-     * @param array|bool|null $responsive
+     * @param array<mixed>|bool|null $responsive
      *
      * @return $this
      */
@@ -148,7 +148,7 @@ class Extensions
     }
 
     /**
-     * @return array|bool|Select|null
+     * @return array<mixed>|bool|Select|null
      */
     public function getSelect()
     {
@@ -156,7 +156,7 @@ class Extensions
     }
 
     /**
-     * @param array|bool|null $select
+     * @param array<mixed>|bool|null $select
      *
      * @return $this
      */
@@ -173,7 +173,7 @@ class Extensions
     }
 
     /**
-     * @return array|bool|RowGroup|null
+     * @return array<mixed>|bool|RowGroup|null
      */
     public function getRowGroup()
     {
@@ -181,7 +181,7 @@ class Extensions
     }
 
     /**
-     * @param array|bool|null $rowGroup
+     * @param array<mixed>|bool|null $rowGroup
      *
      * @throws \Exception
      *

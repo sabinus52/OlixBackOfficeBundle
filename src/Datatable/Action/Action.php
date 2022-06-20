@@ -47,7 +47,7 @@ class Action
      * The route parameters.
      * Default: null.
      *
-     * @var array|Closure|null
+     * @var array<mixed>|Closure|null
      */
     protected $routeParameters;
 
@@ -87,7 +87,7 @@ class Action
      * HTML attributes (except 'href' and 'value').
      * Default: null.
      *
-     * @var array|Closure|null
+     * @var array<mixed>|Closure|null
      */
     protected $attributes;
 
@@ -200,7 +200,7 @@ class Action
     }
 
     /**
-     * @return array|Closure|null
+     * @return array<mixed>|Closure|null
      */
     public function getRouteParameters()
     {
@@ -208,7 +208,7 @@ class Action
     }
 
     /**
-     * @param array|Closure|null $routeParameters
+     * @param array<mixed>|Closure|null $routeParameters
      *
      * @return $this
      */
@@ -300,7 +300,7 @@ class Action
     }
 
     /**
-     * @return array|Closure|null
+     * @return array<mixed>|Closure|null
      */
     public function getAttributes()
     {
@@ -308,7 +308,7 @@ class Action
     }
 
     /**
-     * @param array|Closure|null $attributes
+     * @param array<mixed>|Closure|null $attributes
      *
      * @throws Exception
      *

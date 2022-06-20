@@ -47,15 +47,14 @@ class Helper
             $value = strstr($data, ']', false);
 
             // remove needle
-            $value = str_replace('].', '', $value);
-            // format value
+            $value = str_replace('].', '', $value); /** @phpstan-ignore-line */
             $value = '['.str_replace('.', '][', $value).']';
 
             $data = $before;
         }
 
         // e.g. 'createdBy.allowed' => [createdBy][allowed]
-        return '['.str_replace('.', '][', $data).']';
+        return '['.str_replace('.', '][', $data).']'; // @phpstan-ignore-line
     }
 
     /**

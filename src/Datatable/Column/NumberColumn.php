@@ -207,9 +207,9 @@ class NumberColumn extends Column
     /**
      * Render template.
      *
-     * @param string|null $data
-     * @param string|null $pk
-     * @param string|null $path
+     * @param string|float $data
+     * @param string|null  $pk
+     * @param string|null  $path
      *
      * @return mixed|string
      */

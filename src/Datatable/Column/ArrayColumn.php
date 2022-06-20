@@ -19,6 +19,8 @@ class ArrayColumn extends Column
 {
     /**
      * {@inheritdoc}
+     *
+     * @param array<mixed> $row
      */
     public function renderSingleField(array &$row)
     {
@@ -28,7 +30,8 @@ class ArrayColumn extends Column
     }
 
     /**
-     * @param int $tab
+     * @param array<mixed> $array
+     * @param int          $tab
      */
     protected function arrayToString(array $array, $tab = 0): string
     {
@@ -63,6 +66,13 @@ class ArrayColumn extends Column
         return $arrayField;
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @param array<mixed> $array
+     *
+     * @return bool
+     */
     protected function isAssociative(array $array): bool
     {
         if (empty($array)) {

@@ -25,7 +25,7 @@ trait OptionsTrait
     /**
      * Options container.
      *
-     * @var array
+     * @var array<mixed>
      */
     protected $options;
 
@@ -51,7 +51,7 @@ trait OptionsTrait
     {
         $this->options = [];
 
-        // @noinspection PhpUndefinedMethodInspection
+        // @phpstan-ignore-next-line
         $this->accessor = PropertyAccess::createPropertyAccessorBuilder()
             ->enableMagicCall()
             ->getPropertyAccessor()
@@ -65,6 +65,8 @@ trait OptionsTrait
     }
 
     /**
+     * @param array<mixed> $options
+     *
      * @throws Exception
      *
      * @return $this
@@ -84,6 +86,8 @@ trait OptionsTrait
      * Option to JSON.
      *
      * @param mixed $value
+     *
+     * @return mixed
      */
     protected function optionToJson($value)
     {
@@ -96,6 +100,9 @@ trait OptionsTrait
 
     /**
      * Validates an array whether the "template" and "vars" options are set.
+     *
+     * @param array<mixed> $array
+     * @param array<mixed> $other
      *
      * @throws Exception
      *
@@ -122,6 +129,8 @@ trait OptionsTrait
 
     /**
      * Calls the setters.
+     *
+     * @param array<mixed> $options
      *
      * @return $this
      */

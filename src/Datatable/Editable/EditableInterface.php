@@ -24,6 +24,8 @@ interface EditableInterface
     /**
      * Checks whether the object may be editable.
      *
+     * @param array<mixed> $row
+     *
      * @return bool
      */
     public function callEditableIfClosure(array $row = []);

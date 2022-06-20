@@ -16,7 +16,6 @@ use Exception;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Translation\TranslatorInterface as LegacyTranslatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -64,14 +63,14 @@ class DatatableFactory
     /**
      * The Twig Environment.
      *
-     * @var Twig_Environment
+     * @var Environment
      */
     protected $twig;
 
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         TokenStorageInterface $securityToken,
-        $translator,
+        TranslatorInterface $translator,
         RouterInterface $router,
         EntityManagerInterface $em,
         Environment $twig
@@ -79,8 +78,8 @@ class DatatableFactory
         $this->authorizationChecker = $authorizationChecker;
         $this->securityToken = $securityToken;
 
-        if (!($translator instanceof LegacyTranslatorInterface) && !($translator instanceof TranslatorInterface)) {
-            throw new \InvalidArgumentException(sprintf('The $translator argument of %s must be an instance of %s or %s, a %s was given.', static::class, LegacyTranslatorInterface::class, TranslatorInterface::class, \get_class($translator)));
+        if (!($translator instanceof TranslatorInterface)) {
+            throw new \InvalidArgumentException(sprintf('The $translator argument of %s must be an instance of %s, a %s was given.', static::class, TranslatorInterface::class, \get_class($translator)));
         }
         $this->translator = $translator;
         $this->router = $router;
@@ -111,7 +110,9 @@ class DatatableFactory
             throw new Exception("DatatableFactory::create(): {$class} does not exist");
         }
 
+        // @phpstan-ignore-next-line
         if (\in_array(DatatableInterface::class, class_implements($class), true)) {
+            // @phpstan-ignore-next-line
             return new $class(
                 $this->authorizationChecker,
                 $this->securityToken,

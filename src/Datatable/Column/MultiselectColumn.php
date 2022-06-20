@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Datatable\Column;
 
+use Closure;
 use Exception;
 use Olix\BackOfficeBundle\Datatable\Action\MultiselectAction;
 use Olix\BackOfficeBundle\Datatable\RenderIfTrait;
@@ -29,7 +30,7 @@ class MultiselectColumn extends ActionColumn
      * HTML <input> Tag attributes (except 'type' and 'value').
      * Default: null.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $attributes;
 
@@ -79,16 +80,25 @@ class MultiselectColumn extends ActionColumn
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<mixed> $row
+     *
+     * @return self
      */
-    public function addDataToOutputArray(array &$row): void
+    public function addDataToOutputArray(array &$row)
     {
+        // @phpstan-ignore-next-line
         $row['sg_datatables_cbox'] = $this->callRenderIfClosure($row);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<mixed> $row
+     *
+     * @return self
      */
-    public function renderSingleField(array &$row): void
+    public function renderSingleField(array &$row)
     {
         $value = $row[$this->value];
 
@@ -100,6 +110,7 @@ class MultiselectColumn extends ActionColumn
             $value = 'sg-datatables-'.$this->getDatatableName().'-checkbox-'.$value;
         }
 
+        // @phpstan-ignore-next-line
         $row[$this->getIndex()] = $this->twig->render(
             $this->getCellContentTemplate(),
             [
@@ -122,6 +133,8 @@ class MultiselectColumn extends ActionColumn
 
     /**
      * {@inheritdoc}
+     *
+     * @return array<int>|null
      */
     public function allowedPositions()
     {
@@ -205,7 +218,7 @@ class MultiselectColumn extends ActionColumn
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|Closure|null
      */
     public function getAttributes()
     {
@@ -213,7 +226,7 @@ class MultiselectColumn extends ActionColumn
     }
 
     /**
-     * @param array|null $attributes
+     * @param array<mixed>|Closure|null $attributes
      *
      * @throws Exception
      *
@@ -243,7 +256,7 @@ class MultiselectColumn extends ActionColumn
                 $attributes['class'] = $value;
             }
         } else {
-            $attributes['name'] = $value.'[]';
+            $attributes['name'] = $value.'[]'; // @phpstan-ignore-line
             $attributes['class'] = $value;
         }
 

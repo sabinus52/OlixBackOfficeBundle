@@ -25,7 +25,7 @@ class Select2Filter extends SelectFilter
      * Select2 supports displaying a placeholder by default using the placeholder option.
      * Default: null.
      *
-     * @var string|null
+     * @var string
      */
     protected $placeholder;
 

@@ -34,7 +34,7 @@ class ActionColumn extends AbstractColumn
      * The Actions container.
      * A required option.
      *
-     * @var array
+     * @var array<mixed>
      */
     protected $actions;
 
@@ -44,6 +44,10 @@ class ActionColumn extends AbstractColumn
 
     /**
      * {@inheritdoc}
+     *
+     * @param string|null $dql
+     *
+     * @return bool
      */
     public function dqlConstraint($dql)
     {
@@ -52,6 +56,8 @@ class ActionColumn extends AbstractColumn
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool
      */
     public function isSelectColumn()
     {
@@ -60,8 +66,12 @@ class ActionColumn extends AbstractColumn
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<mixed> $row
+     *
+     * @return self
      */
-    public function addDataToOutputArray(array &$row): void
+    public function addDataToOutputArray(array &$row)
     {
         $actionRowItems = [];
 
@@ -70,13 +80,18 @@ class ActionColumn extends AbstractColumn
             $actionRowItems[$actionKey] = $action->callRenderIfClosure($row);
         }
 
+        // @phpstan-ignore-next-line
         $row['sg_datatables_actions'][$this->getIndex()] = $actionRowItems;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<mixed> $row
+     *
+     * @return self
      */
-    public function renderSingleField(array &$row): void
+    public function renderSingleField(array &$row)
     {
         $parameters = [];
         $attributes = [];
@@ -136,6 +151,7 @@ class ActionColumn extends AbstractColumn
             }
         }
 
+        // @phpstan-ignore-next-line
         $row[$this->getIndex()] = $this->twig->render(
             $this->getCellContentTemplate(),
             [
@@ -152,8 +168,12 @@ class ActionColumn extends AbstractColumn
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<mixed> $row
+     *
+     * @return self
      */
-    public function renderToMany(array &$row): void
+    public function renderToMany(array &$row)
     {
         throw new Exception('ActionColumn::renderToMany(): This function should never be called.');
     }
@@ -227,6 +247,8 @@ class ActionColumn extends AbstractColumn
     }
 
     /**
+     * @param array<mixed> $actions
+     *
      * @throws Exception
      *
      * @return $this
@@ -246,6 +268,8 @@ class ActionColumn extends AbstractColumn
 
     /**
      * Add action.
+     *
+     * @param array<mixed> $action
      *
      * @return $this
      */

@@ -33,7 +33,7 @@ class Options
      * DataTables default: null
      * Default: null.
      *
-     * @var array|int|null
+     * @var array<mixed>|int|null
      */
     protected $deferLoading;
 
@@ -60,7 +60,7 @@ class Options
      * DataTables default: [10, 25, 50, 100]
      * Default: null.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $lengthMenu;
 
@@ -69,7 +69,7 @@ class Options
      * DataTables default: [[0, 'asc']]
      * Default: null.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $order;
 
@@ -95,7 +95,7 @@ class Options
      * Ordering to always be applied to the table.
      * Default: null.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $orderFixed;
 
@@ -190,7 +190,7 @@ class Options
      * Set the zebra stripe class names for the rows in the table.
      * Default: null.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $stripeClasses;
 
@@ -313,7 +313,7 @@ class Options
     // -------------------------------------------------
 
     /**
-     * @return array|int|null
+     * @return array<mixed>|int|null
      */
     public function getDeferLoading()
     {
@@ -325,7 +325,7 @@ class Options
     }
 
     /**
-     * @param array|int|null $deferLoading
+     * @param array<mixed>|int|null $deferLoading
      *
      * @return $this
      */
@@ -377,7 +377,7 @@ class Options
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getLengthMenu()
     {
@@ -389,7 +389,7 @@ class Options
     }
 
     /**
-     * @param array|null $lengthMenu
+     * @param array<mixed>|null $lengthMenu
      *
      * @return $this
      */
@@ -401,7 +401,7 @@ class Options
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getOrder()
     {
@@ -413,7 +413,7 @@ class Options
     }
 
     /**
-     * @param array|null $order
+     * @param array<mixed>|null $order
      *
      * @return $this
      */
@@ -465,7 +465,7 @@ class Options
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getOrderFixed()
     {
@@ -477,7 +477,7 @@ class Options
     }
 
     /**
-     * @param array|null $orderFixed
+     * @param array<mixed>|null $orderFixed
      *
      * @return $this
      */
@@ -669,7 +669,7 @@ class Options
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getStripeClasses()
     {
@@ -681,7 +681,7 @@ class Options
     }
 
     /**
-     * @param array|null $stripeClasses
+     * @param array<mixed>|null $stripeClasses
      *
      * @return $this
      */

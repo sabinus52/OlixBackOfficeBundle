@@ -31,7 +31,7 @@ class Responsive
      * Responsive details options.
      * Required option.
      *
-     * @var array|bool
+     * @var array<mixed>|bool
      */
     protected $details;
 
@@ -61,7 +61,7 @@ class Responsive
     // -------------------------------------------------
 
     /**
-     * @return array|bool
+     * @return array<mixed>|bool
      */
     public function getDetails()
     {
@@ -69,7 +69,7 @@ class Responsive
     }
 
     /**
-     * @param array|bool $details
+     * @param array<mixed>|bool $details
      *
      * @throws Exception
      *

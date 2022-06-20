@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Datatable\Action;
 
+use Closure;
 use Exception;
 
 /**
@@ -24,7 +25,7 @@ class MultiselectAction extends Action
     // -------------------------------------------------
 
     /**
-     * @param array|null $attributes
+     * @param array<mixed>|Closure|null $attributes
      *
      * @throws Exception
      *
@@ -45,7 +46,7 @@ class MultiselectAction extends Action
                 $attributes['class'] = $value;
             }
         } else {
-            $attributes['class'] = $value;
+            $attributes['class'] = $value; // @phpstan-ignore-line
         }
 
         $this->attributes = $attributes;

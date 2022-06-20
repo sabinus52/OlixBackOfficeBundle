@@ -40,8 +40,12 @@ class AttributeColumn extends AbstractColumn
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<mixed> $row
+     *
+     * @return self
      */
-    public function renderSingleField(array &$row): void
+    public function renderSingleField(array &$row)
     {
         $renderAttributes = [];
 
@@ -57,11 +61,14 @@ class AttributeColumn extends AbstractColumn
             ]
         );
 
+        // @phpstan-ignore-next-line
         $this->accessor->setValue($row, $path, $content);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param array<mixed> $row
      */
     public function renderToMany(array &$row)
     {
@@ -81,9 +88,10 @@ class AttributeColumn extends AbstractColumn
                         $currentPath = $path.'['.$key.']'.$value;
                         $currentObjectPath = Helper::getPropertyPathObjectNotation($path, $key, $value);
 
+                        /** @phpstan-ignore-next-line */
                         $content = $this->renderTemplate(
                             $this->accessor->getValue($row, $currentPath),
-                            $row[$this->editable->getPk()],
+                            $row[$this->editable->getPk()], // @phpstan-ignore-line
                             $currentObjectPath
                         );
 
@@ -107,6 +115,8 @@ class AttributeColumn extends AbstractColumn
 
     /**
      * {@inheritdoc}
+     *
+     * @return string|null
      */
     public function renderPostCreateDatatableJsContent()
     {
@@ -144,7 +154,7 @@ class AttributeColumn extends AbstractColumn
     }
 
     /**
-     * @return Attributes[]
+     * @return array<mixed>|Closure|null
      */
     public function getAttributes()
     {

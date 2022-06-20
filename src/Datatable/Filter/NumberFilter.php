@@ -55,7 +55,7 @@ class NumberFilter extends TextFilter
      * Pre-defined values.
      * Default: null.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $datalist;
 
@@ -187,7 +187,7 @@ class NumberFilter extends TextFilter
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getDatalist()
     {
@@ -195,7 +195,7 @@ class NumberFilter extends TextFilter
     }
 
     /**
-     * @param array|null $datalist
+     * @param array<mixed>|null $datalist
      *
      * @return $this
      */

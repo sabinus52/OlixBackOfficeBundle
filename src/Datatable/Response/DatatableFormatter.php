@@ -26,7 +26,7 @@ class DatatableFormatter
     /**
      * The output array.
      *
-     * @var array
+     * @var array<mixed>
      */
     private $output;
 
@@ -124,7 +124,7 @@ class DatatableFormatter
     // -------------------------------------------------
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getOutput()
     {

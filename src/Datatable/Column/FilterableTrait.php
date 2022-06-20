@@ -46,6 +46,8 @@ trait FilterableTrait
     /**
      * Set Filter instance.
      *
+     * @param array<mixed> $filterClassAndOptions
+     *
      * @throws Exception
      *
      * @return $this

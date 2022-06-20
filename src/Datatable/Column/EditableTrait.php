@@ -42,7 +42,7 @@ trait EditableTrait
     }
 
     /**
-     * @param array|null $editableClassAndOptions
+     * @param array<mixed>|null $editableClassAndOptions
      *
      * @throws Exception
      *

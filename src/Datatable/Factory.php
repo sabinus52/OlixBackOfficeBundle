@@ -26,6 +26,8 @@ class Factory
      * @param mixed $interface
      *
      * @throws Exception
+     *
+     * @return mixed
      */
     public static function create($class, $interface)
     {

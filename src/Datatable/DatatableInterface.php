@@ -23,13 +23,15 @@ interface DatatableInterface
 
     /**
      * Builds the datatable.
+     *
+     * @param array<mixed> $options
      */
-    public function buildDatatable(array $options = []);
+    public function buildDatatable(array $options = []): void;
 
     /**
      * Returns a callable that modify the data row.
      *
-     * @return callable
+     * @return callable|null
      */
     public function getLineFormatter();
 
@@ -97,11 +99,11 @@ interface DatatableInterface
     /**
      * Help function to create an option array for filtering.
      *
-     * @param array  $entities
-     * @param string $keyFrom
-     * @param string $valueFrom
+     * @param array<mixed> $entities
+     * @param string       $keyFrom
+     * @param string       $valueFrom
      *
-     * @return array
+     * @return array<mixed>
      */
     public function getOptionsArrayFromEntities($entities, $keyFrom = 'id', $valueFrom = 'name');
 

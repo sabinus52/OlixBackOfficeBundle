@@ -26,7 +26,7 @@ class SelectFilter extends AbstractFilter
      * This allows to define a search type (e.g. 'like' or 'isNull') for each item in 'selectOptions'.
      * Default: array() - The default value of searchType is used.
      *
-     * @var array
+     * @var array<mixed>
      */
     protected $selectSearchTypes;
 
@@ -34,7 +34,7 @@ class SelectFilter extends AbstractFilter
      * Select options for this filter type (e.g. for boolean column: '1' => 'Yes', '0' => 'No').
      * Default: array().
      *
-     * @var array
+     * @var array<mixed>
      */
     protected $selectOptions;
 
@@ -77,6 +77,7 @@ class SelectFilter extends AbstractFilter
 
         $this->setSelectSearchType($searchValue);
 
+        // @phpstan-ignore-next-line
         return $this->getExpression($andExpr, $qb, $this->searchType, $searchField, $searchValue, $searchTypeOfField, $parameterCounter);
     }
 
@@ -113,7 +114,7 @@ class SelectFilter extends AbstractFilter
     // -------------------------------------------------
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getSelectSearchTypes()
     {
@@ -121,6 +122,8 @@ class SelectFilter extends AbstractFilter
     }
 
     /**
+     * @param array<mixed> $selectSearchTypes
+     *
      * @return $this
      */
     public function setSelectSearchTypes(array $selectSearchTypes)
@@ -131,7 +134,7 @@ class SelectFilter extends AbstractFilter
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getSelectOptions()
     {
@@ -139,6 +142,8 @@ class SelectFilter extends AbstractFilter
     }
 
     /**
+     * @param array<mixed> $selectOptions
+     *
      * @return $this
      */
     public function setSelectOptions(array $selectOptions)

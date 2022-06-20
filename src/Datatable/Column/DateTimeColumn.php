@@ -114,6 +114,8 @@ class DateTimeColumn extends AbstractColumn
 
     /**
      * {@inheritdoc}
+     *
+     * @return string|null
      */
     public function renderPostCreateDatatableJsContent()
     {

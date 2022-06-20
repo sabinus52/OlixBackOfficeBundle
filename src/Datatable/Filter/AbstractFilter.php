@@ -70,7 +70,7 @@ abstract class AbstractFilter implements FilterInterface
      * Specifies whether a placeholder is displayed.
      * Default: true.
      *
-     * @var bool
+     * @var string
      */
     protected $placeholder;
 
@@ -224,7 +224,7 @@ abstract class AbstractFilter implements FilterInterface
     }
 
     /**
-     * @return bool
+     * @return string
      */
     public function isPlaceholder()
     {
@@ -232,7 +232,7 @@ abstract class AbstractFilter implements FilterInterface
     }
 
     /**
-     * @param bool $placeholder
+     * @param string $placeholder
      *
      * @return $this
      */

@@ -33,6 +33,8 @@ trait RenderIfTrait
     /**
      * Checks whether the object may be added.
      *
+     * @param array<mixed> $row
+     *
      * @return bool
      */
     public function callRenderIfClosure(array $row = [])

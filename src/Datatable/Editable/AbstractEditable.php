@@ -39,7 +39,7 @@ abstract class AbstractEditable implements EditableInterface
      * Additional params for submit It is appended to original ajax data (pk, name and value).
      * Default: null.
      *
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected $params;
 
@@ -210,7 +210,7 @@ abstract class AbstractEditable implements EditableInterface
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getParams()
     {
@@ -218,7 +218,7 @@ abstract class AbstractEditable implements EditableInterface
     }
 
     /**
-     * @param array|null $params
+     * @param array<mixed>|null $params
      *
      * @return $this
      */
