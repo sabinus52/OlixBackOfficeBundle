@@ -36,6 +36,8 @@ olix_back_office:
     security:
         # Si on active le menu de gestion des utlisateurs
         menu_activ: false
+        # Delai en minutes à partir duquel l'utilisateur est considéré comme non connecté.
+        delay_activity: 5
         class:
             # Class de l'entité utilisateur
             user: App\Entity\User

@@ -108,6 +108,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
             ->booleanNode('menu_activ')->defaultValue(false)->end()
+            ->integerNode('delay_activity')->defaultValue(5)->end()
             ->arrayNode('class')
             ->addDefaultsIfNotSet()
             ->children()

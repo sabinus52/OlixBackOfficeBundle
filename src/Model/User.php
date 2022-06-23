@@ -29,6 +29,8 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     protected const AVATAR_PATH = 'bundles/olixbackoffice/images/avatar/';
     protected const AVATAR_DEFAULT = 'default.png';
 
+    protected const DELAY_ACTIVITY = 5;
+
     /**
      * @var int
      * @ORM\Id
@@ -78,6 +80,13 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(name="last_login", type="datetime", nullable=true)
      */
     protected $lastLogin;
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(name="last_activity", type="datetime", nullable=true)
+     */
+    protected $lastActivity;
 
     /**
      * @var array<string> liste des roles
@@ -263,6 +272,68 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->lastLogin = $lastLogin;
 
         return $this;
+    }
+
+    /**
+     * @param DateTime $lastActivity
+     *
+     * @return User
+     */
+    public function setLastActivity(?DateTimeInterface $lastActivity): self
+    {
+        $this->lastActivity = $lastActivity;
+
+        return $this;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getLastActivity(): ?DateTimeInterface
+    {
+        return $this->lastActivity;
+    }
+
+    /**
+     * Indique que l'utilisateur est en activité.
+     *
+     * @return User
+     */
+    public function setOnline(): self
+    {
+        $this->setLastActivity(new DateTime());
+
+        return $this;
+    }
+
+    /**
+     * Verifie si l'utilisateur est en activité.
+     *
+     * @param int $minDelay Minutes d'inactivité
+     *
+     * @return bool
+     */
+    public function isOnline(int $minDelay = self::DELAY_ACTIVITY)
+    {
+        $delay = new DateTime();
+        $timeDelay = (int) strtotime(sprintf('%s minutes ago', $minDelay));
+        $delay->setTimestamp($timeDelay);
+
+        return $this->getLastActivity() > $delay;
+    }
+
+    /**
+     * @param int $minDelay Minutes d'inactivité
+     *
+     * @return string
+     */
+    public function getOnlineBadge(int $minDelay = self::DELAY_ACTIVITY): string
+    {
+        if ($this->isOnline($minDelay)) {
+            return '<span class="badge bg-green">OUI</span>';
+        }
+
+        return '<span class="badge bg-red">NON</span>';
     }
 
     /**

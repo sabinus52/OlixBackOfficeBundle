@@ -22,10 +22,15 @@ services:
     Olix\BackOfficeBundle\Security\UserManager:
         arguments: [ '@service_container', '@parameter_bag', '@doctrine', '@security.user_password_hasher' ]
 
-    Olix\BackOfficeBundle\Listener\LoginListener:
+    Olix\BackOfficeBundle\EventSubscriber\LoginListener:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+
+    Olix\BackOfficeBundle\EventSubscriber\ActivitySubscriber:
+        arguments: [ '@doctrine.orm.entity_manager', '@security.helper', '%olix_back_office%' ]
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.controller' }
 
     Olix\BackOfficeBundle\Controller\:
         resource: '../src/Controller'
@@ -43,6 +48,16 @@ services:
         public: false
         tags:
             - { name: twig.runtime }
+
+    Olix\BackOfficeBundle\Datatable\DatatableFactory:
+        public: true
+        arguments:
+            - '@security.authorization_checker'
+            - '@security.token_storage'
+            - '@translator'
+            - '@router'
+            - '@doctrine.orm.entity_manager'
+            - '@twig'
 
     Olix\BackOfficeBundle\Datatable\Response\DatatableResponse:
         public: true
