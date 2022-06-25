@@ -14,14 +14,18 @@ namespace Olix\BackOfficeBundle\Model;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Classe abstraite de l'entité de la table utilisateurs de connexion.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
  * @ORM\MappedSuperclass
+ * @UniqueEntity(fields="username", message="Ce login est déjà utilisé, merci d'en choisir un autre")
+ * @UniqueEntity(fields="email", message="Cet email est déjà utilisé, merci d'en choisir un autre")
  * @SuppressWarnings(PHPMD.ShortVariable)
  */
 abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -42,18 +46,22 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Length(min=2, max=180)
      */
     protected $username;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=150, nullable=true)
+     * @Assert\Email
      */
     protected $email;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=150, nullable=true)
+     * @Assert\Length(min=2, max=180)
      */
     protected $name;
 

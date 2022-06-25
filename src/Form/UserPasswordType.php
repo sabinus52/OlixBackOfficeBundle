@@ -17,6 +17,8 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Formulaire de mise à jour du mot de passe de l'utilisateur.
@@ -36,9 +38,13 @@ class UserPasswordType extends AbstractType
             'type' => PasswordType::class,
             'invalid_message' => 'The password fields must match.',
             'required' => true,
-            'first_options' => ['label' => 'Password'],
-            'second_options' => ['label' => 'Repeat Password'],
+            'first_options' => ['label' => 'Mot de passe'],
+            'second_options' => ['label' => 'Confirmation mot de passe'],
             'mapped' => false,
+            'constraints' => [
+                new Length(['min' => 8]),
+                new NotBlank(),
+            ],
         ]);
     }
 

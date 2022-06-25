@@ -90,7 +90,10 @@ class ManagerController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Add this new user
-            $manager->setUser($form->getData())->add($form->get('password')->getData());
+            $manager->setUser($form->getData());
+            $manager->add($form->get('password')->getData());
+
+            $this->addFlash('success', 'La création de l\'utilisateur <b>'.$manager->getUser()->getUserIdentifier().'</b> a bien été prise en compte');
 
             return $this->redirectToRoute('olix_users__edit', ['id' => $manager->getUser()->getId()]);
         }
@@ -123,6 +126,8 @@ class ManagerController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Update datas of this user
             $manager->setUser($form->getData())->update();
+
+            $this->addFlash('success', 'La modification de l\'utilisateur <b>'.$user->getUserIdentifier().'</b> a bien été prise en compte');
 
             return $this->redirectToRoute('olix_users__list');
         }
@@ -157,6 +162,8 @@ class ManagerController extends AbstractController
             // Change password for this user
             $manager->update($form->get('password')->getData());
 
+            $this->addFlash('success', 'La modification du mot de passe de l\'utilisateur <b>'.$user->getUserIdentifier().'</b> a bien été prise en compte');
+
             return $this->redirectToRoute('olix_users__list');
         }
 
@@ -175,9 +182,9 @@ class ManagerController extends AbstractController
     public function removeUser(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
-        $idUser = (int) $request->get('id');
 
         // Get user from request
+        $idUser = (int) $request->get('id');
         $user = $manager->setUserById($idUser);
         if (!$user instanceof UserInterface) {
             $this->redirectToRoute('olix_users__list');
