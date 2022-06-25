@@ -150,6 +150,8 @@ abstract class AbstractDatatable implements DatatableInterface
     protected static $uniqueCounter = [];
 
     /**
+     * @param array<mixed> $options
+     *
      * @throws LogicException
      */
     public function __construct(
@@ -158,7 +160,8 @@ abstract class AbstractDatatable implements DatatableInterface
         TranslatorInterface $translator,
         RouterInterface $router,
         EntityManagerInterface $em,
-        Environment $twig
+        Environment $twig,
+        array $options = []
     ) {
         $this->validateName();
 
@@ -191,6 +194,8 @@ abstract class AbstractDatatable implements DatatableInterface
         $this->language = new Language();
 
         $this->accessor = PropertyAccess::createPropertyAccessor();
+
+        $options = $options;
     }
 
     // -------------------------------------------------

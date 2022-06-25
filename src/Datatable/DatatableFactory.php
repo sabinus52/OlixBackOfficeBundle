@@ -92,13 +92,14 @@ class DatatableFactory
     // -------------------------------------------------
 
     /**
-     * @param string $class
+     * @param string       $class
+     * @param array<mixed> $options
      *
      * @throws Exception
      *
      * @return DatatableInterface
      */
-    public function create($class)
+    public function create($class, array $options = [])
     {
         if (!\is_string($class)) {
             $type = \gettype($class);
@@ -119,7 +120,8 @@ class DatatableFactory
                 $this->translator,
                 $this->router,
                 $this->em,
-                $this->twig
+                $this->twig,
+                $options
             );
         }
 

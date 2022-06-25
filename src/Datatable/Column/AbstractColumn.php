@@ -321,7 +321,7 @@ abstract class AbstractColumn implements ColumnInterface
             'orderable' => true,
             'order_data' => null,
             'order_sequence' => null,
-            'searchable' => true,
+            'searchable' => false,
             'title' => null,
             'visible' => true,
             'width' => null,

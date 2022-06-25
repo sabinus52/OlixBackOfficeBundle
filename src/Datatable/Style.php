@@ -110,7 +110,7 @@ class Style
      *
      * @var string
      */
-    public const BOOTSTRAP_4_STYLE = 'table table-striped table-bordered';
+    public const BOOTSTRAP_4_STYLE = 'table table-hover text-nowrap table-valign-middle';
 
     /**
      * Material Design style.

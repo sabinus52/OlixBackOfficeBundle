@@ -183,10 +183,10 @@ class BooleanColumn extends AbstractColumn
                         'select_options' => ['' => 'Any', '1' => 'Yes', '0' => 'No'],
                     ],
                 ],
-                'true_icon' => null,
-                'false_icon' => null,
-                'true_label' => null,
-                'false_label' => null,
+                'true_icon' => 'fas fa-check-circle',
+                'false_icon' => '',
+                'true_label' => '',
+                'false_label' => '',
                 'editable' => null,
             ]
         );
@@ -299,6 +299,14 @@ class BooleanColumn extends AbstractColumn
         $this->falseLabel = $falseLabel;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getClassName()
+    {
+        return $this->className.'text-center';
     }
 
     // -------------------------------------------------

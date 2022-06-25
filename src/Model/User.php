@@ -184,6 +184,26 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * Retourne le badge du statut en cours de l'utilisateur.
+     *
+     * @return string
+     */
+    public function getStateBadge(): string
+    {
+        if (!$this->isEnabled()) {
+            return '<span class="badge bg-red">DISABLED</span>';
+        }
+        if ($this->isExpired()) {
+            return '<span class="badge bg-red">EXPIRED</span>';
+        }
+        if (null !== $this->getExpiresAt()) {
+            return '<span class="badge bg-orange">Expires at '.$this->getExpiresAt()->format('d/m/Y').'</span>';
+        }
+
+        return '<span class="badge bg-green">ACTIVE</span>';
+    }
+
+    /**
      * @return bool
      */
     public function isEnabled(): bool
@@ -236,18 +256,20 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * @param string $prefix : pour ajouter un préfix dans l'URL comme un '/'
+     *
      * @return string|null
      */
-    public function getAvatar(): ?string
+    public function getAvatar(string $prefix = ''): ?string
     {
         if (!$this->avatar) {
-            return self::AVATAR_PATH.self::AVATAR_DEFAULT;
+            return $prefix.self::AVATAR_PATH.self::AVATAR_DEFAULT;
         }
         if ('http' === substr($this->avatar, 0, 4)) {
             return $this->avatar;
         }
 
-        return self::AVATAR_PATH.$this->avatar;
+        return $prefix.self::AVATAR_PATH.$this->avatar;
     }
 
     /**
@@ -280,6 +302,37 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->lastLogin = $lastLogin;
 
         return $this;
+    }
+
+    /**
+     * Retourne le temps écoulé depuis la dernière connexion.
+     *
+     * @return string
+     */
+    public function getIntervalLastLogin(): string
+    {
+        if (null === $this->lastLogin) {
+            return '';
+        }
+        $now = new DateTime();
+        $interval = $now->diff($this->lastLogin);
+        if (1 === $interval->days) {
+            return $interval->format('%a jour');
+        }
+        if ($interval->days > 1) {
+            return $interval->format('%a jours');
+        }
+        if (1 === $interval->h) {
+            return $interval->format('%h heure');
+        }
+        if ($interval->h > 1) {
+            return $interval->format('%h heures');
+        }
+        if (1 === $interval->i) {
+            return $interval->format('%i minute');
+        }
+
+        return $interval->format('%i minutes');
     }
 
     /**

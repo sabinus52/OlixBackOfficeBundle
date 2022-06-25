@@ -188,7 +188,7 @@ abstract class AbstractFilter implements FilterInterface
      */
     public function getClasses()
     {
-        return $this->classes;
+        return $this->classes.' form-control';
     }
 
     /**

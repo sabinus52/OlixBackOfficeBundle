@@ -225,6 +225,7 @@ class ActionColumn extends AbstractColumn
         $resolver->setDefaults([
             'start_html' => null,
             'end_html' => null,
+            'class_name' => 'text-right text-nowrap',
         ]);
 
         $resolver->setAllowedTypes('actions', 'array');

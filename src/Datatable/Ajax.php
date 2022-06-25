@@ -77,7 +77,7 @@ class Ajax
             'url' => null,
             'method' => 'GET',
             'data' => null,
-            'pipeline' => 0,
+            'pipeline' => 10,
         ]);
 
         $resolver->setAllowedTypes('url', ['null', 'string']);

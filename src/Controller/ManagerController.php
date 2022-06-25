@@ -12,6 +12,10 @@ declare(strict_types=1);
 namespace Olix\BackOfficeBundle\Controller;
 
 use Exception;
+use Olix\BackOfficeBundle\Datatable\DatatableFactory;
+use Olix\BackOfficeBundle\Datatable\DatatableInterface;
+use Olix\BackOfficeBundle\Datatable\Response\DatatableResponse;
+use Olix\BackOfficeBundle\Security\UserDatatable;
 use Olix\BackOfficeBundle\Security\UserManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,6 +37,7 @@ class ManagerController extends AbstractController
      */
     private $parameters = [
         'menu_activ' => false,
+        'delay_activity' => 5,
     ];
 
     /**
@@ -60,14 +65,32 @@ class ManagerController extends AbstractController
      * @Route("/security/users", name="olix_users__list")
      * @Security("is_granted('ROLE_ADMIN')")
      */
-    public function listUsers(UserManager $manager): Response
+    public function listUsers(UserManager $manager, Request $request, DatatableFactory $factory, DatatableResponse $responseService): Response
     {
         $this->checkAccess();
+
+        $isAjax = $request->isXmlHttpRequest();
+
+        /** @var DatatableInterface $datatable */
+        $datatable = $factory->create(UserDatatable::class, [
+            'entityUser' => $manager->getClass(),
+        ]);
+        $datatable->buildDatatable([
+            'delay' => $this->parameters['delay_activity'],
+        ]);
+
+        if ($isAjax) {
+            $responseService->setDatatable($datatable);
+            $responseService->getDatatableQueryBuilder();
+
+            return $responseService->getResponse();
+        }
 
         // Get all users
         $users = $manager->findAll();
 
         return $this->render('@OlixBackOffice/Security/users-list.html.twig', [
+            'datatable' => $datatable,
             'users' => $users,
         ]);
     }
