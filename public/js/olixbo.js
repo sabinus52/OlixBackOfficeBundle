@@ -33,7 +33,7 @@
         "onclick": null,
         "showDuration": "300",
         "hideDuration": "1000",
-        "timeOut": "5000",
+        "timeOut": "10000",
         "extendedTimeOut": "1000",
         "showEasing": "swing",
         "hideEasing": "linear",
@@ -42,3 +42,26 @@
     };
 
 })();
+
+
+
+/**
+ * Gestion de l'interface de l'admin
+ *
+ * @namespace olixAdminInterface
+ */
+ var olixBackOffice = {
+
+    /**
+     * Lors d'une Datatable, affiche le modal de confirmation d'une suppression d'un élément
+     * 
+     * @param Object obj Objet du lien
+     */
+    confirmDelete: function (obj)
+    {
+        $('#modalDelete form').attr('action', $(obj).attr('href'));
+        $('#modalDelete').modal('show');
+        return false;
+    }
+
+};

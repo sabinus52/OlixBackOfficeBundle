@@ -86,11 +86,15 @@ class ManagerController extends AbstractController
             return $responseService->getResponse();
         }
 
+        // Formulaire pour la suppression d'un élément
+        $form = $this->createFormBuilder()->getForm();
+
         // Get all users
         $users = $manager->findAll();
 
-        return $this->render('@OlixBackOffice/Security/users-list.html.twig', [
+        return $this->renderForm('@OlixBackOffice/Security/users-list.html.twig', [
             'datatable' => $datatable,
+            'form' => $form,
             'users' => $users,
         ]);
     }
@@ -213,8 +217,19 @@ class ManagerController extends AbstractController
             $this->redirectToRoute('olix_users__list');
         }
 
-        // Remove this user
-        $manager->remove();
+        $form = $this->createFormBuilder()->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Remove this user
+            $manager->remove();
+
+            $this->addFlash('success', 'La suppression de l\'utilisateur <b>'.$user->getUserIdentifier().'</b> a bien été prise en compte');
+
+            return $this->redirectToRoute('olix_users__list');
+        }
+
+        $this->addFlash('error', '<b>Erreur lors de la suppression</b>');
 
         return $this->redirectToRoute('olix_users__list');
     }

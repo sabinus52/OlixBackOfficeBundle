@@ -188,6 +188,7 @@ class UserDatatable extends AbstractDatatable
                             'title' => 'Supprimer l\'utilisateur',
                             'class' => 'btn btn-danger btn-sm obtn-delete',
                             'role' => 'button',
+                            'onclick' => 'return olixBackOffice.confirmDelete(this)',
                         ],
                     ],
                 ],
