@@ -77,9 +77,9 @@ class NotificationModel implements NotificationInterface
     /**
      * @param string $icon
      *
-     * @return NotificationInterface
+     * @return NotificationModel
      */
-    public function setIcon(string $icon): NotificationInterface
+    public function setIcon(string $icon): self
     {
         $this->icon = $icon;
 
@@ -97,9 +97,9 @@ class NotificationModel implements NotificationInterface
     /**
      * @param string $color
      *
-     * @return NotificationInterface
+     * @return NotificationModel
      */
-    public function setColor(?string $color): NotificationInterface
+    public function setColor(?string $color): self
     {
         $this->color = $color;
 
@@ -117,9 +117,9 @@ class NotificationModel implements NotificationInterface
     /**
      * @param string $message
      *
-     * @return NotificationInterface
+     * @return NotificationModel
      */
-    public function setMessage(string $message): NotificationInterface
+    public function setMessage(string $message): self
     {
         $this->message = $message;
 
@@ -137,9 +137,9 @@ class NotificationModel implements NotificationInterface
     /**
      * @param string $info
      *
-     * @return NotificationInterface
+     * @return NotificationModel
      */
-    public function setInfo(?string $info): NotificationInterface
+    public function setInfo(?string $info): self
     {
         $this->info = $info;
 

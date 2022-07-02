@@ -48,8 +48,8 @@
     "scripts": {
         "test": "phpunit --debug",
         "phpmd": [
-            "phpmd src ansi cleancode,codesize,controversial,design,unusedcode,naming",
-            "phpmd tests ansi cleancode,codesize,controversial,design,unusedcode,naming"
+            "phpmd src ansi ruleset.xml",
+            "phpmd tests ansi ruleset.xml"
         ],
         "phpstan": "phpstan analyse src --level=7 --configuration=phpstan.neon",
         "codestyle": "php-cs-fixer fix --dry-run --verbose --diff",

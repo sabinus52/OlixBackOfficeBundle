@@ -94,7 +94,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
             ]));
         }
 
-        $this->activateByRoute($event->getRequest()->get('_route'), $event->getSidebarMenu());
+        $this->activateByRoute($this->getPrefixRoute($event->getRequest()->get('_route')), $event->getSidebarMenu());
     }
 
     /**
@@ -107,13 +107,31 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
     {
         foreach ($items as $item) {
             if ($item->hasChildren()) {
-                if ($item->getRoute() === $route) {
-                    $item->setIsActive(true); // TODO inclusio de chemin __
+                if ($this->getPrefixRoute($item->getRoute()) === $route) {
+                    $item->setIsActive(true);
                 }
                 $this->activateByRoute($route, $item->getChildren());
-            } elseif ($item->getRoute() === $route) {
+            } elseif ($this->getPrefixRoute($item->getRoute()) === $route) {
                 $item->setIsActive(true);
             }
         }
+    }
+
+    /**
+     * Retourne la route ou le prefixe de la route avant '__' pour les sous pages du menu.
+     *
+     * @param string|null $route
+     *
+     * @return string|null
+     */
+    protected function getPrefixRoute(?string $route): ?string
+    {
+        if (null === $route) {
+            return null;
+        }
+
+        $result = strstr($route, '__', true);
+
+        return (false === $result) ? $route : $result.'__';
     }
 }

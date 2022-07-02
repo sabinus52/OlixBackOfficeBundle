@@ -77,7 +77,7 @@ abstract class DateTimePickerModelType extends AbstractModelType
             'ojs_stepping' => 5,
             'ojs_min_date' => false,
             'ojs_max_date' => false,
-            'ojs_use_current' => true,
+            'ojs_use_current' => false,
             'ojs_collapse' => true,
             'ojs_default_date' => false,
             'ojs_disabled_dates' => [],
@@ -91,7 +91,7 @@ abstract class DateTimePickerModelType extends AbstractModelType
             'ojs_calendar_weeks' => false,
             'obj_view_mode' => 'days',
             'obj_keep_open' => false,
-            'ojj_disabled_time_intervals' => [],
+            'obj_disabled_time_intervals' => [],
             'obj_allow_input_toggle' => false,
             'obj_focus_on_show' => true,
             'obj_disabled_hours' => [],
@@ -111,7 +111,7 @@ abstract class DateTimePickerModelType extends AbstractModelType
         $resolver->setAllowedTypes('ojs_calendar_weeks', 'bool');
         $resolver->setAllowedTypes('obj_view_mode', 'string');
         $resolver->setAllowedTypes('obj_keep_open', 'bool');
-        $resolver->setAllowedTypes('ojj_disabled_time_intervals', 'array');
+        $resolver->setAllowedTypes('obj_disabled_time_intervals', 'array');
         $resolver->setAllowedTypes('obj_allow_input_toggle', 'bool');
         $resolver->setAllowedTypes('obj_focus_on_show', 'bool');
         $resolver->setAllowedTypes('obj_disabled_hours', 'array');
