@@ -45,6 +45,10 @@
                         {% include '@OlixBackOffice/Navbar/notifications.html.twig' %}
                     {% endblock %}
 
+                    {% block navbar_user %}
+                        {% include '@OlixBackOffice/Navbar/user.html.twig' %}
+                    {% endblock %}
+
                     {% block fullscreen %}
                         <li class="nav-item"><a class="nav-link" data-widget="fullscreen" href="#" role="button"><i class="fas fa-expand-arrows-alt"></i></a></li>
                     {% endblock %}
@@ -96,12 +100,7 @@
                                 <h1 class="m-0">{% block content_title %}Back Office{% endblock %} <small>{% block content_subtitle %}Démo du bundle{% endblock %}</small></h1>
                             </div>
                             {% block content_breadcrumb %}
-                                <div class="col-sm-6">
-                                    <ol class="breadcrumb float-sm-right">
-                                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                        <li class="breadcrumb-item active">Starter Page</li>
-                                    </ol>
-                                </div>
+                                {% include '@OlixBackOffice/Include/breadcrumb.html.twig' %}
                             {% endblock %}
                         </div>
                     </div>

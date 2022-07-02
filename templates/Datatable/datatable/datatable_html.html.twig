@@ -1,0 +1,65 @@
+{##
+ # This file is part of the SgDatatablesBundle package.
+ #
+ # (c) stwe <https://github.com/stwe/DatatablesBundle>
+ #
+ # For the full copyright and license information, please view the LICENSE
+ # file that was distributed with this source code.
+ #}
+{% set individual_filtering = false %}
+
+{% if true == sg_datatables_view.options.individualFiltering %}
+    {% if true == sg_datatables_view.features.searching or sg_datatables_view.features.searching is same as(null) %}
+        {% set individual_filtering = true %}
+    {% endif %}
+{% endif %}
+
+<table id="sg-datatables-{{ sg_datatables_view.uniqueName }}" class="{{ sg_datatables_view.options.classes }}" cellspacing="0" width="100%">
+    <thead>
+        {% if true == individual_filtering %}
+            {% if 'head' == sg_datatables_view.options.individualFilteringPosition or 'both' == sg_datatables_view.options.individualFilteringPosition%}
+                <tr>
+                    {% for column in sg_datatables_view.columnBuilder.columns %}
+                        {% if column.sentInResponse %}
+                            <th>{{ column.title }}</th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr id="sg-datatables-{{ sg_datatables_view.uniqueName }}-filterrow">
+                    {% for column in sg_datatables_view.columnBuilder.columns %}
+                        {% if column.sentInResponse %}
+                            <th>
+                                {% if column.searchable %}
+                                    {{ olixbo_datatable_filter(sg_datatables_view, column, 'head') }}
+                                {% endif %}
+                            </th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endif %}
+        {% endif %}
+    </thead>
+        {% if true == individual_filtering %}
+            {% if 'foot' == sg_datatables_view.options.individualFilteringPosition or 'both' == sg_datatables_view.options.individualFilteringPosition%}
+            <tfoot>
+                    <tr>
+                        {% for column in sg_datatables_view.columnBuilder.columns %}
+                            {% if column.sentInResponse %}
+                                <td>
+                                    {% if column.searchable %}
+                                        {{ olixbo_datatable_filter(sg_datatables_view, column, 'foot') }}
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                </tfoot>
+            {% endif %}
+        {% endif %}
+    <tbody>
+    </tbody>
+</table>
+
+{% if sg_datatables_view.columnBuilder.uniqueColumn('multiselect') is not same as(null) %}
+    <div id="sg-datatables-{{ sg_datatables_view.uniqueName }}-multiselect-actions"></div>
+{% endif %}

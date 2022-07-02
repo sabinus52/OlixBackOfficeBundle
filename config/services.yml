@@ -10,3 +10,56 @@ services:
         arguments: [ '%olix_back_office%' ]
         tags:
             - { name: twig.runtime }
+
+    olix.backoffice.twig.events:
+        class: Olix\BackOfficeBundle\Twig\EventsRuntime
+        arguments: [ '@event_dispatcher' ]
+        tags:
+            - { name: twig.runtime }
+
+    Olix\BackOfficeBundle\Security\UserChecker:
+
+    Olix\BackOfficeBundle\Security\UserManager:
+        arguments: [ '@service_container', '@parameter_bag', '@doctrine', '@security.user_password_hasher' ]
+
+    Olix\BackOfficeBundle\EventSubscriber\LoginListener:
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+
+    Olix\BackOfficeBundle\EventSubscriber\ActivitySubscriber:
+        arguments: [ '@doctrine.orm.entity_manager', '@security.helper', '%olix_back_office%' ]
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.controller' }
+
+    Olix\BackOfficeBundle\Controller\:
+        resource: '../src/Controller'
+        arguments: ['@parameter_bag']
+        tags: ['controller.service_arguments']
+        calls:
+            - ['setContainer', ['@service_container']]
+
+    Olix\BackOfficeBundle\Form\Type\Select2AjaxType:
+        arguments: [ '@doctrine' ]
+        tags:
+            - { name: form.type }
+
+    Olix\BackOfficeBundle\Twig\DatatableRuntime:
+        public: false
+        tags:
+            - { name: twig.runtime }
+
+    Olix\BackOfficeBundle\Datatable\DatatableFactory:
+        public: true
+        arguments:
+            - '@security.authorization_checker'
+            - '@security.token_storage'
+            - '@translator'
+            - '@router'
+            - '@doctrine.orm.entity_manager'
+            - '@twig'
+
+    Olix\BackOfficeBundle\Datatable\Response\DatatableResponse:
+        public: true
+        arguments:
+            - '@request_stack'

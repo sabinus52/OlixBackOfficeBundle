@@ -1,27 +1,48 @@
+{% macro menu_item(item, level) %}
+    {% import _self as sidebar %}
+
+    {% if item.route or item.hasChildren %}
+        <li class="nav-item {% if item.isActive %}menu-open{% endif %}">
+            {# Contenu de menu du niveau au cours #}
+            {{ sidebar.menu_item_content(item, level) }}
+
+            {% if item.hasChildren %}
+                {# Pour chaque enfant du menu #}
+                <ul class="nav nav-treeview">
+                    {% for child in item %}
+                        {{ sidebar.menu_item(child, level+1) }}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% else %}
+        <li class="nav-header">{{ item.label }}</li>
+    {% endif %}
+
+{% endmacro %}
+
+
+{# Contenu de l'item, on a besoin du level pour afficher le badge que pour le niveau 1 #}
+{% macro menu_item_content(item, level) %}
+    {% set route = item.hasChildren ? '#': '/' in item.route ? item.route : path(item.route, item.routeArgs) %}
+    <a href="{{ route }}" class="nav-link {% if item.isActive %}active{% endif %}">
+        <i class="nav-icon {{ item.icon|default('far fa-circle') }} text-{{ item.iconColor|default('') }}"></i>
+        <p class="text">
+            {{ item.label }}
+            {% if item.hasChildren %}<i class="right fas fa-angle-left"></i>{% endif %}
+            {% if level == 1 and item.badge %}<span class="right badge badge-{{ item.badgeColor|default('light') }}">{{ item.badge }}</span>{% endif %}
+        </p>
+    </a>
+{% endmacro %}
+
+
+{% import _self as sidebar %}
+
 <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column {{ olixbo_class_sidebar() }}" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
-                <p>Starter Pages<i class="right fas fa-angle-left"></i></p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item"><a href="#" class="nav-link active"><i class="far fa-circle nav-icon"></i><p>Active Page</p></a></li>
-                <li class="nav-item"><a href="#" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Inactive Page</p></a></li>
-            </ul>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-th"></i>
-                <p>Simple Link<span class="right badge badge-danger">New</span></p>
-            </a>
-        </li>
-        <li class="nav-header">LABELS</li>
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon far fa-circle text-danger"></i>
-                <p class="text">Important</p>
-            </a>
-        </li>
+        {% set menu = olixbo_sidebar_menu(app.request) %}
+        {% for item in menu %}
+            {{ sidebar.menu_item(item, 1) }}
+        {% endfor %}
     </ul>
 </nav>
