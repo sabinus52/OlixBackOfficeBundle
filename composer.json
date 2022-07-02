@@ -1,5 +1,5 @@
 {
-    "name": "olix/adminltefull-bundle",
+    "name": "olix/backoffice-bundle",
     "description": "Admin theme bundle for Symfony 5+ based on AdminLTE 3.2 with FOSUserBundle, Forms",
     "type": "symfony-bundle",  
     "license": "GPL-2.0",
