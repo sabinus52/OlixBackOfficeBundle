@@ -6,3 +6,5 @@
 - [Sidebar navigation menu](menu.md)
 - [Integration of the security](security.md)
 - [Extended Forms](forms.md)
+- [Datatables](datatables.md)
+- [Implements CRUD](crud.md)

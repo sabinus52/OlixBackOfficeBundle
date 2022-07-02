@@ -227,6 +227,61 @@ public function getSearchIPs(Request $request, ManagerRegistry $doctrine): JsonR
 
 
 
+## DateTime picker
+
+Date and time picker designed to integrate into your Bootstrap
+
+### Exemple
+
+~~~ php
+use Olix\BackOfficeBundle\Form\Type\DatePickerType;
+use Olix\BackOfficeBundle\Form\Type\DateTimePickerType;
+use Olix\BackOfficeBundle\Form\Type\TimePickerType;
+
+$builder
+    ->add('datetime', DateTimePickerType::class, [
+        'label' => 'Date et heure',
+        'ojs_default_date' => new DateTime('2022-05-10'),
+        'ojs_disabled_dates' => [new DateTime('2022-05-13'), new DateTime('2022-05-15')],
+        'ojs_side_by_side' => true,
+        'ojs_days_of_week_disabled' => [0, 6],
+    ])
+    ->add('date', DatePickerType::class, [
+        'label' => 'Date',
+        'ojs_min_date' => new DateTime('05/05/2022'),
+        'ojs_calendar_weeks' => true,
+    ])
+    ->add('time', TimePickerType::class, [
+        'label' => 'Heure',
+    ]);
+~~~
+
+### Options
+
+| Nom SF                      | Nom JS                | Type               | Description                                                                               | Defaut | Valeurs 
+|-----------------------------|-----------------------|--------------------|-------------------------------------------------------------------------------------------|--------|---------
+| button_icon                 |                       | String             | Icon from right input                                                                     |        | 
+| locale                      |                       | String             | Locale                                                                                    | 'fr'   |
+| ojs_stepping                | stepping              | Integer            | Number of minutes the up/down arrow's will move the minutes value in the time picker      | 1      |
+| ojs_min_date                | minDate               | String,Date,moment | Disallows the user to select a moment that is before that moment                          | false  | 
+| ojs_max_date                | maxDate               | String,Date,moment | Disallows the user to select a moment that is after that moment                           | false  | 
+| ojs_use_current             | useCurrent            | String,Boolean     |                                                                                           | true   | true, false
+| ojs_collapse                | collapse              | Boolean            | Using a Bootstraps collapse to switch between date/time pickers                           | true   | true, false
+| ojs_default_date            | defaultDate           | String,Date,moment | Sets the picker default date/time. Overrides useCurrent                                   | false  | 
+| ojs_disabled_dates          | disabledDates         | Array              | Array with the currently set disabled dates on the component                              | false  | 
+| ojs_enabled_dates           | enabledDates          | Array              | Array with the currently set enabled dates on the component                               | false  | 
+| ojs_icons                   | icons                 | Object             | Change the default icons for the pickers functions                                        |        | 
+| ojs_side_by_side            | sideBySide            | Boolean            | Shows the picker side by side when using the time and date together                       | false  | 
+| ojs_days_of_week_disabled   | daysOfWeekDisabled    | Array              | Disables the section of days of the week                                                  | []     | 
+| ojs_calendar_weeks          | calendarWeeks         | Integer            | Shows the week of the year to the left of first day of the week                           | false  | 
+| obj_view_mode               | viewMode              | String             | The default view to display when the picker is shown                                      | 'days' | 'decades','years','months','days', 'times'
+| obj_keep_open               | keepOpen              | Boolean            | Will cause the date picker to stay open after selecting a date                            | false  | true, false
+| obj_disabled_time_intervals | disabledTimeIntervals | Boolean            | Disables time selection between the given moments                                         | false  | true, false
+| obj_allow_input_toggle      | allowInputToggle      | Boolean            | If true, the picker will show on textbox focus and icon click when used in a button group | false  | true, false
+| obj_focus_on_show           | focusOnShow           | Boolean            | If false, the textbox will not be given focus when the picker is                          | true   | true, false
+| obj_disabled_hours          | disabledHours         | Array              | Disallow hour selections but will affect all days                                         | false  | []
+
+
 ## Input text with icon
 
 ### Exemple
