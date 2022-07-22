@@ -5,6 +5,7 @@
 Déclaration du bundle dans `config/bundles.php`
 ~~~ php
 Olix\BackOfficeBundle\OlixBackOfficeBundle::class => ['all' => true],
+FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
 ~~~
 
 Génération des assets
@@ -18,6 +19,20 @@ Ajout des routes du bundle dans son application dans `config/routes.yaml`
 app_file:
     resource: '@OlixBackOfficeBundle/config/routing.yml'
 ~~~
+
+
+## Configuration du bundle
+
+Création du fichier de configuration du bundle `config/packages/olix_bo.yaml` pour modifier les options par défaut
+
+~~~ yml
+olix_back_office:
+    options:
+    security:
+~~~
+
+[Voir les options](options.md)
+
 
 ## Template
 
@@ -65,10 +80,3 @@ class UserRepository extends ServiceEntityRepository
 ~~~
 
 [Plus d'informations](security.md)
-
-
-## Configuration du bundle
-
-Création du fichier de configuration du bundle `config/packages/olix_bo.yaml` pour modifier les options par défaut
-
-[Voir les options](options.md)
