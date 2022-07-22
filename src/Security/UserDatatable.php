@@ -27,6 +27,8 @@ use Twig\Environment;
  * Classe de la Datatable de la liste des utilisateurs.
  *
  * @author Sabinus52 <sabinus52@gmail.com>
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 class UserDatatable extends AbstractDatatable
 {

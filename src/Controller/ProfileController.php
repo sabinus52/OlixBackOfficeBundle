@@ -18,6 +18,7 @@ use Olix\BackOfficeBundle\Security\UserManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,24 +45,38 @@ class ProfileController extends AbstractController
 
         // Création des formulaires
         $form1 = $manager->createFormProfileUser();
-        $form2 = $manager->createFormChangePassword();
+        $form2 = $manager->createFormProfilePassword();
 
         // Validation du formulaire de profile de l'utilisateur
         $form1->handleRequest($request);
         if ($form1->isSubmitted() && $form1->isValid()) {
             // Update datas of this user
             $manager->setUser($form1->getData())->update();
+            $this->addFlash('success', 'La modification des informations a bien été prise en compte');
 
             return $this->redirectToRoute('olix_profile');
         }
 
         // Validation de formulaire de modification du mot de passe
         $form2->handleRequest($request);
-        if ($form2->isSubmitted() && $form2->isValid()) {
-            // Change password for this user
-            $manager->update($form2->get('password')->getData());
+        if ($form2->isSubmitted()) {
+            $isError = false;
 
-            return $this->redirectToRoute('olix_profile');
+            if (!$form2->isValid()) {
+                $form2->addError(new FormError('Nouveau mot de passe incorrect'));
+                $isError = true;
+            }
+            if (!$manager->isPasswordValid($form2->get('oldPassword')->getData())) {
+                $form2->addError(new FormError('Ancien mot de passe incorrect'));
+                $isError = true;
+            }
+            if (!$isError) {
+                // Change password for this user
+                $manager->update($form2->get('password')->getData());
+                $this->addFlash('success', 'La modification du mot de passe a bien été prise en compte');
+
+                return $this->redirectToRoute('olix_profile');
+            }
         }
 
         // Rendu de la page

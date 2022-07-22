@@ -34,18 +34,24 @@ class UserPasswordType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('password', RepeatedType::class, [
-            'type' => PasswordType::class,
-            'invalid_message' => 'The password fields must match.',
-            'required' => true,
-            'first_options' => ['label' => 'Mot de passe'],
-            'second_options' => ['label' => 'Confirmation mot de passe'],
-            'mapped' => false,
-            'constraints' => [
-                new Length(['min' => 8]),
-                new NotBlank(),
-            ],
-        ]);
+        $builder
+            ->add('oldPassword', PasswordType::class, [
+                'label' => 'Ancien mot de passe',
+                'mapped' => false,
+            ])
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'The password fields must match.',
+                'required' => true,
+                'first_options' => ['label' => 'Mot de passe'],
+                'second_options' => ['label' => 'Confirmation mot de passe'],
+                'mapped' => false,
+                'constraints' => [
+                    new Length(['min' => 1]),
+                    new NotBlank(),
+                ],
+            ])
+        ;
     }
 
     /**
