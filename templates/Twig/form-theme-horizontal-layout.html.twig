@@ -1,4 +1,4 @@
-{% extends 'bootstrap_4_horizontal_layout.html.twig' %}
+{% use 'bootstrap_4_horizontal_layout.html.twig' %}
 
 {% block email_widget -%}
     <div class="input-group">
@@ -193,3 +193,25 @@
         });
     </script>
 {%- endblock olix_datetimepicker_widget %}
+
+
+{% block olix_collection_row -%}
+    {%- if expanded is defined and expanded -%}
+        {{ block('fieldset_form_row') }}
+    {%- else -%}
+        {%- set widget_attr = {} -%}
+        {%- if help is not empty -%}
+            {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+        {%- endif -%}
+        <div{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group row' ~ ((not compound or force_error|default(false)) and not valid ? ' is-invalid'))|trim})} %}{{ block('attributes') }}{% endwith %}>
+            {{- form_label(form) -}}
+            <div class="{{ block('form_group_class') }}">
+                {{- form_widget(form, widget_attr) -}}
+                <button type="button" class="btn btn-primary btn-sm collection-btn-add">
+                    <i class="fas fa-plus"></i>&nbsp;{{ button_label_add | default('Add') }}
+                </button>
+                {{- form_help(form) -}}
+            </div>
+        </div>
+    {%- endif -%}
+{%- endblock %}
