@@ -1,9 +1,15 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme form1 '@OlixBackOffice/Twig/form-theme-horizontal-layout.html.twig' %}
+{% form_theme form2 '@OlixBackOffice/Twig/form-theme-horizontal-layout.html.twig' %}
+
 {% block title %}{{ parent() }} - Mon profil{% endblock %}
 
 {% block content_title %}Mon profil{% endblock %}
 {% block content_subtitle %}{% endblock %}
+
+{% set form1Activ = form1.vars.submitted or (not form1.vars.submitted and not form2.vars.submitted) %}
+{% set form2Activ = form2.vars.submitted %}
 
 {% block content %}
 
@@ -25,7 +31,7 @@
                                 {% for role in app.user.roles %}<span class="badge bg-green">{{ role }}</span> {% endfor %}
                             </a>
                         </li>
-                        <li class="list-group-item"><b>Dernière connexion</b> <a class="float-right">{{ app.user.lastLogin|date('d§m/Y H:i') }}</a></li>
+                        <li class="list-group-item"><b>Dernière connexion</b> <a class="float-right">{{ app.user.lastLogin|date('d/m/Y H:i') }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -35,23 +41,17 @@
             <div class="card">
                 <div class="card-header p-2">
                     <ul class="nav nav-pills">
-                        <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Mes informations</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Mot de passe</a></li>
+                        <li class="nav-item"><a class="nav-link{% if form1Activ %} active{% endif %}" href="#activity" data-toggle="tab">Mes informations</a></li>
+                        <li class="nav-item"><a class="nav-link{% if form2Activ %} active{% endif %}" href="#settings" data-toggle="tab">Mot de passe</a></li>
                     </ul>
                 </div>
                 <div class="card-body">
                     <div class="tab-content">
 
-                        <div class="active tab-pane" id="activity">
+                        <div class="tab-pane{% if form1Activ %} active{% endif %}" id="activity">
                             {{ form_start(form1, {'attr': {'class': 'form-horizontal'}}) }}
-                                <div class="form-group row">
-                                    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
-                                    <div class="col-sm-10">{{ form_widget(form1.name, {'attr': {'class': 'form-control'}}) }}</div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-                                    <div class="col-sm-10">{{ form_widget(form1.email, {'attr': {'class': 'form-control'}}) }}</div>
-                                </div>
+                                {{ form_errors(form1) }}
+                                {{ form_rest(form1) }}
                                 <div class="form-group row">
                                     <div class="offset-sm-2 col-sm-10">
                                         <button type="submit" class="btn btn-danger">Modifier</button>
@@ -60,18 +60,12 @@
                             {{ form_end(form1) }}
                         </div>
 
-                        <div class="tab-pane" id="settings">
-                            {{ form_start(form2, {'attr': {'class': 'form-horizontal'}}) }}
+                        <div class="tab-pane{% if form2Activ %} active{% endif %}" id="settings">
+                            {{ form_start(form2) }}
+                                {{ form_errors(form2) }}
+                                {{ form_rest(form2) }}
                                 <div class="form-group row">
-                                    <label for="inputName" class="col-sm-2 col-form-label">Mot de passe</label>
-                                    <div class="col-sm-10">{{ form_widget(form2.password.first, {'attr': {'class': 'form-control'}}) }}</div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputEmail" class="col-sm-2 col-form-label">Confirmation</label>
-                                    <div class="col-sm-10">{{ form_widget(form2.password.second, {'attr': {'class': 'form-control'}}) }}</div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="offset-sm-2 col-sm-10">
+                                    <div class="offset-sm-5 col-sm-7">
                                         <button type="submit" class="btn btn-danger">Valider</button>
                                     </div>
                                 </div>

@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Olix\BackOfficeBundle\Form\UserCreateType;
+use Olix\BackOfficeBundle\Form\UserEditPassType;
 use Olix\BackOfficeBundle\Form\UserPasswordType;
 use Olix\BackOfficeBundle\Model\User;
 use Psr\Container\ContainerInterface;
@@ -27,6 +28,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Classe de la gestion des utilisateurs.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class UserManager implements UserManagerInterface
 {
@@ -217,6 +220,18 @@ class UserManager implements UserManagerInterface
     }
 
     /**
+     * Vérifie si le mot courant est le bon.
+     *
+     * @param string $password
+     *
+     * @return bool
+     */
+    public function isPasswordValid(string $password): bool
+    {
+        return $this->passwordHasher->isPasswordValid($this->user, $password);
+    }
+
+    /**
      * Crée le formulaire de création d'un utilisateur.
      *
      * @param array<mixed> $options
@@ -257,6 +272,18 @@ class UserManager implements UserManagerInterface
     }
 
     /**
+     * Crée le formulaire de changement de mot de passe depuis le profile utilisateur.
+     *
+     * @param array<mixed> $options
+     *
+     * @return FormInterface
+     */
+    public function createFormProfilePassword(array $options = []): FormInterface
+    {
+        return $this->createForm(UserPasswordType::class, $options);
+    }
+
+    /**
      * Crée le formulaire de changement de mot de passe d'un utilisateur.
      *
      * @param array<mixed> $options
@@ -265,7 +292,7 @@ class UserManager implements UserManagerInterface
      */
     public function createFormChangePassword(array $options = []): FormInterface
     {
-        return $this->createForm(UserPasswordType::class, $options);
+        return $this->createForm(UserEditPassType::class, $options);
     }
 
     /**

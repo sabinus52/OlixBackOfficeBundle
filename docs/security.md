@@ -9,7 +9,7 @@ Il faut d'abord créer et surcharger l'entité `User` :
 
 namespace App\Entity;
 
-use Olix\BackOfficeBundle\Entity\User as BaseUser;
+use Olix\BackOfficeBundle\Model\User as BaseUser;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
