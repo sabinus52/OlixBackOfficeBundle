@@ -63,3 +63,10 @@ services:
         public: true
         arguments:
             - '@request_stack'
+    
+    Olix\BackOfficeBundle\Command\AdminLteInstallCommand:
+        tags:
+            - { name: 'console.command' }
+        arguments:
+            - '@filesystem'
+            - '%kernel.project_dir%'
