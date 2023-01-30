@@ -28,7 +28,7 @@
     <a href="{{ route }}" class="nav-link {% if item.isActive %}active{% endif %}">
         <i class="nav-icon {{ item.icon|default('far fa-circle') }} text-{{ item.iconColor|default('') }}"></i>
         <p class="text">
-            {{ item.label }}
+            {{ item.label|raw }}
             {% if item.hasChildren %}<i class="right fas fa-angle-left"></i>{% endif %}
             {% if level == 1 and item.badge %}<span class="right badge badge-{{ item.badgeColor|default('light') }}">{{ item.badge }}</span>{% endif %}
         </p>
@@ -40,7 +40,7 @@
 
 <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column {{ olixbo_class_sidebar() }}" data-widget="treeview" role="menu" data-accordion="false">
-        {% set menu = olixbo_sidebar_menu(app.request) %}
+        {% set menu = olixbo_sidebar_menu(app.request, forceMenuActiv|default()) %}
         {% for item in menu %}
             {{ sidebar.menu_item(item, 1) }}
         {% endfor %}

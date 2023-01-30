@@ -1,4 +1,4 @@
-{% set breadcrumb = olixbo_breadcrumb(app.request) %}                                
+{% set breadcrumb = olixbo_breadcrumb(app.request, forceMenuActiv|default()) %}                                
 {% if breadcrumb %}
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
