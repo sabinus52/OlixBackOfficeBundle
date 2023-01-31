@@ -134,5 +134,16 @@
             {% include '@OlixBackOffice/javascripts.html.twig' %}
         {% endblock %}
 
+        <script type="text/javascript">
+            const flashMessages = [];
+            {% if app.session and app.session.started and app.session.flashbag.peekAll|length > 0 %}
+                {% for type, messages in app.session.flashbag.all %}
+                    {% for message in messages %}
+                        flashMessages.push({ type: "{{ type }}", message: "{{ message|trans({},'flashmessages')|raw }}" });
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+        </script>
+
     </body>
 </html>

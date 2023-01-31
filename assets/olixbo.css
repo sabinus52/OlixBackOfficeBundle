@@ -1,0 +1,13 @@
+/**
+ * Styles de base pour le BackOffice
+ */
+ @import "styles/fonts.css";
+ @import "admin-lte/dist/css/adminlte.css";
+ @import "styles/style.css";
+
+/**
+ * Chargement des plugins
+ */
+ @import "@fortawesome/fontawesome-free/css/all.css";
+ @import "toastr/build/toastr.css";
+ @import "icheck-bootstrap/icheck-bootstrap.css";
