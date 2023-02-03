@@ -57,15 +57,9 @@
 
 {% block olix_switch_widget -%}
     {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-control')|trim}) -%}
-    {%- set attr = attr|merge({'data-toggle': 'switch'}) -%}
     <div>
         <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
     </div>
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function() {
-            $('#{{ id }}').bootstrapSwitch({{ ojs_options|json_encode|raw }});
-        });
-    </script>
 {%- endblock olix_switch_widget %}
 
 
@@ -165,18 +159,13 @@
 
 
 {% block olix_duallistbox_widget -%}
-    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' duallistbox')|trim}) -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' duallistbox')|trim }) -%}
     {{- block('choice_widget') -}}
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function() {
-            $('#{{ id }}').bootstrapDualListbox({{ ojs_options|json_encode|raw }});
-        });
-    </script>
 {%- endblock olix_duallistbox_widget %}
 
 
 {% block olix_datetimepicker_widget -%}
-    <div class="input-group" id="dp_{{ id }}" data-target-input="nearest">
+    <div class="input-group" id="dp_{{ id }}" data-target-input="nearest" data-toggle="datetimepicker2" data-options-js="{{ js_options|json_encode }}">
         {%- set attr = attr|merge({
             'class': (attr.class|default('') ~ ' datetimepicker-input')|trim,
             'data-target': '#dp_' ~ id,
@@ -186,11 +175,6 @@
             <span class="input-group-text"><i class="{{ button_icon }}"></i></span>
         </div>
     </div>
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function() {
-            $('#dp_{{ id }}').datetimepicker({{ ojs_options|json_encode|raw }}); 
-        });
-    </script>
 {%- endblock olix_datetimepicker_widget %}
 
 

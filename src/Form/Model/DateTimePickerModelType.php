@@ -74,47 +74,47 @@ abstract class DateTimePickerModelType extends AbstractModelType
 
         // Options JavaScript supplémentaires du widget
         $resolver->setDefaults([
-            'ojs_stepping' => 5,
-            'ojs_min_date' => false,
-            'ojs_max_date' => false,
-            'ojs_use_current' => false,
-            'ojs_collapse' => true,
-            'ojs_default_date' => false,
-            'ojs_disabled_dates' => [],
-            'ojs_enabled_dates' => [],
-            'ojs_icons' => [
+            'js_stepping' => 5,
+            'js_min_date' => false,
+            'js_max_date' => false,
+            'js_use_current' => false,
+            'js_collapse' => true,
+            'js_default_date' => false,
+            'js_disabled_dates' => [],
+            'js_enabled_dates' => [],
+            'js_icons' => [
                 'time' => 'far fa-clock',
                 'date' => 'far fa-calendar-alt',
             ],
-            'ojs_side_by_side' => false,
-            'ojs_days_of_week_disabled' => [],
-            'ojs_calendar_weeks' => false,
-            'obj_view_mode' => 'days',
-            'obj_keep_open' => false,
-            'obj_disabled_time_intervals' => [],
-            'obj_allow_input_toggle' => false,
-            'obj_focus_on_show' => true,
-            'obj_disabled_hours' => [],
+            'js_side_by_side' => false,
+            'js_days_of_week_disabled' => [],
+            'js_calendar_weeks' => false,
+            'js_view_mode' => 'days',
+            'js_keep_open' => false,
+            'js_disabled_time_intervals' => [],
+            'js_allow_input_toggle' => false,
+            'js_focus_on_show' => true,
+            'js_disabled_hours' => [],
         ]);
 
-        $resolver->setAllowedTypes('ojs_stepping', 'int');
-        $resolver->setAllowedTypes('ojs_min_date', ['bool', 'string', DateTimeInterface::class]);
-        $resolver->setAllowedTypes('ojs_max_date', ['bool', 'string', DateTimeInterface::class]);
-        $resolver->setAllowedTypes('ojs_use_current', 'bool');
-        $resolver->setAllowedTypes('ojs_collapse', 'bool');
-        $resolver->setAllowedTypes('ojs_default_date', ['bool', 'string', DateTimeInterface::class]);
-        $resolver->setAllowedTypes('ojs_disabled_dates', 'array');
-        $resolver->setAllowedTypes('ojs_enabled_dates', 'array');
-        $resolver->setAllowedTypes('ojs_icons', 'array');
-        $resolver->setAllowedTypes('ojs_side_by_side', 'bool');
-        $resolver->setAllowedTypes('ojs_days_of_week_disabled', 'array');
-        $resolver->setAllowedTypes('ojs_calendar_weeks', 'bool');
-        $resolver->setAllowedTypes('obj_view_mode', 'string');
-        $resolver->setAllowedTypes('obj_keep_open', 'bool');
-        $resolver->setAllowedTypes('obj_disabled_time_intervals', 'array');
-        $resolver->setAllowedTypes('obj_allow_input_toggle', 'bool');
-        $resolver->setAllowedTypes('obj_focus_on_show', 'bool');
-        $resolver->setAllowedTypes('obj_disabled_hours', 'array');
+        $resolver->setAllowedTypes('js_stepping', 'int');
+        $resolver->setAllowedTypes('js_min_date', ['bool', 'string', DateTimeInterface::class]);
+        $resolver->setAllowedTypes('js_max_date', ['bool', 'string', DateTimeInterface::class]);
+        $resolver->setAllowedTypes('js_use_current', 'bool');
+        $resolver->setAllowedTypes('js_collapse', 'bool');
+        $resolver->setAllowedTypes('js_default_date', ['bool', 'string', DateTimeInterface::class]);
+        $resolver->setAllowedTypes('js_disabled_dates', 'array');
+        $resolver->setAllowedTypes('js_enabled_dates', 'array');
+        $resolver->setAllowedTypes('js_icons', 'array');
+        $resolver->setAllowedTypes('js_side_by_side', 'bool');
+        $resolver->setAllowedTypes('js_days_of_week_disabled', 'array');
+        $resolver->setAllowedTypes('js_calendar_weeks', 'bool');
+        $resolver->setAllowedTypes('js_view_mode', 'string');
+        $resolver->setAllowedTypes('js_keep_open', 'bool');
+        $resolver->setAllowedTypes('js_disabled_time_intervals', 'array');
+        $resolver->setAllowedTypes('js_allow_input_toggle', 'bool');
+        $resolver->setAllowedTypes('js_focus_on_show', 'bool');
+        $resolver->setAllowedTypes('js_disabled_hours', 'array');
     }
 
     /**
@@ -127,18 +127,18 @@ abstract class DateTimePickerModelType extends AbstractModelType
         $view->vars['button_icon'] = $options['button_icon'];
 
         // Convert les options de types DateTime
-        $options['ojs_min_date'] = $this->formatIsDate($options['ojs_min_date'], $format);
-        $options['ojs_max_date'] = $this->formatIsDate($options['ojs_max_date'], $format);
-        $options['ojs_default_date'] = $this->formatIsDate($options['ojs_default_date'], $format);
-        foreach ($options['ojs_disabled_dates'] as $key => $value) {
-            $options['ojs_disabled_dates'][$key] = $this->formatIsDate($value, $format);
+        $options['js_min_date'] = $this->formatIsDate($options['js_min_date'], $format);
+        $options['js_max_date'] = $this->formatIsDate($options['js_max_date'], $format);
+        $options['js_default_date'] = $this->formatIsDate($options['js_default_date'], $format);
+        foreach ($options['js_disabled_dates'] as $key => $value) {
+            $options['js_disabled_dates'][$key] = $this->formatIsDate($value, $format);
         }
-        foreach ($options['ojs_enabled_dates'] as $key => $value) {
-            $options['ojs_enabled_dates'][$key] = $this->formatIsDate($value, $format);
+        foreach ($options['js_enabled_dates'] as $key => $value) {
+            $options['js_enabled_dates'][$key] = $this->formatIsDate($value, $format);
         }
 
         // Options javascript du widget
-        $view->vars['ojs_options'] = $this->getOptionsWidget($options);
+        $view->vars['js_options'] = $this->getOptionsWidget($options);
     }
 
     /**

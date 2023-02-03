@@ -19,24 +19,24 @@ use Olix\BackOfficeBundle\Form\Type\SwitchType;
 
 $builder->add('public', SwitchType::class, [
     'label'    => 'Show this entry publicly?',
-    'ojs_size' => 'mini',
-    'ojs_on_text' => 'OUI',
-    'ojs_off_text' => 'NON',
+    'js_size' => 'mini',
+    'js_on_text' => 'OUI',
+    'js_off_text' => 'NON',
 ]);
 ~~~
 
 ### Options
 
-| Nom SF            | Nom JS        | Type    |	Description                             | Defaut    | Valeurs 
-|-------------------|---------------|---------|-----------------------------------------|-----------|----------------------------------------
-| ojs_size          | size          | String  | The checkbox size                       | null      | null, 'mini', 'small', 'normal', 'large'
-| ojs_indeterminate | indeterminate | Boolean | Indeterminate state                     | false     | true, false
-| obj_inverse       | inverse       | Boolean | Inverse switch direction                | false     | true, false
-| ojs_on_color      | onColor       | String  | Color of the left side of the switch    | 'primary' | List of COLORS
-| ojs_off_color     | offColor      | String  | Color of the right side of the switch   | 'default' | List of COLORS
-| ojs_on_text       | onText        | String  | Text of the left side of the switch     | 'OUI'     |
-| ojs_off_text      | offText       | String  | Text of the right side of the switch    | 'NON'     |
-| ojs_label_text    | labelText     | String  | Text of the center handle of the switch	| '\&nbsp;' |
+| Nom SF           | Nom JS        | Type    |	Description                             | Defaut    | Valeurs 
+|------------------|---------------|---------|-----------------------------------------|-----------|----------------------------------------
+| js_size          | size          | String  | The checkbox size                       | null      | null, 'mini', 'small', 'normal', 'large'
+| js_indeterminate | indeterminate | Boolean | Indeterminate state                     | false     | true, false
+| js_inverse       | inverse       | Boolean | Inverse switch direction                | false     | true, false
+| js_on_color      | onColor       | String  | Color of the left side of the switch    | 'primary' | List of COLORS
+| js_off_color     | offColor      | String  | Color of the right side of the switch   | 'default' | List of COLORS
+| js_on_text       | onText        | String  | Text of the left side of the switch     | 'OUI'     |
+| js_off_text      | offText       | String  | Text of the right side of the switch    | 'NON'     |
+| js_label_text    | labelText     | String  | Text of the center handle of the switch | '\&nbsp;' |
 
 
 
@@ -61,24 +61,24 @@ $builder->add('duallist', DualListBoxChoiceType::class, [
 
 ### Options
 
-| Nom SF                      | Nom JS                | Type            | Description                                                              | Defaut                   | Valeurs 
-|-----------------------------|-----------------------|-----------------|--------------------------------------------------------------------------|--------------------------|-
-| ojs_filter_text_clear       | filterTextClear       | String          | The text for the "Show All" button                                       | 'voir tous'              |
-| ojs_filter_place_holder     | filterPlaceHolder     | String          | The placeholder for the input element for filtering elements             | 'Filtrer'                |
-| ojs_move_selected_label     | moveSelectedLabel     | String          | The label for the "Move Selected" button                                 | 'Déplacer la sélection'  |
-| ojs_move_all_label          | moveAllLabel          | String          | The label for the "Move All" button                                      | 'Déplacer tous'          |
-| ojs_remove_selected_label   | removeSelectedLabel   | String          | The label for the "Remove Selected" button                               | 'Supprimer la sélection' |
-| ojs_remove_all_label        | removeAllLabelnText   | String          | The label for the "Remove All" button                                    | 'Supprimer tous'         |
-| ojs_selected_list_label     | selectedListLabel     | Boolean, String | Can be a string specifying the name of the selected list                 | false                    | true, false, string
-| ojs_non_selected_list_label | nonSelectedListLabel  | Boolean, String | Can be a string specifying the name of the non selected list             | false                    | true, false, string
-| ojs_selector_minimal_height | selectorMinimalHeight | Integer         | Represents the minimal height of the generated dual listbox              | 100                      |
-| ojs_show_filter_inputs      | showFilterInputs      | Boolean         | Whether to show filter input                                             | true                     | true, false
-| ojs_non_selected_filter     | nonSelectedFilter     | String          | Initializes the dual listbox with a filter for the non selected elements | ''                       |
-| ojs_selected_filter         | selectedFilter        | String          | Initializes the dual listbox with a filter for the selected elements     | ''                       |
-| ojs_info_text               | infoText              | String, Boolean | Set this to false to hide this information                               | 'Voir tous {0}'          | false, string
-| ojs_info_text_filtered      | infoTextFiltered      | String          | Determines which element format to use when some element is filtered     | '<span class="badge badge-warning">Filtré</span> {0} sur {1}' |
-| ojs_info_text_empty         | infoTextEmpty         | String          | Determines the string to use when there are no options in the list       | 'Liste vide'             |
-| ojs_filter_on_values        | filterOnValues        | Boolean         | Set this to true to filter the options according to their values         | false                    | true, false
+| Nom SF                     | Nom JS                | Type            | Description                                                              | Defaut                   | Valeurs 
+|----------------------------|-----------------------|-----------------|--------------------------------------------------------------------------|--------------------------|-
+| js_filter_text_clear       | filterTextClear       | String          | The text for the "Show All" button                                       | 'voir tous'              |
+| js_filter_place_holder     | filterPlaceHolder     | String          | The placeholder for the input element for filtering elements             | 'Filtrer'                |
+| js_move_selected_label     | moveSelectedLabel     | String          | The label for the "Move Selected" button                                 | 'Déplacer la sélection'  |
+| js_move_all_label          | moveAllLabel          | String          | The label for the "Move All" button                                      | 'Déplacer tous'          |
+| js_remove_selected_label   | removeSelectedLabel   | String          | The label for the "Remove Selected" button                               | 'Supprimer la sélection' |
+| js_remove_all_label        | removeAllLabelnText   | String          | The label for the "Remove All" button                                    | 'Supprimer tous'         |
+| js_selected_list_label     | selectedListLabel     | Boolean, String | Can be a string specifying the name of the selected list                 | false                    | true, false, string
+| js_non_selected_list_label | nonSelectedListLabel  | Boolean, String | Can be a string specifying the name of the non selected list             | false                    | true, false, string
+| js_selector_minimal_height | selectorMinimalHeight | Integer         | Represents the minimal height of the generated dual listbox              | 100                      |
+| js_show_filter_inputs      | showFilterInputs      | Boolean         | Whether to show filter input                                             | true                     | true, false
+| js_non_selected_filter     | nonSelectedFilter     | String          | Initializes the dual listbox with a filter for the non selected elements | ''                       |
+| js_selected_filter         | selectedFilter        | String          | Initializes the dual listbox with a filter for the selected elements     | ''                       |
+| js_info_text               | infoText              | String, Boolean | Set this to false to hide this information                               | 'Voir tous {0}'          | false, string
+| js_info_text_filtered      | infoTextFiltered      | String          | Determines which element format to use when some element is filtered     | '<span class="badge badge-warning">Filtré</span> {0} sur {1}' |
+| js_info_text_empty         | infoTextEmpty         | String          | Determines the string to use when there are no options in the list       | 'Liste vide'             |
+| js_filter_on_values        | filterOnValues        | Boolean         | Set this to true to filter the options according to their values         | false                    | true, false
 
 
 
@@ -258,28 +258,28 @@ $builder
 
 ### Options
 
-| Nom SF                      | Nom JS                | Type               | Description                                                                               | Defaut | Valeurs 
-|-----------------------------|-----------------------|--------------------|-------------------------------------------------------------------------------------------|--------|---------
-| button_icon                 |                       | String             | Icon from right input                                                                     |        | 
-| locale                      |                       | String             | Locale                                                                                    | 'fr'   |
-| ojs_stepping                | stepping              | Integer            | Number of minutes the up/down arrow's will move the minutes value in the time picker      | 1      |
-| ojs_min_date                | minDate               | String,Date,moment | Disallows the user to select a moment that is before that moment                          | false  | 
-| ojs_max_date                | maxDate               | String,Date,moment | Disallows the user to select a moment that is after that moment                           | false  | 
-| ojs_use_current             | useCurrent            | String,Boolean     |                                                                                           | true   | true, false
-| ojs_collapse                | collapse              | Boolean            | Using a Bootstraps collapse to switch between date/time pickers                           | true   | true, false
-| ojs_default_date            | defaultDate           | String,Date,moment | Sets the picker default date/time. Overrides useCurrent                                   | false  | 
-| ojs_disabled_dates          | disabledDates         | Array              | Array with the currently set disabled dates on the component                              | false  | 
-| ojs_enabled_dates           | enabledDates          | Array              | Array with the currently set enabled dates on the component                               | false  | 
-| ojs_icons                   | icons                 | Object             | Change the default icons for the pickers functions                                        |        | 
-| ojs_side_by_side            | sideBySide            | Boolean            | Shows the picker side by side when using the time and date together                       | false  | 
-| ojs_days_of_week_disabled   | daysOfWeekDisabled    | Array              | Disables the section of days of the week                                                  | []     | 
-| ojs_calendar_weeks          | calendarWeeks         | Integer            | Shows the week of the year to the left of first day of the week                           | false  | 
-| obj_view_mode               | viewMode              | String             | The default view to display when the picker is shown                                      | 'days' | 'decades','years','months','days', 'times'
-| obj_keep_open               | keepOpen              | Boolean            | Will cause the date picker to stay open after selecting a date                            | false  | true, false
-| obj_disabled_time_intervals | disabledTimeIntervals | Boolean            | Disables time selection between the given moments                                         | false  | true, false
-| obj_allow_input_toggle      | allowInputToggle      | Boolean            | If true, the picker will show on textbox focus and icon click when used in a button group | false  | true, false
-| obj_focus_on_show           | focusOnShow           | Boolean            | If false, the textbox will not be given focus when the picker is                          | true   | true, false
-| obj_disabled_hours          | disabledHours         | Array              | Disallow hour selections but will affect all days                                         | false  | []
+| Nom SF                     | Nom JS                | Type               | Description                                                                               | Defaut | Valeurs 
+|----------------------------|-----------------------|--------------------|-------------------------------------------------------------------------------------------|--------|---------
+| button_icon                |                       | String             | Icon from right input                                                                     |        | 
+| locale                     |                       | String             | Locale                                                                                    | 'fr'   |
+| js_stepping                | stepping              | Integer            | Number of minutes the up/down arrow's will move the minutes value in the time picker      | 1      |
+| js_min_date                | minDate               | String,Date,moment | Disallows the user to select a moment that is before that moment                          | false  | 
+| js_max_date                | maxDate               | String,Date,moment | Disallows the user to select a moment that is after that moment                           | false  | 
+| js_use_current             | useCurrent            | String,Boolean     |                                                                                           | true   | true, false
+| js_collapse                | collapse              | Boolean            | Using a Bootstraps collapse to switch between date/time pickers                           | true   | true, false
+| js_default_date            | defaultDate           | String,Date,moment | Sets the picker default date/time. Overrides useCurrent                                   | false  | 
+| js_disabled_dates          | disabledDates         | Array              | Array with the currently set disabled dates on the component                              | false  | 
+| js_enabled_dates           | enabledDates          | Array              | Array with the currently set enabled dates on the component                               | false  | 
+| js_icons                   | icons                 | Object             | Change the default icons for the pickers functions                                        |        | 
+| js_side_by_side            | sideBySide            | Boolean            | Shows the picker side by side when using the time and date together                       | false  | 
+| js_days_of_week_disabled   | daysOfWeekDisabled    | Array              | Disables the section of days of the week                                                  | []     | 
+| js_calendar_weeks          | calendarWeeks         | Integer            | Shows the week of the year to the left of first day of the week                           | false  | 
+| js_view_mode               | viewMode              | String             | The default view to display when the picker is shown                                      | 'days' | 'decades','years','months','days', 'times'
+| js_keep_open               | keepOpen              | Boolean            | Will cause the date picker to stay open after selecting a date                            | false  | true, false
+| js_disabled_time_intervals | disabledTimeIntervals | Boolean            | Disables time selection between the given moments                                         | false  | true, false
+| js_allow_input_toggle      | allowInputToggle      | Boolean            | If true, the picker will show on textbox focus and icon click when used in a button group | false  | true, false
+| js_focus_on_show           | focusOnShow           | Boolean            | If false, the textbox will not be given focus when the picker is                          | true   | true, false
+| js_disabled_hours          | disabledHours         | Array              | Disallow hour selections but will affect all days                                         | false  | []
 
 
 ## Input text with icon
