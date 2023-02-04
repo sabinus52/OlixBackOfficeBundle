@@ -1,5 +1,12 @@
+/**
+ * Module sur les fenêtres modales des formulaires
+ * 
+ * @author Sabinus52 <sabinus52@gmail.com>
+ */
+
 import $ from "jquery";
 import "bootstrap/js/src/modal.js";
+import Olix from "./functions";
 
 /**
  * Constants
@@ -66,7 +73,7 @@ class OlixModal {
         console.log(this._settings.urlLoad);
         if (this._settings.urlLoad != "") {
             this._content.load(this._settings.urlLoad, () => {
-               //olixBackOffice.initForm(); // FIXME
+                Olix.initForms();
                 // Evenement sur la validation du formulaire
                 this._modal.on("submit", "form", () => {
                     this.valid();
@@ -110,7 +117,7 @@ class OlixModal {
                 if (jqXHR.status == 422) {
                     console.log("error 422");
                     this._content.html(jqXHR.responseText);
-                    //olixBackOffice.initForm(); // FIXME
+                    Olix.initForms();
                 } else {
                     alert(
                         "Une erreur est survenue lors de validation du formulaire."

@@ -97,21 +97,21 @@ use Olix\BackOfficeBundle\Form\Type\Select2ChoiceType;
 $builder->add('ajax_ips', Select2ChoiceType::class, [
     'label' => 'Sélection IPs',
     'color' => 'red',
-    'ojs_minimum_input_length' => 2,
-    'ojs_allow_clear' => true
+    'js_minimum_input_length' => 2,
+    'js_allow_clear' => true
 ]);
 ~~~
 
 ### Options
 
-| Nom SF                   | Nom JS             | Type    |	Description                                                                                    | Defaut    | Valeurs 
-|--------------------------|--------------------|---------|------------------------------------------------------------------------------------------------|-----------|-------
-| color                    |                    | String  | Color of widget                                                                                | 'default' | 
-| ojs_allow_clear          | allowClear         | Boolean | Causes a clear button ("x" icon) to appear on the select box when a value is selected          | false     | true, false
-| ojs_close_on_select      | closeOnSelect      | Boolean | Select2 will automatically close the dropdown when an element is selected                      | true      | true, false
-| ojs_language             | language           | String  | Specify the language used for Select2 messages                                                 | 'fr'      | 
-| ojs_placeholder          | placeholder        | String  | Specifies the placeholder for the control.                                                     | ''        | 
-| ojs_minimum_input_length | maximumInputLength | Integer | Minimum number of characters required to start a search.                                       | 0         | 
+| Nom SF                  | Nom JS             | Type    |	Description                                                                                   | Defaut    | Valeurs 
+|-------------------------|--------------------|---------|------------------------------------------------------------------------------------------------|-----------|-------
+| color                   |                    | String  | Color of widget                                                                                | 'default' | 
+| js_allow_clear          | allowClear         | Boolean | Causes a clear button ("x" icon) to appear on the select box when a value is selected          | false     | true, false
+| js_close_on_select      | closeOnSelect      | Boolean | Select2 will automatically close the dropdown when an element is selected                      | true      | true, false
+| js_language             | language           | String  | Specify the language used for Select2 messages                                                 | 'fr'      | 
+| js_placeholder          | placeholder        | String  | Specifies the placeholder for the control.                                                     | ''        | 
+| js_minimum_input_length | maximumInputLength | Integer | Minimum number of characters required to start a search.                                       | 0         | 
 
 
 
@@ -125,83 +125,31 @@ use Olix\BackOfficeBundle\Form\Type\Select2AjaxType;
 
 $builder->add('ajax_ips', Select2AjaxType::class, [
     'label' => 'Sélection IPs',
-    'ajax_route' => 'addressip_ajax',
-    'ajax_scroll' => false, // or true for scrolling by page
+    'class' => AddressIP::class,
+    'class_property' => 'ip',
+    'class_pkey' => 'id',
+    'class_label' => 'ip',
+    'remote_route' => 'form_test_ajax',
+    'ajax_js_scroll' => false, // or true for scrolling by page
 ]);
 ~~~
 
-Create the fonction in a controller for return full results (no scroll)
+Create the fonction in a controller for return full results in AJAX
 ~~~ php
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Persistence\ManagerRegistry;
+use Olix\BackOfficeBundle\Helper\AutoCompleteService;
+use App\Form\MyFormType;
 
 /**
- * @Route("/addressip/ajax", name="addressip_ajax")
+ * @Route("/addressip/ajax", name="form_test_ajax")
  */
-public function getSearchIPs(Request $request, ManagerRegistry $doctrine): JsonResponse
+public function getSearchIPs(Request $request, AutoCompleteService $autoComplete): JsonResponse
 {
-    $entityManager = $doctrine->getManager();
-    $term = $request->get('term');
-
-    $query = $entityManager->getRepository(AddressIP::class)->createQueryBuilder('m')
-        ->andWhere('m.ip LIKE :val')
-        ->setParameter('val', '%'.$term.'%')
-        ->orderBy('m.ip', 'ASC')
-        ->getQuery();
-
-    $results = [];
-    foreach ($query->getResult() as $value) {
-        $results[] = [
-            'id' => $value->getId(),
-            'text' => $value->getIp(),
-        ];
-    }
+    $results = $autoComplete->getResults(MyFormType::class, $request);
 
     return $this->json($results);
-}
-~~~
-
-Create the fonction in a controller for return results by page with scrolling
-~~~ php
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\Tools\Pagination\Paginator;
-
-/**
- * @Route("/addressip/ajax", name="addressip_ajax")
- */
-public function getSearchIPs(Request $request, ManagerRegistry $doctrine): JsonResponse
-{
-    $entityManager = $doctrine->getManager();
-    $term = $request->get('term');
-    $page = (int) $request->get('page', 1);
-
-    $query = $entityManager->getRepository(AddressIP::class)->createQueryBuilder('m')
-        ->andWhere('m.ip LIKE :val')
-        ->setParameter('val', '%'.$term.'%')
-        ->orderBy('m.ip', 'ASC')
-        ->setFirstResult(($page-1) * 10)
-        ->setMaxResults(10)
-        ->getQuery();
-
-    $addressips = new Paginator($query, $fetchJoinCollection = true);
-
-    $results = [];
-    foreach ($addressips as $value) {
-        $results[] = [
-            'id' => $value->getId(),
-            'text' => $value->getIp(),
-        ];
-    }
-
-    return $this->json([
-        'results' => $results,
-        'more' => (($page * 10) < count($addressips)),
-    ]);
 }
 ~~~
 
@@ -210,20 +158,16 @@ public function getSearchIPs(Request $request, ManagerRegistry $doctrine): JsonR
 | Nom SF               | Nom JS             | Type    |	Description                                                                                    | Defaut    | Valeurs 
 |----------------------|--------------------|---------|------------------------------------------------------------------------------------------------|-----------|-------
 | multiple             |                    | Boolean | True for multiple select and false for single select.                                          | false     | true, false
-| class                |                    | String  | True will enable infinite scrolling                                                            | null      |
-| primary_key          |                    | String  | The name of the property used to uniquely identify entities                                    | 'id'      |
-| label_field          |                    | String  | The entity property used to retrieve the text for existing data                                | null      |
-| color                |                    | String  | Color of widget                                                                                | 'default' | 
-| allow_clear          | allowClear         | Boolean | Causes a clear button ("x" icon) to appear on the select box when a value is selected          | false     | true, false
-| close_on_select      | closeOnSelect      | Boolean | Select2 will automatically close the dropdown when an element is selected                      | true      | true, false
-| language             | language           | String  | Specify the language used for Select2 messages                                                 | 'fr'      | 
-| placeholder          | placeholder        | String  | Specifies the placeholder for the control.                                                     | ''        | 
-| minimum_input_length | maximumInputLength | Integer | Minimum number of characters required to start a search.                                       | 0         | 
-| ajax_route           | ajax / url         | String  | Route of ajax remote datas                                                                     | null      | 
-| ajax_param           |                    | Array   | Parameters of route                                                                            | []        | 
-| ajax_scroll          |                    | Boolean | "infinite scrolling" for remote data sources out of the box                                    | true      | true, false
-| ajax_delay           | ajax / delay       | Integer | The number of milliseconds to wait for the user to stop typing before issuing the ajax request | 250       | 
-| ajax_cache           | ajax / cache       | Boolean |                                                                                                | true      | true, false
+| class                |                    | String  | The class of your entity                                                                       | null      |
+| class_property       |                    | String  | The name of the property used to search the query                                              | null      |
+| class_pkey           |                    | String  | The name of the property used to uniquely identify entities                                    | 'id'      |
+| class_label          |                    | String  | The entity property used to retrieve the text for existing data                                | null      |
+| page_limit           |                    | Integer | Number items by page for the scroll
+| remote_route         | ajax / url         | String  | Route of ajax remote datas                                                                     | null      | 
+| remote_params        |                    | Array   | Parameters of route                                                                            | []        | 
+| ajax_js_scroll       |                    | Boolean | True will enable infinite scrolling                                                            | true      | true, false
+| ajax_js_delay        | ajax / delay       | Integer | The number of milliseconds to wait for the user to stop typing before issuing the ajax request | 250       | 
+| ajax_js_cache        | ajax / cache       | Boolean |                                                                                                | true      | true, false
 
 
 

@@ -11,36 +11,32 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Form\Type;
 
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Olix\BackOfficeBundle\Form\DataTransformer\EntitiesToValuesTransformer;
 use Olix\BackOfficeBundle\Form\DataTransformer\EntityToValueTransformer;
-use Olix\BackOfficeBundle\Form\Model\AbstractModelType;
+use Olix\BackOfficeBundle\Form\Model\Select2ModelType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Widget de formulaire de type select amélioré.
  *
  * @example     Configuration with options of this type
  * @example     @param bool   multiple              : True for multiple select and false for single select.
- * @example     @param string class                 : True will enable infinite scrolling
- * @example     @param string primary_key           : The name of the property used to uniquely identify entities
- * @example     @param string label_field           : The entity property used to retrieve the text for existing data
- * @example     @param Enum   color                 : Color of widget
- * @example     Config widget width JS parameters
- * @example     @param bool   allow_clear           : Causes a clear button ("x" icon) to appear on the select box when a value is selected
- * @example     @param bool   close_on_select       : Select2 will automatically close the dropdown when an element is selected
- * @example     @param string language              : Specify the language used for Select2 messages
- * @example     @param string placeholder           : Specifies the placeholder for the control.
- * @example     @param int    minimum_input_length  : Minimum number of characters required to start a search.
+ * @example     @param string class                 : The class of your entity
+ * @example     @param string class_property        : The name of the property used to search the query
+ * @example     @param string class_pkey            : The name of the property used to uniquely identify entities
+ * @example     @param string class_label           : The name of the property used to retrieve the text for existing data
+ * @example     @param int    page_limit            : Number items by page for the scroll
  * @example     Config for ajax remote datas
- * @example     @param string ajax_route            : Route of ajax remote datas
- * @example     @param array  ajax_param            : Parameters of route
- * @example     @param bool   ajax_scroll           : "infinite scrolling" for remote data sources out of the box
- * @example     @param int    ajax_delay            : The number of milliseconds to wait for the user to stop typing before issuing the ajax request
- * @example     @param bool   ajax_cache            :
+ * @example     @param string remote_route          : Route of ajax remote datas
+ * @example     @param array  remote_params         : Parameters of route
+ * @example     @param bool   ajax_js_scroll        : True will enable infinite scrolling
+ * @example     @param int    ajax_js_delay         : The number of milliseconds to wait for the user to stop typing before issuing the ajax request
+ * @example     @param bool   ajax_js_cache         :
  * @example     @see https://select2.org/configuration/options-api Liste des différentes options
  *
  * @author      Sabinus52 <sabinus52@gmail.com>
@@ -48,19 +44,26 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @see         https://github.com/select2/select2
  * @see         https://github.com/tetranz/select2entity-bundle (inspiration)
  */
-class Select2AjaxType extends AbstractModelType
+class Select2AjaxType extends Select2ModelType
 {
     /**
-     * @var ManagerRegistry
+     * @var EntityManagerInterface
      */
-    protected $doctrine;
+    protected $entityManager;
 
     /**
-     * @param ManagerRegistry $doctrine
+     * @var RouterInterface
      */
-    public function __construct(ManagerRegistry $doctrine)
+    protected $router;
+
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @param RouterInterface        $router
+     */
+    public function __construct(EntityManagerInterface $entityManager, RouterInterface $router)
     {
-        $this->doctrine = $doctrine;
+        $this->entityManager = $entityManager;
+        $this->router = $router;
     }
 
     /**
@@ -68,46 +71,45 @@ class Select2AjaxType extends AbstractModelType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        // Options du widget du formulaire
-        $resolver->setDefaults([
-            'expanded' => false,
-            'compound' => false,
-            'data_class' => null,
-            'multiple' => false,
-            'color' => 'default',
-            'class' => null,
-            'primary_key' => 'id',
-            'label_field' => null,
-            'allow_clear' => true,
-            'close_on_select' => true,
-            'language' => 'fr',
-            'minimum_input_length' => 0,
-            'placeholder' => '',
-            'ajax_route' => null,
-            'ajax_param' => [],
-            'ajax_scroll' => true,
-            'ajax_delay' => 250,
-            'ajax_cache' => true,
-        ]);
+        parent::configureOptions($resolver);
 
-        // Allowed types for options
-        $resolver->setAllowedValues('expanded', [false]);
+        // Options symfony du widget
+        $resolver->setDefaults([
+            'compound' => false,
+            'multiple' => false,
+            'class' => null,
+        ]);
         $resolver->setAllowedValues('compound', [false]);
-        $resolver->setAllowedTypes('color', ['string']);
-        $resolver->setAllowedValues('color', self::COLORS);
-        $resolver->setAllowedTypes('class', ['string']);
-        $resolver->setAllowedTypes('primary_key', ['string']);
-        $resolver->setAllowedTypes('label_field', ['string']);
-        $resolver->setAllowedTypes('allow_clear', ['bool']);
-        $resolver->setAllowedTypes('close_on_select', ['bool']);
-        $resolver->setAllowedTypes('language', ['string']);
-        $resolver->setAllowedTypes('minimum_input_length', ['int']);
-        $resolver->setAllowedTypes('placeholder', ['string']);
-        $resolver->setAllowedTypes('ajax_route', ['null', 'string']);
-        $resolver->setAllowedTypes('ajax_param', ['array']);
-        $resolver->setAllowedTypes('ajax_scroll', ['bool']);
-        $resolver->setAllowedTypes('ajax_delay', ['int']);
-        $resolver->setAllowedTypes('ajax_cache', ['bool']);
+
+        // Options supplémentaires pour l'entité
+        $resolver->setDefaults([
+            'class_property' => null,
+            'class_pkey' => 'id',
+            'class_label' => null,
+            'page_limit' => 25,
+        ]);
+        $resolver->setAllowedTypes('class_property', ['string']);
+        $resolver->setAllowedTypes('class_pkey', ['string']);
+        $resolver->setAllowedTypes('class_label', ['string']);
+        $resolver->setAllowedTypes('page_limit', ['int']);
+
+        // Options supplémentaires pour l'appel url en Ajax
+        $resolver->setDefaults([
+            'remote_route' => null,
+            'remote_params' => [],
+        ]);
+        $resolver->setAllowedTypes('remote_route', ['null', 'string']);
+        $resolver->setAllowedTypes('remote_params', ['array']);
+
+        // Options javascript pour la fonction Ajax
+        $resolver->setDefaults([
+            'ajax_js_scroll' => true,
+            'ajax_js_delay' => 250,
+            'ajax_js_cache' => true,
+        ]);
+        $resolver->setAllowedTypes('ajax_js_scroll', ['bool']);
+        $resolver->setAllowedTypes('ajax_js_delay', ['int']);
+        $resolver->setAllowedTypes('ajax_js_cache', ['bool']);
     }
 
     /**
@@ -116,8 +118,8 @@ class Select2AjaxType extends AbstractModelType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $transformer = ($options['multiple'])
-            ? new EntitiesToValuesTransformer($this->doctrine->getManager(), $options['class'], $options['primary_key'], $options['label_field'])
-            : new EntityToValueTransformer($this->doctrine->getManager(), $options['class'], $options['primary_key'], $options['label_field']);
+            ? new EntitiesToValuesTransformer($this->entityManager, $options['class'], $options['class_pkey'], $options['class_label'])
+            : new EntityToValueTransformer($this->entityManager, $options['class'], $options['class_pkey'], $options['class_label']);
         $builder->addViewTransformer($transformer, true);
     }
 
@@ -126,27 +128,20 @@ class Select2AjaxType extends AbstractModelType
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        // pass the form type option directly to the template
-        $view->vars['multiple'] = $options['multiple'];
-        $view->vars['color'] = $options['color'];
-        $view->vars['allow_clear'] = $options['allow_clear'];
-        $view->vars['ojs_options'] = [
-            'allowClear' => $options['allow_clear'],
-            'closeOnSelect' => $options['close_on_select'],
-            'language' => $options['language'],
-            'minimumInputLength' => $options['minimum_input_length'],
-            'placeholder' => $options['placeholder'],
-        ];
+        parent::buildView($view, $form, $options);
+
+        // Options pour la création du widget
+        $view->vars['allow_clear'] = $options['js_allow_clear'];
+
+        // Génération de la route
+        $options['ajax_js_route'] = $this->router->generate($options['remote_route'], array_merge($options['remote_params'], ['widget' => $form->getName()]));
 
         // Options Javascript pour les sources de données distantes
-        $view->vars['ajax_route'] = $options['ajax_route'];
-        $view->vars['ajax_param'] = $options['ajax_param'];
-        $view->vars['ajax_scroll'] = $options['ajax_scroll'];
-        $view->vars['ajax_delay'] = $options['ajax_delay'];
-        $view->vars['ajax_cache'] = $options['ajax_cache'];
+        $view->vars['attr'] += ['data-ajax' => json_encode($this->getOptionsWidgetCamelized($options, 'ajax_js_'))];
 
         // Pour les données multiples, le nom doit être un tableau
         if ($options['multiple']) {
+            $view->vars['attr'] += ['multiple' => 'multiple'];
             $view->vars['full_name'] .= '[]';
         }
     }

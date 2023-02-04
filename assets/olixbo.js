@@ -1,4 +1,6 @@
-
+/**
+ * Import des modules
+ */
 import "admin-lte/plugins/bootstrap/js/bootstrap.bundle";
 import "admin-lte";
 import "bootstrap-switch";
@@ -8,37 +10,16 @@ window.moment = moment;
 require("tempusdominus-bootstrap-4");
 import "bootstrap4-duallistbox";
 
-
+/**
+ * Import des modules perso
+ */
 import "./scripts/modal.js";
 import "./scripts/toastr.js";
+import "./scripts/select2.js";
+import Olix from "./scripts/functions.js";
 
 /**
- * Formulaires
+ * Initialisation
  */
-
-
-
-export default {
-
-    init() {
-        // Initialisation des widgets Bootstrap-Switch
-        $.each($("[data-toggle='switch']"), function (i, element) {
-            $(element).bootstrapSwitch($(element).data("options-js"));
-        });
-
-        // Initialisation des widgets DateTimePicker
-        $.each($("[data-toggle='datetimepicker2']"), function (i, element) {
-            $(element).datetimepicker($(element).data("options-js"));
-        });
-
-        // Initialisation des widgets DualListBox
-        $.each($("[data-toggle='duallistbox']"), function (i, element) {
-            $(element).bootstrapDualListbox($(element).data("options-js"));
-        });
-    },
-
-    finalize() {
-        // JavaScript to be fired on the home page, after the init JS
-
-    },
-};
+Olix.initForms();
+Olix.finalize();

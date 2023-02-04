@@ -40,9 +40,12 @@ services:
             - ['setContainer', ['@service_container']]
 
     Olix\BackOfficeBundle\Form\Type\Select2AjaxType:
-        arguments: [ '@doctrine' ]
+        arguments: [ '@doctrine.orm.entity_manager', '@router' ]
         tags:
             - { name: form.type }
+    
+    Olix\BackOfficeBundle\Helper\AutoCompleteService:
+        arguments: [ '@doctrine.orm.entity_manager', '@form.factory' ]
 
     Olix\BackOfficeBundle\Twig\DatatableRuntime:
         public: false

@@ -5,6 +5,7 @@
 @import "@fortawesome/fontawesome-free/css/all.css";
 @import "toastr/build/toastr.css";
 @import "icheck-bootstrap/icheck-bootstrap.css";
+@import "admin-lte/plugins/select2/css/select2.css";
 @import "tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.css";
 @import "bootstrap4-duallistbox/dist/bootstrap-duallistbox.css";
 
@@ -15,9 +16,3 @@
 @import "admin-lte/dist/css/adminlte.css";
 @import "styles/style.css";
 
-/**
- * Chargement des plugins
- */
- @import "@fortawesome/fontawesome-free/css/all.css";
- @import "toastr/build/toastr.css";
- @import "icheck-bootstrap/icheck-bootstrap.css";

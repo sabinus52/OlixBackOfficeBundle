@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Form\DataTransformer;
 
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -24,7 +24,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 class EntitiesToValuesTransformer implements DataTransformerInterface
 {
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
     protected $entityManager;
 
@@ -51,12 +51,12 @@ class EntitiesToValuesTransformer implements DataTransformerInterface
     /**
      * Constructeur.
      *
-     * @param ObjectManager $entityManager
-     * @param string        $entityName    : Nom de la classe de l'entité
-     * @param string        $primaryKey    : Clé primaire de l'entité de la valeur de la liste de choix
-     * @param string        $fieldLabel    : Label de la valeur correspondant à un champs de l'entité
+     * @param EntityManagerInterface $entityManager
+     * @param string                 $entityName    : Nom de la classe de l'entité
+     * @param string                 $primaryKey    : Clé primaire de l'entité de la valeur de la liste de choix
+     * @param string                 $fieldLabel    : Label de la valeur correspondant à un champs de l'entité
      */
-    public function __construct(ObjectManager $entityManager, string $entityName, string $primaryKey, string $fieldLabel)
+    public function __construct(EntityManagerInterface $entityManager, string $entityName, string $primaryKey, string $fieldLabel)
     {
         $this->entityManager = $entityManager;
         $this->entityName = $entityName;
@@ -93,7 +93,6 @@ class EntitiesToValuesTransformer implements DataTransformerInterface
             return [];
         }
 
-        /** @phpstan-ignore-next-line */
         $entities = $this->entityManager->createQueryBuilder()
             ->select('entity')
             ->from($this->entityName, 'entity')
