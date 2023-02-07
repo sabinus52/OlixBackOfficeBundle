@@ -16,6 +16,7 @@ import "bootstrap4-duallistbox";
 import "./scripts/modal.js";
 import "./scripts/toastr.js";
 import "./scripts/select2.js";
+import "./scripts/collection.js";
 import Olix from "./scripts/functions.js";
 
 /**

@@ -298,15 +298,8 @@ A rajouter dans le template de la page du formulaire :
         </div>
     </div>
 {%- endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('bundles/olixbackoffice/js/collection.js') }}"></script>
-    <script type="text/javascript">
-        $('.collection-widget').olixCollection();
-    </script>
-{% endblock %}
 ~~~
+La classe `collection-btn-delete`est necessaire pour l'activation du bouton de suppression.
 
 ### Options
 
