@@ -1,5 +1,8 @@
 services:
 
+    Twig\Extension\StringLoaderExtension:
+        tags: [twig.extension]
+
     olix.backoffice.twig.extension:
         class: Olix\BackOfficeBundle\Twig\BackOfficeExtension
         tags:

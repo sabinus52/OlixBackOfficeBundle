@@ -28,8 +28,6 @@ export default {
         $.each($("[data-toggle='duallistbox']"), function (i, element) {
             $(element).bootstrapDualListbox($(element).data("options-js"));
         });
-
-
     },
 
     finalize() {

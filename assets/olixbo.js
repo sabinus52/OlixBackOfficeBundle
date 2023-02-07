@@ -9,6 +9,11 @@ import moment from 'moment';
 window.moment = moment;
 require("tempusdominus-bootstrap-4");
 import "bootstrap4-duallistbox";
+import "datatables.net";
+import "datatables.net-bs4";
+import "datatables.net-responsive";
+import "datatables.net-responsive-bs4";
+import "../../public/bundles/datatables/js/datatables.js";
 
 /**
  * Import des modules perso
