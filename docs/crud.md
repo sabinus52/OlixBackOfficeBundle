@@ -40,6 +40,10 @@ class TablesController extends AbstractController
 
         return $this->renderForm('index.html.twig', [
             'datatable' => $datatable,
+            'modal' => [
+                'class' => 'modal-lg',
+                'backdrop' => 'false',
+            ],
         ]);
     }
 
@@ -57,12 +61,14 @@ class TablesController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', sprintf('La création de <strong>%s</strong> a bien été prise en compte', $entity));
 
-            return $this->redirectToRoute('table_server_list');
+            return $this->redirectToRoute('table_server_list'); // return new Response('OK');
         }
 
-        return $this->renderForm('edit.html.twig', [
+        return $this->renderForm('edit.html.twig', [ // @OlixBackOffice/Include/modal-form-(vertical|horizontal).html.twig
             'form' => $form,
-            'title' => 'Créer un nouveau objet',
+            'modal' => [
+                'title' => 'Créer un nouveau objet',
+            ],
         ]);
     }
 
@@ -78,12 +84,14 @@ class TablesController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', sprintf('La modification de <strong>%s</strong> a bien été prise en compte', $entity));
 
-            return $this->redirectToRoute('table_server_list');
+            return $this->redirectToRoute('table_server_list'); // return new Response('OK');
         }
 
-        return $this->renderForm('edit.html.twig', [
+        return $this->renderForm('edit.html.twig', [ // @OlixBackOffice/Include/modal-form-(vertical|horizontal).html.twig
             'form' => $form,
-            'title' => 'Formulaire d\'édition d\'un objet',
+            'modal' => [
+                'title' => 'Formulaire d\'édition d\'un objet',
+            ],
         ]);
     }
 

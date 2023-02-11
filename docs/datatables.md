@@ -3,6 +3,31 @@
 Github : https://github.com/omines/datatables-bundle
 Full documentation : https://omines.github.io/datatables-bundle/
 
+## Configuration du bundle
+
+Configurer le fichier `config/packages/datatables.yaml` comme suit :
+
+~~~ yml
+datatables:
+    language_from_cdn: false
+
+    # Set options, as documented at https://datatables.net/reference/option/
+    options:
+        lengthMenu : [10, 25, 50, 100, 250, 500]
+        pageLength: 50
+        dom: "<'row' <'col-sm-6'l><'col-sm-6 text-right'f>><'row' <'col-sm-12' tr>><'row' <'col-sm-6'i><'col-sm-6 text-right'p>>"
+        searching: true
+
+    template_parameters:
+        # Example classes to integrate nicely with Bootstrap 3.x
+        className: 'table table-striped table-hover data-table'
+        columnFilter: 'thead'
+
+    # You can for example override this to "tables" to keep the translation domains separated nicely
+    translation_domain: 'messages'
+~~~
+
+
 ## Create a Datatable class
 
 ~~~ php

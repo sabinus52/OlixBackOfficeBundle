@@ -9,7 +9,8 @@ A rajouter dans le fichier `composer.json` :
 "scripts": {
     "auto-scripts": {
         (...)
-        "assets:adminlte %PUBLIC_DIR%": "symfony-cmd"
+        "assets:adminlte %PUBLIC_DIR%": "symfony-cmd",
+        "fos:js-routing:dump --format=json --target=config/routes/fos_js_routes.json": "symfony-cmd"
     }
 }
 ~~~
@@ -20,12 +21,14 @@ Déclaration du bundle dans `config/bundles.php`
 ~~~ php
 Olix\BackOfficeBundle\OlixBackOfficeBundle::class => ['all' => true],
 FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
+Omines\DataTablesBundle\DataTablesBundle::class => ['all' => true],
 ~~~
 
 Génération des assets
 ~~~
 ./bin/console assets:install
 ./bin/console assets:adminlte
+./bin/console fos:js-routing:dump --format=json --target=config/routes/fos_js_routes.json
 ~~~
 
 Ajout des routes du bundle dans son application dans `config/routes.yaml`
@@ -33,6 +36,14 @@ Ajout des routes du bundle dans son application dans `config/routes.yaml`
 ~~~ yaml
 app_file:
     resource: '@OlixBackOfficeBundle/config/routing.yml'
+~~~
+
+Ajout des modules nodeJS :
+
+~~~ bash
+yarn add jquery
+yarn add admin-lte
+yarn add devbridge-autocomplete
 ~~~
 
 
@@ -60,6 +71,23 @@ Créer **obligatoirement** le fichier `templates/base.hrml.twig` pour surcharger
 
 [Plus d'infos sur les templates](template.md)
 
+
+## Assets
+
+Déclarer les assets javascript dans `assets/app.js` :
+
+~~~ js
+const $ = require('jquery');
+window.$ = window.jQuery = $;
+
+import '/vendor/olix/backoffice-bundle/assets/olixbo.js';
+~~~
+
+Déclarer les assets stylesheets dans `assets/styles/app.css` :
+
+~~~ css
+@import '/vendor/olix/backoffice-bundle/assets/olixbo.css';
+~~~
 
 ## Intégration de la connexion utilisateur
 
