@@ -89,11 +89,11 @@ security:
 
             form_login:
                 # "login" is the name of the route created previously
-                login_path: login
-                check_path: login
+                login_path: olix_login
+                check_path: olix_login
                 enable_csrf: true
             logout:
-                path: logout
+                path: olix_logout
 ### BEGIN add
 ~~~
 
@@ -128,7 +128,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/login", name="login")
+     * @Route("/login", name="olix_login")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -141,11 +141,41 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/logout", name="logout")
+     * @Route("/logout", name="olix_logout")
      */
     public function logout(AuthenticationUtils $authenticationUtils)
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+}
+~~~
+
+
+## Création d'un utilisateur
+
+A mettre dans un controleur
+~~~ php
+use App\Entity\User;
+use Olix\BackOfficeBundle\Security\UserManager;
+
+class DefaultController extends AbstractController
+{
+    /**
+     * @Route("/adduser", name="adduser")
+     */
+    public function index(UserManager $manager): Response
+    {
+
+        /** @var User $user */
+        $user = $manager->newUser();
+
+        $user->setUsername('admin')
+            ->setName('admin')
+            ->setRoles(['ROLE_ADMIN']);
+        $manager->setUser($user);
+        $manager->add('toto');
+
+        return new Response('OK');
     }
 }
 ~~~

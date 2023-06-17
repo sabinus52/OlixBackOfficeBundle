@@ -16,7 +16,7 @@
             null
         {% endif %}
     {% else %}
-        <span class="{{ action.icon }}"></span> {{ action.label }}
+        <span class="{{ action.icon }}"></span> {{ action.label|raw }}
     {% endif %}
 {% endmacro %}
 
