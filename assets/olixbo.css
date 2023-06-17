@@ -1,0 +1,20 @@
+
+/**
+ * Chargement des plugins
+ */
+@import "@fortawesome/fontawesome-free/css/all.css";
+@import "toastr/build/toastr.css";
+@import "icheck-bootstrap/icheck-bootstrap.css";
+@import "admin-lte/plugins/select2/css/select2.css";
+@import "tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.css";
+@import "bootstrap4-duallistbox/dist/bootstrap-duallistbox.css";
+@import "admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.css";
+@import "admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.css";
+
+/**
+ * Styles de base pour le BackOffice
+ */
+@import "styles/fonts.css";
+@import "admin-lte/dist/css/adminlte.css";
+@import "styles/style.css";
+

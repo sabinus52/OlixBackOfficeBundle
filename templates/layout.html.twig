@@ -8,7 +8,7 @@
         <title>{% block title %}{% endblock %}</title>
 
         {% block stylesheets %}
-            {% include '@OlixBackOffice/stylesheets.html.twig' %}
+            {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
     </head>
@@ -97,7 +97,7 @@
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1 class="m-0">{% block content_title %}Back Office{% endblock %} <small>{% block content_subtitle %}Démo du bundle{% endblock %}</small></h1>
+                                <h1 class="m-0">{% block content_title %}Back Office{% endblock %} <small class="d-none d-md-inline">{% block content_subtitle %}Démo du bundle{% endblock %}</small></h1>
                             </div>
                             {% block content_breadcrumb %}
                                 {% include '@OlixBackOffice/Include/breadcrumb.html.twig' %}
@@ -131,8 +131,19 @@
         </div>
 
         {% block javascripts %}
-            {% include '@OlixBackOffice/javascripts.html.twig' %}
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
+
+        <script type="text/javascript">
+            const flashMessages = [];
+            {% if app.session and app.session.started and app.session.flashbag.peekAll|length > 0 %}
+                {% for type, messages in app.session.flashbag.all %}
+                    {% for message in messages %}
+                        flashMessages.push({ type: "{{ type }}", message: "{{ message|trans({},'flashmessages')|raw }}" });
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+        </script>
 
     </body>
 </html>

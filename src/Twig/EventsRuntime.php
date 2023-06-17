@@ -49,17 +49,18 @@ class EventsRuntime implements RuntimeExtensionInterface
      * Retourne le menu de la barre latérale.
      *
      * @param Request $request
+     * @param string  $forceMenuActiv
      *
      * @return MenuItemInterface[]
      */
-    public function getSidebarMenu(Request $request): ?array
+    public function getSidebarMenu(Request $request, string $forceMenuActiv): ?array
     {
         if (!$this->eventDispatcher->hasListeners(SidebarMenuEvent::class)) {
             return null;
         }
 
         /** @var SidebarMenuEvent $event */
-        $event = $this->eventDispatcher->dispatch(new SidebarMenuEvent($request));
+        $event = $this->eventDispatcher->dispatch(new SidebarMenuEvent($request, $forceMenuActiv));
 
         return $event->getSidebarMenu();
     }
@@ -68,17 +69,18 @@ class EventsRuntime implements RuntimeExtensionInterface
      * Retourne le fil d'ariane.
      *
      * @param Request $request
+     * @param string  $forceMenuActiv
      *
      * @return MenuItemInterface[]
      */
-    public function getBreadcrumb(Request $request): ?array
+    public function getBreadcrumb(Request $request, string $forceMenuActiv): ?array
     {
         if (!$this->eventDispatcher->hasListeners(BreadcrumbEvent::class)) {
             return null;
         }
 
         /** @var BreadcrumbEvent $event */
-        $event = $this->eventDispatcher->dispatch(new BreadcrumbEvent($request));
+        $event = $this->eventDispatcher->dispatch(new BreadcrumbEvent($request, $forceMenuActiv));
 
         /** @var MenuItemInterface $active */
         $active = $event->getActive();

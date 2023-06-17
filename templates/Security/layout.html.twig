@@ -8,7 +8,7 @@
         <title>{% block title %}{% endblock %}</title>
 
         {% block stylesheets %}
-            {% include '@OlixBackOffice/stylesheets.html.twig' %}
+            {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
     </head>
@@ -65,7 +65,7 @@
     {% endblock %}
 
         {% block javascripts %}
-            {% include '@OlixBackOffice/javascripts.html.twig' %}
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
 
     </body>

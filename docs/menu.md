@@ -43,7 +43,7 @@ class MenuBuilderSubscriber extends MenuFactorySubscriber
 
         $event
             ->addItem($child1)
-            ->addItem($child2)
+            ->addItem($child2);
     }
 }
 ~~~

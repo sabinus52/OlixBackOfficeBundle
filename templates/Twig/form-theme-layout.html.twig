@@ -57,51 +57,28 @@
 
 {% block olix_switch_widget -%}
     {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-control')|trim}) -%}
-    {%- set attr = attr|merge({'data-toggle': 'switch'}) -%}
     <div>
         <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
     </div>
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function() {
-            $('#{{ id }}').bootstrapSwitch({{ ojs_options|json_encode|raw }});
-        });
-    </script>
 {%- endblock olix_switch_widget %}
 
 
-{% block olix_select2_attributes -%}
-    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' select2')|trim}) -%}
-    {% if color != 'default' %}
-        {%- set attr = attr|merge({class: (attr.class ~ ' select2-' ~ color)|trim, 'data-dropdown-css-class': 'select2-' ~ color}) -%}
-    {% endif %}
-{%- endblock olix_select2_attributes %}
-
 {% block olix_select2_widget -%}
-    {{- block('olix_select2_attributes') -}}
+    {% if color != 'default' %}
+        {%- set attr = attr|merge({class: (attr.class|default('') ~ ' select2-' ~ color)|trim, 'data-dropdown-css-class': 'select2-' ~ color}) -%}
+    {% endif %}
     {% if color != 'default' %}
         <div class="select2-{{ color }}">{{- block('choice_widget') -}}</div>
     {% else %}
         {{- block('choice_widget') -}}
     {% endif %}
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function(){
-            $('#{{ id }}').select2({{ ojs_options|json_encode|raw }});
-            $(document).on('select2:open', () => {
-                document.querySelector('.select2-container--open .select2-search__field').focus();
-            });
-        });
-    </script>
 {%- endblock olix_select2_widget %}
 
 {% block olix_select2_ajax_widget -%}
-    {%- set attr = attr|merge({
-        'class': (attr.class|default('') ~ ' form-control')|trim,
-        'data-scroll': ajax_scroll ? 'true' : 'false',
-    }) -%}
-    {% if multiple %}
-        {% set attr = attr|merge({'multiple': 'multiple'}) %}
+    {%- set attr = attr|merge({ 'class': (attr.class|default('') ~ ' form-control')|trim }) -%}
+    {% if color != 'default' %}
+        {%- set attr = attr|merge({class: (attr.class|default('') ~ ' select2-' ~ color)|trim, 'data-dropdown-css-class': 'select2-' ~ color}) -%}
     {% endif %}
-    {{- block('olix_select2_attributes') -}}
     <div class="select2-{{ color }}">
         <select {{ block('widget_attributes') }}>
             {% if value is iterable %}
@@ -114,69 +91,17 @@
             {% endif %}
         </select>
     </div>
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function(){
-
-            $('#{{ id }}').select2($.extend({},
-                {{ ojs_options|json_encode|raw }}
-                ,{
-                    ajax: {
-                        url: '{{ path(ajax_route, ajax_param) }}',
-                        dataType: 'json',
-                        delay: {{ ajax_delay }},
-                        cache: {{ ajax_cache }},
-                        data: function (params) {
-                            let parameter = {};
-                            parameter['term'] = params.term;
-                            if ($('#{{ id }}').data('scroll')) {
-                                parameter['page'] = params.page || 1;
-                            }
-                            return parameter;
-                        },
-                        processResults: function (data, params) {
-                            let results, more = false, response = {};
-                            params.page = params.page || 1;
-                            if ($.isArray(data)) {
-                                results = data;
-                            } else if (typeof data === 'object') {
-                                results = data.results;
-                                more = data.more;
-                            } else {
-                                results = [];
-                            }
-                            response.results = results;
-                            if ($('#{{ id }}').data('scroll')) {
-                                response.pagination = { more: more };
-                            }
-                            
-                            return response;
-                        }
-                    }
-                }
-            ));
-
-            $(document).on('select2:open', () => {
-                document.querySelector('.select2-container--open .select2-search__field').focus();
-            });
-
-        });
-    </script>
 {%- endblock olix_select2_ajax_widget %}
 
 
 {% block olix_duallistbox_widget -%}
-    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' duallistbox')|trim}) -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' duallistbox')|trim }) -%}
     {{- block('choice_widget') -}}
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function() {
-            $('#{{ id }}').bootstrapDualListbox({{ ojs_options|json_encode|raw }});
-        });
-    </script>
 {%- endblock olix_duallistbox_widget %}
 
 
 {% block olix_datetimepicker_widget -%}
-    <div class="input-group" id="dp_{{ id }}" data-target-input="nearest">
+    <div class="input-group" id="dp_{{ id }}" data-target-input="nearest" data-toggle="datetimepicker2" data-options-js="{{ js_options|json_encode }}">
         {%- set attr = attr|merge({
             'class': (attr.class|default('') ~ ' datetimepicker-input')|trim,
             'data-target': '#dp_' ~ id,
@@ -186,11 +111,6 @@
             <span class="input-group-text"><i class="{{ button_icon }}"></i></span>
         </div>
     </div>
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function() {
-            $('#dp_{{ id }}').datetimepicker({{ ojs_options|json_encode|raw }}); 
-        });
-    </script>
 {%- endblock olix_datetimepicker_widget %}
 
 

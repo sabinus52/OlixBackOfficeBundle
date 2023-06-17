@@ -94,24 +94,28 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
             ]));
         }
 
-        $this->activateByRoute($this->getPrefixRoute($event->getRequest()->get('_route')), $event->getSidebarMenu());
+        $this->activateByRoute($this->getPrefixRoute($event->getMenuActiv()), $event->getSidebarMenu());
     }
 
     /**
      * Correspondance de la route par récursivité pour activer le menu en cours.
      *
-     * @param string              $route
-     * @param MenuItemInterface[] $items : MenuItemInterface[]
+     * @param string              $match Chaine à faire correspondre
+     * @param MenuItemInterface[] $items Les éléments du menu
      */
-    protected function activateByRoute(string $route, ?array $items): void
+    protected function activateByRoute(string $match, ?array $items): void
     {
         foreach ($items as $item) {
             if ($item->hasChildren()) {
-                if ($this->getPrefixRoute($item->getRoute()) === $route) {
+                if ($this->getPrefixRoute($item->getRoute()) === $match) {
+                    $item->setIsActive(true);
+                } elseif ($this->getPrefixRoute($item->getCode()) === $match) {
                     $item->setIsActive(true);
                 }
-                $this->activateByRoute($route, $item->getChildren());
-            } elseif ($this->getPrefixRoute($item->getRoute()) === $route) {
+                $this->activateByRoute($match, $item->getChildren());
+            } elseif ($this->getPrefixRoute($item->getRoute()) === $match) {
+                $item->setIsActive(true);
+            } elseif ($this->getPrefixRoute($item->getCode()) === $match) {
                 $item->setIsActive(true);
             }
         }

@@ -32,11 +32,20 @@ class SidebarMenuEvent extends BackOfficeEvent
     protected $request;
 
     /**
-     * @param Request $request
+     * Code du menu pour forcer son activation.
+     *
+     * @var string
      */
-    public function __construct(Request $request = null)
+    protected $forceMenuActiv;
+
+    /**
+     * @param Request     $request
+     * @param string|null $forceMenuActiv
+     */
+    public function __construct(Request $request = null, ?string $forceMenuActiv = null)
     {
         $this->request = $request;
+        $this->forceMenuActiv = (empty($forceMenuActiv)) ? null : $forceMenuActiv;
     }
 
     /**
@@ -45,6 +54,16 @@ class SidebarMenuEvent extends BackOfficeEvent
     public function getRequest(): ?Request
     {
         return $this->request;
+    }
+
+    /**
+     * Retourne le code à correspondre pour mettre en surbrillance le menu de la sidebar.
+     *
+     * @return string
+     */
+    public function getMenuActiv(): string
+    {
+        return (null === $this->forceMenuActiv) ? $this->request->get('_route') : $this->forceMenuActiv;
     }
 
     /**

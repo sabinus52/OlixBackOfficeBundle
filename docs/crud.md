@@ -1,113 +1,120 @@
 # CRUD
 
+
+## Prerequis
+
 For breadcrumb, positioning the route with two `__`
+
+***Facultatif***, dans l'entity, il faut ajouter la fonction `__toString` pour déterminer si l'objet est vide ou pas :
+~~~ php
+public function __toString(): string
+{
+    return ($this->label) ?: ''; // or return "{$this->label}";
+}
+~~~
 
 ## Controller
 
 ~~~ php
 // src/Controller/TablesController
-
-use App\Datatable\AddressIPDatatable;
-use App\Entity\AddressIP;
-use App\Form\AddressIPType;
-use Doctrine\ORM\EntityManagerInterface;
-use Olix\BackOfficeBundle\Datatable\Response\DatatableResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use App\Datatable\MyTableType;
+use App\Entity\MyEntity;
+use App\Form\MyFormType;
+use Omines\DataTablesBundle\DataTableFactory;
+// ...
 
 class TablesController extends AbstractController
 {
     /**
-     * @Route("/tables/addressip/list", name="table_adrip__list")
+     * @Route("/tables/list", name="table__list")
      */
-    public function listAddressIP(Request $request, AddressIPDatatable $datatable, DatatableResponse $responseService): Response
+    public function index(Request $request, DataTableFactory $factory): Response
     {
-        $isAjax = $request->isXmlHttpRequest();
+        $datatable = $factory->createFromType(MyTableType::class)
+            ->handleRequest($request)
+        ;
 
-        $datatable->buildDatatable();
-
-        if ($isAjax) {
-            $responseService->setDatatable($datatable);
-            $responseService->getDatatableQueryBuilder();
-
-            return $responseService->getResponse();
+        if ($datatable->isCallback()) {
+            return $datatable->getResponse();
         }
 
-        $form = $this->createFormBuilder()->getForm();
-
-        return $this->renderForm('default/addressip-table.html.twig', [
+        return $this->renderForm('index.html.twig', [
             'datatable' => $datatable,
-            'form' => $form,
+            'modal' => [
+                'class' => 'modal-lg',
+                'backdrop' => 'false',
+            ],
         ]);
     }
 
     /**
-     * @Route("/tables/addressip/create", name="table_adrip__create", methods={"GET", "POST"})
+     * @Route("/tables/create", name="table__create")
      */
-    public function createAddressIP(Request $request, EntityManagerInterface $entityManager): Response
+    public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $adrip = new AddressIP();
-        $form = $this->createForm(AddressIPType::class, $adrip);
+        $entity = new MyEntity();
+        $form = $this->createForm(MyFormType::class, $entity);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($adrip);
+            $entityManager->persist($entity);
             $entityManager->flush();
+            $this->addFlash('success', sprintf('La création de <strong>%s</strong> a bien été prise en compte', $entity));
 
-            $this->addFlash('success', 'La création a bien été prise en compte');
-
-            return $this->redirectToRoute('table_adrip__list');
+            return $this->redirectToRoute('table_server_list'); // return new Response('OK');
         }
 
-        return $this->renderForm('default/addressip-edit.html.twig', [
+        return $this->renderForm('edit.html.twig', [ // @OlixBackOffice/Include/modal-form-(vertical|horizontal).html.twig
             'form' => $form,
+            'modal' => [
+                'title' => 'Créer un nouveau objet',
+            ],
         ]);
     }
 
     /**
-     * Update server.
-     *
-     * @Route("/tables/addressip/edit/{id}", name="table_adrip__edit")
+     * @Route("/tables/edit/{id}", name="table__edit")
      */
-    public function updateAddressIP(Request $request, AddressIP $adrip, EntityManagerInterface $entityManager): Response
+    public function update(Request $request, MyEntity $entity, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(AddressIPType::class, $adrip);
+        $form = $this->createForm(MyFormType::class, $entity);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-            $this->addFlash('success', 'La validation a bien été prise en compte');
+            $this->addFlash('success', sprintf('La modification de <strong>%s</strong> a bien été prise en compte', $entity));
 
-            return $this->redirectToRoute('table_adrip__list');
+            return $this->redirectToRoute('table_server_list'); // return new Response('OK');
         }
 
-        return $this->renderForm('default/addressip-edit.html.twig', [
+        return $this->renderForm('edit.html.twig', [ // @OlixBackOffice/Include/modal-form-(vertical|horizontal).html.twig
             'form' => $form,
+            'modal' => [
+                'title' => 'Formulaire d\'édition d\'un objet',
+            ],
         ]);
     }
 
     /**
-     * @Route("/tables/addressip/delete/{id}", name="table_adrip__delete", methods={"POST"})
+     * @Route("/tables/delete/{id}", name="table__delete")
      */
-    public function deleteAddressIP(Request $request, AddressIP $adrip, EntityManagerInterface $entityManager): Response
+    public function remove(Request $request, MyEntity $entity, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createFormBuilder()->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->remove($adrip);
+            $entityManager->remove($entity);
             $entityManager->flush();
+            $this->addFlash('success', sprintf('La suppression de <strong>%s</strong> a bien été prise en compte', $entity));
 
-            $this->addFlash('success', 'La suppression a bien été prise en compte');
-
-            return $this->redirectToRoute('table_adrip__list');
+            return new Response('OK');
         }
 
-        $this->addFlash('danger', 'Erreur lors de laa suppression');
-
-        return $this->redirectToRoute('table_adrip__list');
+        return $this->renderForm('@OlixBackOffice/Include/modal-content-delete.html.twig', [
+            'form' => $form,
+            'element' => sprintf('<strong>%s</strong>', $entity),
+        ]);
     }
 }
 ~~~
@@ -116,71 +123,41 @@ class TablesController extends AbstractController
 ## Datatable
 
 ~~~ php
-// src/Datatable/AddressIPDatatable.php
-
-use Olix\BackOfficeBundle\Datatable\AbstractDatatable;
-use Olix\BackOfficeBundle\Datatable\Column\ActionColumn;
-use Olix\BackOfficeBundle\Datatable\Column\Column;
+// src/Datatable/MyTableType.php
+use App\Entity\MyEntity;
+use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
+use Omines\DataTablesBundle\Column\TextColumn;
+use Omines\DataTablesBundle\Column\TwigColumn;
+use Omines\DataTablesBundle\DataTable;
+use Omines\DataTablesBundle\DataTableTypeInterface;
 //...
 
-class AddressIPDatatable extends AbstractDatatable
+class MyTableType implements DataTableTypeInterface
 {
-    public function buildDatatable(array $options = []): void
+    public function configure(DataTable $dataTable, array $options): void
     {
-        $this->ajax->set([]);
-
-        $this->options->set([]);
-
-        $this->columnBuilder
-            ->add('id', Column::class, [
-                'title' => 'Id',
+        $dataTable
+            ->add('id', TextColumn::class, [
+                'label' => 'Id',
             ])
-            ->add('ip', Column::class, [
-                'title' => 'IP',
+            ->add('hostname', TextColumn::class, [
+                'label' => 'Hostname',
+                'searchable' => true,
             ])
-            ->add(null, ActionColumn::class, [
-                'actions' => [
-                    [
-                        'route' => 'table_adrip__edit',
-                        'icon' => 'fas fa-edit',
-                        'label' => 'Edit',
-                        'route_parameters' => [
-                            'id' => 'id',
-                        ],
-                        'attributes' => [
-                            'title' => 'Edit',
-                            'class' => 'btn btn-primary btn-sm',
-                            'role' => 'button',
-                        ],
-                    ],
-                    [
-                        'route' => 'table_adrip__delete',
-                        'icon' => 'fas fa-trash',
-                        'label' => 'Delete',
-                        'route_parameters' => [
-                            'id' => 'id',
-                        ],
-                        'attributes' => [
-                            'title' => 'Delete',
-                            'class' => 'btn btn-danger btn-sm',
-                            'role' => 'button',
-                            // Pour la confirmation de la suppression d'un item
-                            'onclick' => 'return olixBackOffice.confirmDelete(this)',
-                        ],
-                    ],
-                ],
+            ->add('state', TextColumn::class, [
+                'label' => 'Statut',
+                'raw' => true,
+                'data' => fn ($row) => sprintf('<b>%s</b>', $row->getStateLabel()),
+            ])
+            ->add('buttons', TwigColumn::class, [
+                'label' => '',
+                'className' => 'text-right align-middle',
+                'template' => 'buttonbar.html.twig',
+            ])
+            ->createAdapter(ORMAdapter::class, [
+                'entity' => MyEntity::class,
             ])
         ;
-    }
-
-    public function getEntity()
-    {
-        return AddressIP::class;
-    }
-
-    public function getName()
-    {
-        return 'addressip_datatable';
     }
 }
 ~~~
@@ -189,32 +166,21 @@ class AddressIPDatatable extends AbstractDatatable
 ## Form of item
 
 ~~~ php
-// src/Form//AddressIPType.php
-
+// src/Form//MyFormType.php
 use Symfony\Component\Form\AbstractType;
 // ...
 
-class AddressIPType extends AbstractType
+class MyFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('ip', TextType::class, [
-                'label' => 'Adresse IP',
-            ])
             ->add('hostname', TextType::class, [
                 'label' => 'Hostname',
             ])
-            ->add('number', NumberType::class, [
-                'label' => 'Numéro',
-            ])
             ->add('state', ChoiceType::class, [
                 'label' => 'Statut',
-                'choices' => AddressIP::getChoiceStates(),
-            ])
-            ->add('comment', TextareaType::class, [
-                'label' => 'Commentaire',
-                'required' => false,
+                'choices' => MyEntity::getChoiceStates(),
             ])
         ;
     }
@@ -222,7 +188,7 @@ class AddressIPType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => AddressIP::class,
+            'data_class' => MyEntity::class,
         ]);
     }
 }
@@ -230,42 +196,64 @@ class AddressIPType extends AbstractType
 
 ## Template list of items
 
+Pour afficher dans une fenêtre modale, il faut rajouter `data-toggle="olix-modal" data-target="#modalOlix"` dans la balise `href`.
+
 ~~~ twig
-{# templates/addressip-table.html.twig #}
+{# templates/crud-index.html.twig #}
 
 {% extends 'base.html.twig' %}
 {# ... #}
-{% block javascripts %}
-{{ parent()}}
-{{ olixbo_datatable_js(datatable) }}
-{% endblock %}
 
 {% block content %}
     <div class="container-fluid">
+
         <div class="row">
             <div class="col-md-12">
-                <div class="card card-blue">
+
+                <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Liste des IPs</h3>
-                        <div class="card-tools"><a href="{{ path('table_adrip__create') }}" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> Ajouter</a></div>
+                        <h3 class="card-title">Liste</h3>
+                        <div class="card-tools"><a href="{{ path('table__create') }}" class="btn btn-sm btn-success" data-toggle="olix-modal" data-target="#modalOlix"><i class="fas fa-plus"></i> Ajouter</a></div>
                     </div>
                     <div class="card-body">
-                        {{ olixbo_datatable_html(datatable) }}
+                        <div id="olixDataTables">Loading...</div>
+                        <script>
+                            var olixDataTables = {{ datatable_settings(datatable) }};
+                        </script>
                     </div>
                 </div>
+
             </div>
         </div>
+
     </div>
-    {# For confirm suppress #}
-    {% include '@OlixBackOffice/Include/modal-delete.html.twig' with {'element': 'cette IP'} %}
+
+    {% include '@OlixBackOffice/Include/modal.html.twig' with { title: "Chargement du formulaire" } %}
+
 {% endblock %}
+~~~
+
+~~~ twig
+{# templates/buttonbar.html.twig #}
+
+<a href="{{ path('table__edit', {'id': row.id}) }}" class="btn btn-sm btn-info" data-toggle="olix-modal" data-target="#modalOlix"><i class="fas fa-edit"></i><span class="d-none d-md-inline">&nbsp;Modifier<span></a>
+<a href="{{ path('table__delete', {'id': row.id}) }}" class="btn btn-sm btn-danger" data-toggle="olix-modal" data-target="#modalOlix"><i class="fas fa-trash"></i><span class="d-none d-md-inline">&nbsp;Supprimer<span></a>
 ~~~
 
 
 ## Template form of a item
 
+Dans une fenêtre modale :
 ~~~ twig
-{# templates/addressip-edit.html.twig #}
+{# templates/crud-edit.html.twig #}
+
+{% form_theme form '@OlixBackOffice/Twig/form-theme-horizontal-layout.html.twig' %}
+{% include '@OlixBackOffice/Include/modal-content-form.html.twig' with { form: form, title: title} %}
+~~~
+
+Dans une nouvelle page :
+~~~ twig
+{# templates/crud-edit.html.twig #}
 
 {% extends 'base.html.twig' %}
 {# ... #}
@@ -277,7 +265,7 @@ class AddressIPType extends AbstractType
                 {{ form_start(form) }}
                 <div class="card card-blue">
                     <div class="card-header">
-                        <h3 class="card-title">Formulaire d'édition d'une adresse IP</h3>
+                        <h3 class="card-title">Formulaire d'édition</h3>
                     </div>
                     <div class="card-body">
                         {{ form_rest(form) }}

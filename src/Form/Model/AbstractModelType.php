@@ -28,20 +28,21 @@ abstract class AbstractModelType extends AbstractType
 
     /**
      * Retourne toutes les options javascript d'un widget.
-     * Parameters starts with "ojs_".
+     * Parameters starts with "js_".
      *
      * @param array<mixed> $options
+     * @param string       $prefix
      *
      * @return array<mixed>
      */
-    protected function getOptionsWidgetCamelized(array $options): array
+    protected function getOptionsWidgetCamelized(array $options, string $prefix = 'js_'): array
     {
         $result = [];
 
         foreach ($options as $key => $value) {
-            if (str_contains($key, 'ojs_')) {
-                // Remove 'ojs_' and camelize the options names
-                $nameOption = substr($key, 4);
+            if (str_starts_with($key, $prefix)) {
+                // Remove 'js_' and camelize the options names
+                $nameOption = substr($key, strlen($prefix));
                 $nameOption = $this->camelize($nameOption);
                 $result[$nameOption] = $value;
             }

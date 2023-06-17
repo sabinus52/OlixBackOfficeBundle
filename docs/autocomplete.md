@@ -2,23 +2,19 @@
 
 Autocompletion in the search of the sidebar in block `sidebar_search`
 
+Github : https://github.com/devbridge/jQuery-Autocomplete
+
 ## Script JS
 
 ~~~ javascript
-var engine = new Bloodhound({
-    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    prefetch: Routing.generate('autocomplete-route', { term: '' }),
-    remote: {
-        url: Routing.generate('autocomplete-route', { term: 'TERM' }),
-        wildcard: 'TERM'
-    }
-});
-    
-$('#sdSearch').typeahead(null, {
-    name: 'myautocomplete',
-    display: 'value',
-    source: engine
+import Routing from "./dist/scripts/routing";
+import "devbridge-autocomplete";
+
+$('#sdSearch').autocomplete({
+  serviceUrl: Routing.generate('sidebar_autocomplete'),
+  onSelect: function (suggestion) {
+      console.log('You selected: ' + suggestion.value + ', ' + suggestion.data);
+  }
 });
 ~~~
 
@@ -28,22 +24,32 @@ $('#sdSearch').typeahead(null, {
 // src/Controller/DefaultController.php
 
 /**
- * @Route("/autocomplete/{term}", options={"expose": true}, name="autocomplete-route")
+ * @Route("/autocomplete", options={"expose": true}, name="sidebar_autocomplete")
  */
-public function autocompleteIP(Request $request, ManagerRegistry $doctrine): JsonResponse
+public function autocompleteSideBar(Request $request, MyEntityRepository $repository): JsonResponse
 {
-    $entityManager = $doctrine->getManager();
-    $term = $request->get('term');
-    
-    /** @phpstan-ignore-next-line */
-    $query = $entityManager->getRepository(MyEntity::class)->createQueryBuilder('m')
-        ->andWhere('m.value LIKE :val')
+    $term = $request->get('query');
+
+    $items = $repository->createQueryBuilder('m')
+        ->andWhere('m.field LIKE :val')
         ->setParameter('val', '%'.$term.'%')
+        ->orderBy('m.field', 'ASC')
         ->getQuery()
+        ->getResult()
     ;
 
-    $result = $query->getResult(PDO::FETCH_ASSOC);
+    $result = [];
+    foreach ($items as $item) {
+        $result[] = [
+            'value' => $item->getField(),
+            'data' => $item->getId(),
+        ];
+    }
 
-    return $this->json($result);
+    // Respecter les clés
+    return $this->json([
+        'query' => $term,
+        'suggestions' => $result,
+    ]);
 }
 ~~~

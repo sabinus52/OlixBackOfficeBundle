@@ -1,171 +1,133 @@
 # Datatables
 
-Full documentation : https://github.com/stwe/DatatablesBundle/blob/v1.3.0/Resources/doc/index.md
+Github : https://github.com/omines/datatables-bundle
+Full documentation : https://omines.github.io/datatables-bundle/
+
+## Configuration du bundle
+
+Configurer le fichier `config/packages/datatables.yaml` comme suit :
+
+~~~ yml
+datatables:
+    language_from_cdn: false
+
+    # Set options, as documented at https://datatables.net/reference/option/
+    options:
+        lengthMenu : [10, 25, 50, 100, 250, 500]
+        pageLength: 50
+        dom: "<'row' <'col-sm-6'l><'col-sm-6 text-right'f>><'row' <'col-sm-12' tr>><'row' <'col-sm-6'i><'col-sm-6 text-right'p>>"
+        searching: true
+
+    template_parameters:
+        # Example classes to integrate nicely with Bootstrap 3.x
+        className: 'table table-striped table-hover data-table'
+        columnFilter: 'thead'
+
+    # You can for example override this to "tables" to keep the translation domains separated nicely
+    translation_domain: 'messages'
+~~~
+
 
 ## Create a Datatable class
 
 ~~~ php
-use App\Constants\Environment;
-use App\Entity\Server;
-use Olix\BackOfficeBundle\Datatable\AbstractDatatable;
-use Olix\BackOfficeBundle\Datatable\Column\ActionColumn;
-use Olix\BackOfficeBundle\Datatable\Column\BooleanColumn;
-use Olix\BackOfficeBundle\Datatable\Column\Column;
-use Olix\BackOfficeBundle\Datatable\Column\DateTimeColumn;
-use Olix\BackOfficeBundle\Datatable\Column\VirtualColumn;
-use Olix\BackOfficeBundle\Datatable\Filter\SelectFilter;
+namespace App\Datatable;
 
-class ServerDatatable extends AbstractDatatable
+use App\Entity\MyEntity;
+use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
+use Omines\DataTablesBundle\Column\BoolColumn;
+use Omines\DataTablesBundle\Column\DateTimeColumn;
+use Omines\DataTablesBundle\Column\TextColumn;
+use Omines\DataTablesBundle\Column\TwigColumn;
+use Omines\DataTablesBundle\Column\TwigStringColumn;
+use Omines\DataTablesBundle\DataTable;
+use Omines\DataTablesBundle\DataTableTypeInterface;
+
+class MyTableType implements DataTableTypeInterface
 {
-    public function getLineFormatter()
+    public function configure(DataTable $dataTable, array $options): void
     {
-        $formatter = function ($row) {
-            if (isset($row['operatingSystem']['name'])) {
-                $row['os'] = $row['operatingSystem']['name'].' '.$row['operatingSystem']['version'];
-            }
-            $row['environment'] = $row['environment']->getBadge();
-            return $row;
-        };
-        return $formatter;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function buildDatatable(array $options = []): void
-    {
-        $this->ajax->set([]);
-
-        $this->options->set([
-            'individual_filtering' => true,
-            'order' => [[0, 'asc']],
-        ]);
-
-        $this->columnBuilder
-            ->add('id', Column::class, [
-                'title' => 'Id',
-                'searchable' => false,
+        $dataTable
+            ->add('id', TextColumn::class, [
+                'label' => 'Id',
             ])
-            ->add('hostname', Column::class, [
-                'title' => 'Hostname',
+            ->add('hostname', TextColumn::class, [
+                'label' => 'Hostname',
+                'searchable' => true,
             ])
-            ->add('addrip.ip', Column::class, [
-                'title' => 'Adresse IP',
-                'default_content' => '',
+            ->add('addrip', TextColumn::class, [
+                'label' => 'Adresse IP',
+                'field' => 'addrip.ip',
+                'searchable' => true,
             ])
-            ->add('virtual', BooleanColumn::class, [
-                'title' => 'Virtuel',
+            ->add('virtual', BoolColumn::class, [
+                'label' => 'Virtuel',
+                'trueValue' => 'yes',
+                'falseValue' => 'no',
+                'nullValue' => '',
             ])
-            ->add('environment', Column::class, [
-                'title' => 'Environnement',
-                'filter' => [SelectFilter::class, [
-                    'multiple' => false,
-                    'cancel_button' => false,
-                    'select_options' => array_merge(['' => 'Tous'], Environment::getFilters()),
-                ]],
+            ->add('environment', TwigStringColumn::class, [
+                'label' => 'Environnement',
+                'searchable' => true,
+                'template' => '{{ row.environment.badge|raw }}',
             ])
-            ->add('os', VirtualColumn::class, [
-                'title' => 'OS',
-                'default_content' => '',
-                'order_column' => 'operatingSystem.bits',
+            ->add('os', TextColumn::class, [
+                'label' => 'OS',
+                'field' => 'operatingSystem.name',
+                'searchable' => true,
+                'render' => fn ($value, $context) => sprintf('%s (%s) %s %s', $value, $context->getOperatingSystem()->getBits(), $context->getOperatingSystem()->getVersion(), $context->getOperatingSystem()->getAdditional()),
             ])
-            ->add('operatingSystem.name', Column::class, [
-                'visible' => false,
-                'default_content' => '',
-            ])
-            ->add('operatingSystem.version', Column::class, [
-                'visible' => false,
-                'default_content' => '',
+            ->add('state', TextColumn::class, [
+                'label' => 'Statut',
+                'raw' => true,
+                'data' => fn ($row) => sprintf('<b>%s</b>', $row->getStateLabel()),
             ])
             ->add('deletedAt', DateTimeColumn::class, [
-                'title' => 'Supprimé',
-                'date_format' => 'L',
+                'label' => 'Supprimé',
+                'format' => 'd/m/Y',
             ])
-            ->add(null, ActionColumn::class, [
-                'actions' => [
-                    [
-                        'route' => 'table_server_edit',
-                        'icon' => 'fas fa-edit',
-                        'label' => 'Edit',
-                        'route_parameters' => [
-                            'id' => 'id',
-                        ],
-                        'attributes' => [
-                            'rel' => 'tooltip',
-                            'title' => 'Edit',
-                            'class' => 'btn btn-primary btn-sm',
-                            'role' => 'button',
-                        ],
-                    ],
-                    [
-                        'route' => 'table_server_delete',
-                        'icon' => 'fas fa-trash',
-                        'label' => 'Delete',
-                        'route_parameters' => [
-                            'id' => 'id',
-                        ],
-                        'attributes' => [
-                            'rel' => 'tooltip',
-                            'title' => 'Delete',
-                            'class' => 'btn btn-danger btn-sm',
-                            'role' => 'button',
-                        ],
-                    ],
-                ],
+            ->add('buttons', TwigColumn::class, [
+                'label' => '',
+                'className' => 'text-right align-middle',
+                'template' => 'tables/server-buttonbar.html.twig',
+            ])
+            ->createAdapter(ORMAdapter::class, [
+                'entity' => MyEntity::class,
             ])
         ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEntity(): string
-    {
-        return Server::class;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName(): string
-    {
-        return 'server_datatable';
     }
 }
 ~~~
 
-
-## Controller
+## In the controller
 
 ~~~ php
-use App\Datatable\ServerDatatable;
-use Olix\BackOfficeBundle\Datatable\Response\DatatableResponse;
-use Symfony\Component\HttpFoundation\Request;
-
+use App\Datatable\MyTableType;
+use Omines\DataTablesBundle\DataTableFactory;
 // ...
 
+class MyController extends AbstractController
+{
     /**
-     * Lists all Server entities.
-     *
-     * @Route("/tables/server/list", name="table_server_list")
+     * @Route("/route/tables", name="myroute")
      */
-    public function listServer(Request $request, ServerDatatable $datatable, DatatableResponse $responseService): Response
+    public function index(Request $request, DataTableFactory $factory): Response
     {
-        $isAjax = $request->isXmlHttpRequest();
+        $datatable = $factory->createFromType(MyTableType::class, [], [
+            'searching' => true,
+        ])
+            ->handleRequest($request)
+        ;
 
-        $datatable->buildDatatable();
-
-        if ($isAjax) {
-            $responseService->setDatatable($datatable);
-            $responseService->getDatatableQueryBuilder();
-
-            return $responseService->getResponse();
+        if ($datatable->isCallback()) {
+            return $datatable->getResponse();
         }
 
-        return $this->render('default/server-table.html.twig', [
+        return $this->renderForm('mytemplate.html.twig', [
             'datatable' => $datatable,
         ]);
     }
+}
 ~~~
 
 
@@ -174,13 +136,7 @@ use Symfony\Component\HttpFoundation\Request;
 ~~~ twig
 {% extends 'base.html.twig' %}
 
-{% block javascripts %}
-{{ parent()}}
-{{ olixbo_datatable_js(datatable) }}
-{% endblock %}
-
 {% block content %}
-
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -189,12 +145,16 @@ use Symfony\Component\HttpFoundation\Request;
                         <h3 class="card-title">Liste des serveurs</h3>
                     </div>
                     <div class="card-body">
-                        {{ olixbo_datatable_html(datatable) }}
+                        <div id="olixDataTables">Loading...</div>
+                        <script>
+                            var olixDataTables = {{ datatable_settings(datatable) }};
+                        </script>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 {% endblock %}
 ~~~
+
+Le nom pour l'identifiant et la variable doit être `olixDataTables`.
