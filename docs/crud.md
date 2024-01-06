@@ -91,6 +91,7 @@ class TablesController extends AbstractController
             'form' => $form,
             'modal' => [
                 'title' => 'Formulaire d\'édition d\'un objet',
+                'btnlabel' => 'Mettre à jour', //Surcharge du label du bouton
             ],
         ]);
     }
