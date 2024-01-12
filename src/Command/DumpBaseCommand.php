@@ -33,18 +33,6 @@ final class DumpBaseCommand extends Command
     protected static $defaultName = 'app:database:dump';
 
     /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * Racine de l'emplacement des dumps.
-     *
-     * @var string
-     */
-    protected $pathRoot;
-
-    /**
      * Nombre de fichiers à conserver.
      *
      * @var int
@@ -55,13 +43,11 @@ final class DumpBaseCommand extends Command
      * Constructeur.
      *
      * @param EntityManagerInterface $entityManager
-     * @param string                 $pathRoot
+     * @param string                 $pathRoot      racine de l'emplacement des dumps
      */
-    public function __construct(EntityManagerInterface $entityManager, string $pathRoot)
+    public function __construct(protected EntityManagerInterface $entityManager, protected string $pathRoot)
     {
         parent::__construct();
-        $this->pathRoot = $pathRoot;
-        $this->entityManager = $entityManager;
     }
 
     /**

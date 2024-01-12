@@ -31,7 +31,6 @@ abstract class AbstractModelType extends AbstractType
      * Parameters starts with "js_".
      *
      * @param array<mixed> $options
-     * @param string       $prefix
      *
      * @return array<mixed>
      */
@@ -53,8 +52,6 @@ abstract class AbstractModelType extends AbstractType
 
     /**
      * Camelize a option name "days_of_week_disabled" -> "daysOfWeekDisabled".
-     *
-     * @param string $name
      *
      * @return string
      */

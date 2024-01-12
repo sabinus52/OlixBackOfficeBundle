@@ -37,9 +37,6 @@ class AutoCompleteService
 
     /**
      * Constructeur.
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param FormFactoryInterface   $formFactory
      */
     public function __construct(EntityManagerInterface $entityManager, FormFactoryInterface $formFactory)
     {
@@ -49,9 +46,6 @@ class AutoCompleteService
 
     /**
      * Retourne les resultats trouvés depuis un recherche "Select2".
-     *
-     * @param string  $formType
-     * @param Request $request
      *
      * @return array<mixed>
      */

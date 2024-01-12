@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Helper;
 
-use InvalidArgumentException;
-
 /**
  * Classe pour l'avatar de l'utilisateur en utilisant le service "Gravatar".
  *
@@ -67,14 +65,12 @@ class Gravatar
     /**
      * Affecte la taille de l'image.
      *
-     * @param int $size
-     *
      * @return Gravatar
      */
     public function setSize(int $size): self
     {
         if ($size > 512 || $size < 0) {
-            throw new InvalidArgumentException('Avatar size must be within 0 pixels and 512 pixels');
+            throw new \InvalidArgumentException('Avatar size must be within 0 pixels and 512 pixels');
         }
         $this->size = $size;
 
@@ -94,8 +90,6 @@ class Gravatar
     /**
      * Affecte l'image par défaut.
      *
-     * @param string $image
-     *
      * @return Gravatar
      */
     public function setDefaultImage(string $image): self
@@ -104,7 +98,7 @@ class Gravatar
 
         // Verifie la bonne url
         if (!filter_var($image, FILTER_VALIDATE_URL)) {
-            throw new InvalidArgumentException('The default image specified is not a recognized gravatar "default" and is not a valid URL');
+            throw new \InvalidArgumentException('The default image specified is not a recognized gravatar "default" and is not a valid URL');
         }
 
         $imgLower = strtolower($image);
@@ -126,8 +120,6 @@ class Gravatar
     /**
      * Affecte le rating.
      *
-     * @param string $rating
-     *
      * @return Gravatar
      */
     public function setRating(string $rating): self
@@ -135,7 +127,7 @@ class Gravatar
         $rating = strtolower($rating);
         $validRatings = ['g', 'pg', 'r', 'x'];
         if (!in_array($rating, $validRatings, true)) {
-            throw new InvalidArgumentException(sprintf('Invalid rating "%s" specified, only "g", "pg", "r", or "x" are allowed to be used.', $rating));
+            throw new \InvalidArgumentException(sprintf('Invalid rating "%s" specified, only "g", "pg", "r", or "x" are allowed to be used.', $rating));
         }
         $this->rating = $rating;
 
@@ -177,8 +169,6 @@ class Gravatar
     }
 
     /**
-     * @param string $email
-     *
      * @see Gravatar::buildURL()
      */
     public function get(string $email): string
@@ -188,8 +178,6 @@ class Gravatar
 
     /**
      * Construit l'url de l'avatar à partir de l'émail.
-     *
-     * @param string $email
      *
      * @return string
      */
@@ -225,8 +213,6 @@ class Gravatar
 
     /**
      * Retourne l'email avec hash.
-     *
-     * @param string $email
      *
      * @return string
      */

@@ -56,10 +56,6 @@ class Select2AjaxType extends Select2ModelType
      */
     protected $router;
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param RouterInterface        $router
-     */
     public function __construct(EntityManagerInterface $entityManager, RouterInterface $router)
     {
         $this->entityManager = $entityManager;

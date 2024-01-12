@@ -52,10 +52,9 @@ class EntityToValueTransformer implements DataTransformerInterface
     /**
      * Constructeur.
      *
-     * @param EntityManagerInterface $entityManager
-     * @param string                 $entityName    : Nom de la classe de l'entité
-     * @param string                 $primaryKey    : Clé primaire de l'entité de la valeur de la liste de choix
-     * @param string                 $fieldLabel    : Label de la valeur correspondant à un champs de l'entité
+     * @param string $entityName : Nom de la classe de l'entité
+     * @param string $primaryKey : Clé primaire de l'entité de la valeur de la liste de choix
+     * @param string $fieldLabel : Label de la valeur correspondant à un champs de l'entité
      */
     public function __construct(EntityManagerInterface $entityManager, string $entityName, string $primaryKey, string $fieldLabel)
     {
@@ -101,7 +100,7 @@ class EntityToValueTransformer implements DataTransformerInterface
                 ->getQuery()
                 ->getSingleResult()
             ;
-        } catch (UnexpectedResultException $exception) {
+        } catch (UnexpectedResultException) {
             throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', $value));
         }
 

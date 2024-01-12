@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Model;
 
-use ArrayIterator;
-
 /**
  * Classe de chaque élément composant la menu de la barre latérale.
  *
@@ -110,8 +108,6 @@ class MenuItemModel implements MenuItemInterface
     }
 
     /**
-     * @param string $label
-     *
      * @return MenuItemModel
      */
     public function setLabel(string $label): self
@@ -376,6 +372,6 @@ class MenuItemModel implements MenuItemInterface
      */
     public function getIterator()
     {
-        return new ArrayIterator($this->getChildren());
+        return new \ArrayIterator($this->getChildren());
     }
 }

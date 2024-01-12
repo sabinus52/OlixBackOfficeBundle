@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Olix\BackOfficeBundle\EventSubscriber;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Olix\BackOfficeBundle\Event\BreadcrumbEvent;
 use Olix\BackOfficeBundle\Event\SidebarMenuEvent;
 use Olix\BackOfficeBundle\Model\MenuItemInterface;
@@ -42,19 +41,13 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
      */
     protected $entityManager;
 
-    /**
-     * @var Security
-     */
-    private $security;
-
-    public function __construct(ParameterBagInterface $parameterBag, EntityManagerInterface $entityManager, Security $security)
+    public function __construct(ParameterBagInterface $parameterBag, EntityManagerInterface $entityManager, private readonly Security $security)
     {
         $this->entityManager = $entityManager;
-        $this->security = $security;
 
         // Get parameter "olix_back_office.security"
         if (!$parameterBag->has('olix_back_office')) {
-            throw new Exception('Parameter "olix_back_office" not defined', 1);
+            throw new \Exception('Parameter "olix_back_office" not defined', 1);
         }
         /** @var array<mixed> $parameters */
         $parameters = $parameterBag->get('olix_back_office');
@@ -78,8 +71,6 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
 
     /**
      * Generate the main menu.
-     *
-     * @param SidebarMenuEvent $event
      */
     public function onBuildSidebar(SidebarMenuEvent $event): void
     {

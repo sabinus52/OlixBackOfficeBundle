@@ -13,7 +13,6 @@ namespace Olix\BackOfficeBundle\Security;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Olix\BackOfficeBundle\Form\UserCreateType;
 use Olix\BackOfficeBundle\Form\UserEditPassType;
 use Olix\BackOfficeBundle\Form\UserPasswordType;
@@ -41,9 +40,9 @@ class UserManager implements UserManagerInterface
     protected $parameters = [
         'menu_activ' => false,
         'class' => [
-            'user' => 'App\Entity\User',
-            'form_user' => 'Olix\BackOfficeBundle\Form\UserEditType',
-            'form_profile' => 'Olix\BackOfficeBundle\Form\UserProfileType',
+            'user' => \App\Entity\User::class,
+            'form_user' => \Olix\BackOfficeBundle\Form\UserEditType::class,
+            'form_profile' => \Olix\BackOfficeBundle\Form\UserProfileType::class,
         ],
     ];
 
@@ -74,11 +73,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Constructeur.
-     *
-     * @param ContainerInterface          $container
-     * @param ParameterBagInterface       $parameterBag
-     * @param ManagerRegistry             $doctrine
-     * @param UserPasswordHasherInterface $passwordHasher
      */
     public function __construct(
         ContainerInterface $container,
@@ -93,7 +87,7 @@ class UserManager implements UserManagerInterface
 
         // Get parameter olix_back_office.security
         if (!$parameterBag->has('olix_back_office')) {
-            throw new Exception('Parameter "olix_back_office" not defined', 1);
+            throw new \Exception('Parameter "olix_back_office" not defined', 1);
         }
         /** @var array<mixed> $parameters */
         $parameters = $parameterBag->get('olix_back_office');
@@ -139,8 +133,6 @@ class UserManager implements UserManagerInterface
     /**
      * Affecte un utilisateur dans le manager.
      *
-     * @param User $user
-     *
      * @return UserManager
      */
     public function setUser(User $user): self
@@ -175,8 +167,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Ajoute un nouvel utilisateur en base.
-     *
-     * @param string $password
      */
     public function add(string $password): void
     {
@@ -186,8 +176,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Mets à jour les données de l'utilisateur.
-     *
-     * @param string $password
      */
     public function update(string $password = null): void
     {
@@ -210,8 +198,6 @@ class UserManager implements UserManagerInterface
     /**
      * Retourne un mot de passe haché.
      *
-     * @param string $plaintextPassword
-     *
      * @return string
      */
     protected function getHashedPassword(string $plaintextPassword): string
@@ -221,8 +207,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Vérifie si le mot courant est le bon.
-     *
-     * @param string $password
      *
      * @return bool
      */
@@ -305,7 +289,7 @@ class UserManager implements UserManagerInterface
      */
     protected function createForm(string $type, array $options = []): FormInterface
     {
-        $options = $options + ['data_class' => $this->getClass()];
+        $options += ['data_class' => $this->getClass()];
 
         return $this->container->get('form.factory')->create($type, $this->user, $options);
     }

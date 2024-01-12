@@ -11,11 +11,8 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Form\Model;
 
-use DateTimeInterface;
-use IntlDateFormatter;
 use Locale;
 use Olix\BackOfficeBundle\Helper\DateFormatConverter;
-use RuntimeException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
@@ -98,11 +95,11 @@ abstract class DateTimePickerModelType extends AbstractModelType
         ]);
 
         $resolver->setAllowedTypes('js_stepping', 'int');
-        $resolver->setAllowedTypes('js_min_date', ['bool', 'string', DateTimeInterface::class]);
-        $resolver->setAllowedTypes('js_max_date', ['bool', 'string', DateTimeInterface::class]);
+        $resolver->setAllowedTypes('js_min_date', ['bool', 'string', \DateTimeInterface::class]);
+        $resolver->setAllowedTypes('js_max_date', ['bool', 'string', \DateTimeInterface::class]);
         $resolver->setAllowedTypes('js_use_current', 'bool');
         $resolver->setAllowedTypes('js_collapse', 'bool');
-        $resolver->setAllowedTypes('js_default_date', ['bool', 'string', DateTimeInterface::class]);
+        $resolver->setAllowedTypes('js_default_date', ['bool', 'string', \DateTimeInterface::class]);
         $resolver->setAllowedTypes('js_disabled_dates', 'array');
         $resolver->setAllowedTypes('js_enabled_dates', 'array');
         $resolver->setAllowedTypes('js_icons', 'array');
@@ -169,14 +166,13 @@ abstract class DateTimePickerModelType extends AbstractModelType
     }
 
     /**
-     * @param string|DateTimeInterface $option
-     * @param string                   $format
+     * @param string|\DateTimeInterface $option
      *
      * @return string
      */
     private function formatIsDate($option, string $format)
     {
-        if ($option instanceof DateTimeInterface) {
+        if ($option instanceof \DateTimeInterface) {
             $option = $this->formatObject($option, $format);
         }
 
@@ -186,19 +182,16 @@ abstract class DateTimePickerModelType extends AbstractModelType
     /**
      * Formate une date de type DateTime dans le format spécifié du widget.
      *
-     * @param DateTimeInterface $dateTime
-     * @param string            $format
-     *
      * @return string
      */
-    private function formatObject(DateTimeInterface $dateTime, string $format): string
+    private function formatObject(\DateTimeInterface $dateTime, string $format): string
     {
-        $formatter = new IntlDateFormatter($this->locale, IntlDateFormatter::NONE, IntlDateFormatter::NONE);
+        $formatter = new \IntlDateFormatter($this->locale, \IntlDateFormatter::NONE, \IntlDateFormatter::NONE);
         $formatter->setPattern($format);
 
         $formatted = $formatter->format($dateTime);
         if (!is_string($formatted)) {
-            throw new RuntimeException(sprintf('The format "%s" is invalid.', $format));
+            throw new \RuntimeException(sprintf('The format "%s" is invalid.', $format));
         }
 
         return $formatted;

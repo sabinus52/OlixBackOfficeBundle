@@ -38,16 +38,6 @@ class AdminLteInstallCommand extends Command
     protected static $defaultDescription = 'Install assets AdminLTE under a public directory';
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var string
-     */
-    private $projectDir;
-
-    /**
      * @var string
      */
     private $originDir;
@@ -68,12 +58,9 @@ class AdminLteInstallCommand extends Command
      * @param Filesystem $filesystem
      * @param string     $projectDir
      */
-    public function __construct(Filesystem $filesystem, string $projectDir)
+    public function __construct(private readonly Filesystem $filesystem, private readonly string $projectDir)
     {
         parent::__construct();
-
-        $this->filesystem = $filesystem;
-        $this->projectDir = $projectDir;
         $this->exitCode = 0;
     }
 
@@ -156,9 +143,6 @@ class AdminLteInstallCommand extends Command
     /**
      * Copie des plugins.
      *
-     * @param string $originDir
-     * @param string $targetDir
-     *
      * @return array<mixed>
      */
     private function copyPlugins(string $originDir, string $targetDir): array
@@ -178,9 +162,6 @@ class AdminLteInstallCommand extends Command
     /**
      * Copie des styles.
      *
-     * @param string $originDir
-     * @param string $targetDir
-     *
      * @return array<mixed>
      */
     private function copyStyles(string $originDir, string $targetDir): array
@@ -199,9 +180,6 @@ class AdminLteInstallCommand extends Command
 
     /**
      * Copie des scripts.
-     *
-     * @param string $originDir
-     * @param string $targetDir
      *
      * @return array<mixed>
      */
@@ -240,10 +218,6 @@ class AdminLteInstallCommand extends Command
 
     /**
      * Retourne le tableau de message.
-     *
-     * @param string $message
-     * @param string $dir
-     * @param string $error
      *
      * @return array<string>
      */

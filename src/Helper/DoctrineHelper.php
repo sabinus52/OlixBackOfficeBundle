@@ -12,8 +12,6 @@ declare(strict_types=1);
 namespace Olix\BackOfficeBundle\Helper;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
-use LogicException;
 
 /**
  * Aide sur le fonctions de la base de données.
@@ -29,8 +27,6 @@ class DoctrineHelper
 
     /**
      * Constructeur.
-     *
-     * @param EntityManagerInterface $manager
      */
     public function __construct(EntityManagerInterface $manager)
     {
@@ -39,8 +35,6 @@ class DoctrineHelper
 
     /**
      * Purge la table.
-     *
-     * @param string $entityClass
      *
      * @return string|null
      */
@@ -54,7 +48,7 @@ class DoctrineHelper
             $connection->executeStatement('SET FOREIGN_KEY_CHECKS=0;');
             $connection->executeStatement($platform->getTruncateTableSQL($table, false /* whether to cascade */));
             $connection->executeStatement('SET FOREIGN_KEY_CHECKS=1;');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
 
@@ -63,8 +57,6 @@ class DoctrineHelper
 
     /**
      * Retourne le nom de la table d'une entité.
-     *
-     * @param string $entityClass
      *
      * @return string
      */
@@ -99,15 +91,15 @@ class DoctrineHelper
         $params = $connection->getParams();
 
         if ('pdo_mysql' !== $params['driver']) {
-            throw new LogicException('Only MySQL database is supported');
+            throw new \LogicException('Only MySQL database is supported');
         }
 
         $dumpfile = sprintf('%s/dump-%s-%s.sql', $pathRoot, $connection->getDatabase(), date('Y-m-d-His'));
 
-        $host = escapeshellarg($params['host']);
+        $host = escapeshellarg((string) $params['host']);
         $port = escapeshellarg((string) $params['port']);
-        $username = escapeshellarg($params['user']);
-        $password = escapeshellarg($params['password']);
+        $username = escapeshellarg((string) $params['user']);
+        $password = escapeshellarg((string) $params['password']);
         $database = escapeshellarg($connection->getDatabase());
 
         $cmd = "mysqldump -h {$host} -P {$port} -u {$username} -p{$password} {$database} > '{$dumpfile}'";
@@ -119,8 +111,6 @@ class DoctrineHelper
     /**
      * Restauration d'un dump.
      *
-     * @param string $dumpFile
-     *
      * @return int
      */
     public function restoreBase(string $dumpFile): int
@@ -130,13 +120,13 @@ class DoctrineHelper
         $params = $connection->getParams();
 
         if ('pdo_mysql' !== $params['driver']) {
-            throw new LogicException('Only MySQL database is supported');
+            throw new \LogicException('Only MySQL database is supported');
         }
 
-        $host = escapeshellarg($params['host']);
+        $host = escapeshellarg((string) $params['host']);
         $port = escapeshellarg((string) $params['port']);
-        $username = escapeshellarg($params['user']);
-        $password = escapeshellarg($params['password']);
+        $username = escapeshellarg((string) $params['user']);
+        $password = escapeshellarg((string) $params['password']);
         $database = escapeshellarg($connection->getDatabase());
 
         $cmd = "mysql -h {$host} -P {$port} -u {$username} -p{$password} {$database} < '{$dumpFile}'";

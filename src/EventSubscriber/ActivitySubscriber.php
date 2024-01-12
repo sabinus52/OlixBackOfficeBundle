@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\EventSubscriber;
 
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Olix\BackOfficeBundle\Model\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -33,11 +32,6 @@ class ActivitySubscriber implements EventSubscriberInterface
     protected $entityManager;
 
     /**
-     * @var Security
-     */
-    private $security;
-
-    /**
      * Delai en minutes à partir duquel l'utilisateur est considéré comme non connecté.
      *
      * @var int
@@ -47,14 +41,11 @@ class ActivitySubscriber implements EventSubscriberInterface
     /**
      * Constructeur.
      *
-     * @param EntityManagerInterface $entityManager
-     * @param Security               $security
-     * @param array<mixed>           $parameters
+     * @param array<mixed> $parameters
      */
-    public function __construct(EntityManagerInterface $entityManager, Security $security, array $parameters)
+    public function __construct(EntityManagerInterface $entityManager, private readonly Security $security, array $parameters)
     {
         $this->entityManager = $entityManager;
-        $this->security = $security;
         $this->delay = $parameters['security']['delay_activity'];
     }
 
@@ -72,8 +63,6 @@ class ActivitySubscriber implements EventSubscriberInterface
 
     /**
      * Evènement sur l'affichage d'une page.
-     *
-     * @param ControllerEvent $event
      */
     public function onKernelController(ControllerEvent $event): void
     {
@@ -88,7 +77,7 @@ class ActivitySubscriber implements EventSubscriberInterface
         // On vérifie qu'un token d'autentification est bien présent avant d'essayer manipuler l'utilisateur courant.
         if (null !== $user) {
             // On utilise un délai pendant lequel on considère que l'utilisateur est toujours actif et qu'il n'est pas nécessaire de refaire de mise à jour
-            $delay = new DateTime();
+            $delay = new \DateTime();
             $timeDelay = (int) strtotime(sprintf('%s minutes ago', $this->delay));
             $delay->setTimestamp($timeDelay);
 

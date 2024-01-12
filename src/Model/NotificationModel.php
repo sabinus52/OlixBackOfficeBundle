@@ -49,7 +49,7 @@ class NotificationModel implements NotificationInterface
      * @param string|null  $code    : Code identifiant de la notif
      * @param array<mixed> $options : Options de la notif
      */
-    public function __construct(?string $code = null, array $options = [])
+    public function __construct(string $code = null, array $options = [])
     {
         $this->code = $code;
         $this->icon = $options['icon'] ?? 'fas fa-exclamation-triangle';
@@ -75,8 +75,6 @@ class NotificationModel implements NotificationInterface
     }
 
     /**
-     * @param string $icon
-     *
      * @return NotificationModel
      */
     public function setIcon(string $icon): self
@@ -115,8 +113,6 @@ class NotificationModel implements NotificationInterface
     }
 
     /**
-     * @param string $message
-     *
      * @return NotificationModel
      */
     public function setMessage(string $message): self

@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Twig;
 
-use Closure;
 use Olix\BackOfficeBundle\Datatable\Action\Action;
 use Olix\BackOfficeBundle\Datatable\Column\ColumnInterface;
 use Olix\BackOfficeBundle\Datatable\DatatableInterface;
@@ -66,8 +65,6 @@ class DatatableRuntime extends AbstractExtension
     /**
      * Renders a Filter template.
      *
-     * @param string $position
-     *
      * @return string
      */
     public function datatablesRenderFilter(Environment $twig, DatatableInterface $datatable, ColumnInterface $column, string $position): string
@@ -98,8 +95,6 @@ class DatatableRuntime extends AbstractExtension
     /**
      * Renders the MultiselectColumn Actions.
      *
-     * @param int $pipeline
-     *
      * @return string
      */
     public function datatablesRenderMultiselectActions(Environment $twig, ColumnInterface $multiselectColumn, int $pipeline): string
@@ -117,7 +112,7 @@ class DatatableRuntime extends AbstractExtension
                 foreach ($routeParameters as $key => $value) {
                     $parameters[$actionKey][$key] = $value;
                 }
-            } elseif ($routeParameters instanceof Closure) {
+            } elseif ($routeParameters instanceof \Closure) {
                 $parameters[$actionKey] = \call_user_func($routeParameters);
             } else {
                 $parameters[$actionKey] = [];
@@ -155,8 +150,6 @@ class DatatableRuntime extends AbstractExtension
 
     /**
      * Renders: {{ var ? 'true' : 'false' }}.
-     *
-     * @param bool $value
      *
      * @return string
      */

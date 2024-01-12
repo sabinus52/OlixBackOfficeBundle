@@ -29,27 +29,14 @@ use Twig\Extension\RuntimeExtensionInterface;
 class EventsRuntime implements RuntimeExtensionInterface
 {
     /**
-     * Dispatcher (listener).
-     *
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * Constructor.
-     *
-     * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct(EventDispatcherInterface $dispatcher)
+    public function __construct(private readonly EventDispatcherInterface $eventDispatcher)
     {
-        $this->eventDispatcher = $dispatcher;
     }
 
     /**
      * Retourne le menu de la barre latérale.
-     *
-     * @param Request $request
-     * @param string  $forceMenuActiv
      *
      * @return MenuItemInterface[]
      */
@@ -67,9 +54,6 @@ class EventsRuntime implements RuntimeExtensionInterface
 
     /**
      * Retourne le fil d'ariane.
-     *
-     * @param Request $request
-     * @param string  $forceMenuActiv
      *
      * @return MenuItemInterface[]
      */

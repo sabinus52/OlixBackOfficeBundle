@@ -71,8 +71,6 @@ class NotificationsEvent extends BackOfficeEvent
     }
 
     /**
-     * @param int $max
-     *
      * @return NotificationsEvent
      */
     public function setMax(int $max): self
@@ -91,8 +89,6 @@ class NotificationsEvent extends BackOfficeEvent
     }
 
     /**
-     * @param int $total
-     *
      * @return NotificationsEvent
      */
     public function setTotal(int $total): self
@@ -111,8 +107,6 @@ class NotificationsEvent extends BackOfficeEvent
     }
 
     /**
-     * @param string $route
-     *
      * @return NotificationsEvent
      */
     public function setRoute(string $route): self
@@ -131,8 +125,6 @@ class NotificationsEvent extends BackOfficeEvent
     }
 
     /**
-     * @param string $routeAll
-     *
      * @return NotificationsEvent
      */
     public function setRouteAll(string $routeAll): self
@@ -154,8 +146,6 @@ class NotificationsEvent extends BackOfficeEvent
 
     /**
      * Ajoute un nouvelle notif.
-     *
-     * @param NotificationInterface $item
      *
      * @return NotificationsEvent
      */

@@ -39,7 +39,6 @@ class SidebarMenuEvent extends BackOfficeEvent
     protected $forceMenuActiv;
 
     /**
-     * @param Request     $request
      * @param string|null $forceMenuActiv
      */
     public function __construct(Request $request = null, ?string $forceMenuActiv = null)
@@ -63,7 +62,7 @@ class SidebarMenuEvent extends BackOfficeEvent
      */
     public function getMenuActiv(): string
     {
-        return (null === $this->forceMenuActiv) ? $this->request->get('_route') : $this->forceMenuActiv;
+        return $this->forceMenuActiv ?? $this->request->get('_route');
     }
 
     /**
@@ -79,7 +78,6 @@ class SidebarMenuEvent extends BackOfficeEvent
     /**
      * Ajoute un nouvel élémént de menu.
      *
-     * @param MenuItemInterface $item
      *
      * @return SidebarMenuEvent
      */

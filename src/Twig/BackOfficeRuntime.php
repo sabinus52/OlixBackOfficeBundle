@@ -19,6 +19,7 @@ use Twig\Extension\RuntimeExtensionInterface;
  * @author     Sabinus52 <sabinus52@gmail.com>
  *
  * @see        https://symfony.com/doc/current/templating/twig_extension.html#creating-lazy-loaded-twig-extensions
+ *
  * @SuppressWarnings(PHPMD)
  */
 class BackOfficeRuntime implements RuntimeExtensionInterface
@@ -35,7 +36,7 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
      */
     public function __construct(array $configs)
     {
-        $this->options = (isset($configs['options'])) ? $configs['options'] : [];
+        $this->options = $configs['options'] ?? [];
     }
 
     /**
