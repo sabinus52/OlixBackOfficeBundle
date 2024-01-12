@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Model;
 
-use DateTime;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -23,11 +21,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Classe abstraite de l'entité de la table utilisateurs de connexion.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
- * @ORM\MappedSuperclass
- * @UniqueEntity(fields="username", message="Ce login est déjà utilisé, merci d'en choisir un autre")
- * @UniqueEntity(fields="email", message="Cet email est déjà utilisé, merci d'en choisir un autre")
+ *
  * @SuppressWarnings(PHPMD.ShortVariable)
  */
+#[ORM\MappedSuperclass]
+#[UniqueEntity(fields: 'username', message: "Ce login est déjà utilisé, merci d'en choisir un autre")]
+#[UniqueEntity(fields: 'email', message: "Cet email est déjà utilisé, merci d'en choisir un autre")]
 abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     protected const AVATAR_PATH = 'bundles/olixbackoffice/images/avatar/';
@@ -37,75 +36,74 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @var int
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotBlank
-     * @Assert\Length(min=2, max=180)
      */
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 180)]
     protected $username;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=150, nullable=true)
-     * @Assert\Email
      */
+    #[ORM\Column(type: 'string', length: 150, nullable: true)]
+    #[Assert\Email]
     protected $email;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=150, nullable=true)
-     * @Assert\Length(min=2, max=180)
      */
+    #[ORM\Column(type: 'string', length: 150, nullable: true)]
+    #[Assert\Length(min: 2, max: 180)]
     protected $name;
 
     /**
      * @var bool
-     * @ORM\Column(type="smallint", options={"default": 1})
      */
+    #[ORM\Column(type: 'smallint', options: ['default' => 1])]
     protected $enabled = true;
 
     /**
-     * @var DateTime
-     * @ORM\Column(name="expiresat", type="date", nullable=true)
+     * @var \DateTime
      */
+    #[ORM\Column(name: 'expiresat', type: 'date', nullable: true)]
     protected $expiresAt;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=250, nullable=true)
      */
+    #[ORM\Column(type: 'string', length: 250, nullable: true)]
     protected $avatar;
 
     /**
-     * @var DateTime
-     * @ORM\Column(name="last_login", type="datetime", nullable=true)
+     * @var \DateTime
      */
+    #[ORM\Column(name: 'last_login', type: 'datetime', nullable: true)]
     protected $lastLogin;
 
     /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="last_activity", type="datetime", nullable=true)
+     * @var \DateTime
      */
+    #[ORM\Column(name: 'last_activity', type: 'datetime', nullable: true)]
     protected $lastActivity;
 
     /**
      * @var array<string> liste des roles
-     * @ORM\Column(type="json")
      */
+    #[ORM\Column(type: 'json')]
     protected $roles = [];
 
     /**
      * @var string Mot de passe hashé
-     * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: 'string')]
     protected $password;
 
     /**
@@ -212,8 +210,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param bool $enabled
-     *
      * @return User
      */
     public function setEnabled(bool $enabled): self
@@ -238,7 +234,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return \DateTime
      */
-    public function getExpiresAt(): ?DateTimeInterface
+    public function getExpiresAt(): ?\DateTimeInterface
     {
         return $this->expiresAt;
     }
@@ -248,7 +244,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @return User
      */
-    public function setExpiresAt(?DateTimeInterface $date = null): self
+    public function setExpiresAt(\DateTimeInterface $date = null): self
     {
         $this->expiresAt = $date;
 
@@ -265,7 +261,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (!$this->avatar) {
             return $prefix.self::AVATAR_PATH.self::AVATAR_DEFAULT;
         }
-        if ('http' === substr($this->avatar, 0, 4)) {
+        if (str_starts_with($this->avatar, 'http')) {
             return $this->avatar;
         }
 
@@ -285,19 +281,19 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return DateTime|null
+     * @return \DateTime|null
      */
-    public function getLastLogin(): ?DateTimeInterface
+    public function getLastLogin(): ?\DateTimeInterface
     {
         return $this->lastLogin;
     }
 
     /**
-     * @param DateTime $lastLogin
+     * @param \DateTime $lastLogin
      *
      * @return User
      */
-    public function setLastLogin(?DateTimeInterface $lastLogin): self
+    public function setLastLogin(?\DateTimeInterface $lastLogin): self
     {
         $this->lastLogin = $lastLogin;
 
@@ -314,7 +310,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (null === $this->lastLogin) {
             return '';
         }
-        $now = new DateTime();
+        $now = new \DateTime();
         $interval = $now->diff($this->lastLogin);
         if (1 === $interval->days) {
             return $interval->format('%a jour');
@@ -336,11 +332,11 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param DateTime $lastActivity
+     * @param \DateTime $lastActivity
      *
      * @return User
      */
-    public function setLastActivity(?DateTimeInterface $lastActivity): self
+    public function setLastActivity(?\DateTimeInterface $lastActivity): self
     {
         $this->lastActivity = $lastActivity;
 
@@ -348,9 +344,9 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
-    public function getLastActivity(): ?DateTimeInterface
+    public function getLastActivity(): ?\DateTimeInterface
     {
         return $this->lastActivity;
     }
@@ -362,7 +358,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function setOnline(): self
     {
-        $this->setLastActivity(new DateTime());
+        $this->setLastActivity(new \DateTime());
 
         return $this;
     }
@@ -376,7 +372,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function isOnline(int $minDelay = self::DELAY_ACTIVITY)
     {
-        $delay = new DateTime();
+        $delay = new \DateTime();
         $timeDelay = (int) strtotime(sprintf('%s minutes ago', $minDelay));
         $delay->setTimestamp($timeDelay);
 
@@ -434,8 +430,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param string $password
-     *
      * @return User
      */
     public function setPassword(string $password): self

@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Controller;
 
-use Exception;
 use Olix\BackOfficeBundle\Datatable\DatatableFactory;
 use Olix\BackOfficeBundle\Datatable\DatatableInterface;
 use Olix\BackOfficeBundle\Datatable\Response\DatatableResponse;
@@ -42,14 +41,12 @@ class ManagerController extends AbstractController
 
     /**
      * Constructeur.
-     *
-     * @param ParameterBagInterface $parameterBag
      */
     public function __construct(ParameterBagInterface $parameterBag)
     {
         // Get parameter "olix_back_office.security"
         if (!$parameterBag->has('olix_back_office')) {
-            throw new Exception('Parameter "olix_back_office" not defined', 1);
+            throw new \Exception('Parameter "olix_back_office" not defined', 1);
         }
 
         /** @var array<mixed> $parameters */
@@ -61,10 +58,9 @@ class ManagerController extends AbstractController
 
     /**
      * Affichage de la liste des utiliseurs.
-     *
-     * @Route("/security/users", name="olix_users__list")
-     * @Security("is_granted('ROLE_ADMIN')")
      */
+    #[Route(path: '/security/users', name: 'olix_users__list')]
+    #[Security("is_granted('ROLE_ADMIN')")]
     public function listUsers(UserManager $manager, Request $request, DatatableFactory $factory, DatatableResponse $responseService): Response
     {
         $this->checkAccess();
@@ -101,10 +97,9 @@ class ManagerController extends AbstractController
 
     /**
      * Création d'un nouvel utilisateur.
-     *
-     * @Route("/security/users/create", name="olix_users__create")
-     * @Security("is_granted('ROLE_ADMIN')")
      */
+    #[Route(path: '/security/users/create', name: 'olix_users__create')]
+    #[Security("is_granted('ROLE_ADMIN')")]
     public function createUser(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
@@ -132,10 +127,9 @@ class ManagerController extends AbstractController
 
     /**
      * Mo des avatars.
-     *
-     * @Route("/security/users/edit/{id}", name="olix_users__edit")
-     * @Security("is_granted('ROLE_ADMIN')")
      */
+    #[Route(path: '/security/users/edit/{id}', name: 'olix_users__edit')]
+    #[Security("is_granted('ROLE_ADMIN')")]
     public function editUser(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
@@ -167,10 +161,9 @@ class ManagerController extends AbstractController
 
     /**
      * Change le mot de passe de l'utilisateur.
-     *
-     * @Route("/security/users/password/{id}", name="olix_users__password")
-     * @Security("is_granted('ROLE_ADMIN')")
      */
+    #[Route(path: '/security/users/password/{id}', name: 'olix_users__password')]
+    #[Security("is_granted('ROLE_ADMIN')")]
     public function changePassword(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
@@ -202,10 +195,9 @@ class ManagerController extends AbstractController
 
     /**
      * Suppression d'un utilisateur.
-     *
-     * @Route("/security/users/remove/{id}", name="olix_users__remove")
-     * @Security("is_granted('ROLE_ADMIN')")
      */
+    #[Route(path: '/security/users/remove/{id}', name: 'olix_users__remove')]
+    #[Security("is_granted('ROLE_ADMIN')")]
     public function removeUser(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
@@ -240,7 +232,7 @@ class ManagerController extends AbstractController
     protected function checkAccess(): bool
     {
         if (!isset($this->parameters['menu_activ']) || true !== $this->parameters['menu_activ']) {
-            throw new Exception('Asses denied', 1); // FIXME
+            throw new \Exception('Asses denied', 1); // FIXME
         }
 
         return true;

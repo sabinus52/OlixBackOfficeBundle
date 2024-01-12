@@ -32,10 +32,9 @@ class ProfileController extends AbstractController
 {
     /**
      * Page de profile.
-     *
-     * @Route("/profile", name="olix_profile")
-     * @Security("is_granted('ROLE_USER')")
      */
+    #[Route(path: '/profile', name: 'olix_profile')]
+    #[Security("is_granted('ROLE_USER')")]
     public function profile(Request $request, UserManager $manager): Response
     {
         // Utilisation de la classe UserManager
@@ -88,10 +87,9 @@ class ProfileController extends AbstractController
 
     /**
      * Affichage des avatars.
-     *
-     * @Route("/profile/avatar", name="olix_profile_avatar")
-     * @Security("is_granted('ROLE_USER')")
      */
+    #[Route(path: '/profile/avatar', name: 'olix_profile_avatar')]
+    #[Security("is_granted('ROLE_USER')")]
     public function choiceAvatar(): Response
     {
         // Chargement des éléments
@@ -115,10 +113,9 @@ class ProfileController extends AbstractController
 
     /**
      * Change l'avatar de l'utilisateur.
-     *
-     * @Route("/profile/avatar/change", name="olix_profile_avatar_change")
-     * @Security("is_granted('ROLE_USER')")
      */
+    #[Route(path: '/profile/avatar/change', name: 'olix_profile_avatar_change')]
+    #[Security("is_granted('ROLE_USER')")]
     public function changeAvatar(Request $request, ManagerRegistry $doctrine): Response
     {
         // Chargement des éléments
