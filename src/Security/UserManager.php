@@ -17,8 +17,8 @@ use Olix\BackOfficeBundle\Form\UserCreateType;
 use Olix\BackOfficeBundle\Form\UserEditPassType;
 use Olix\BackOfficeBundle\Form\UserPasswordType;
 use Olix\BackOfficeBundle\Model\User;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -47,9 +47,9 @@ class UserManager implements UserManagerInterface
     ];
 
     /**
-     * @var ContainerInterface
+     * @var FormFactoryInterface
      */
-    protected $container;
+    protected $formFactory;
 
     /**
      * @var ManagerRegistry
@@ -75,12 +75,12 @@ class UserManager implements UserManagerInterface
      * Constructeur.
      */
     public function __construct(
-        ContainerInterface $container,
+        FormFactoryInterface $formFactory,
         ParameterBagInterface $parameterBag,
         ManagerRegistry $doctrine,
         UserPasswordHasherInterface $passwordHasher
     ) {
-        $this->container = $container;
+        $this->formFactory = $formFactory;
         $this->doctrine = $doctrine;
         $this->passwordHasher = $passwordHasher;
         $this->entityManager = $doctrine->getManager(); // @phpstan-ignore-line
@@ -291,6 +291,6 @@ class UserManager implements UserManagerInterface
     {
         $options += ['data_class' => $this->getClass()];
 
-        return $this->container->get('form.factory')->create($type, $this->user, $options);
+        return $this->formFactory->create($type, $this->user, $options);
     }
 }

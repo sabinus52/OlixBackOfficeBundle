@@ -2,6 +2,16 @@ parameters:
     olix.backup.path: '%env(string:BACKUP_PATH)%'
 
 services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    
+#    Olix\BackOfficeBundle\:
+#        resource: '../src/'
+#        exclude:
+#            - '../src/DependencyInjection/'
+#            - '../src/Resources/'
+#            - '../src/Tests/'
 
     Twig\Extension\StringLoaderExtension:
         tags: [twig.extension]
@@ -25,8 +35,7 @@ services:
 
     Olix\BackOfficeBundle\Security\UserChecker:
 
-    Olix\BackOfficeBundle\Security\UserManager:
-        arguments: [ '@service_container', '@parameter_bag', '@doctrine', '@security.user_password_hasher' ]
+    Olix\BackOfficeBundle\Security\UserManager: ~
 
     Olix\BackOfficeBundle\EventSubscriber\LoginListener:
         arguments: [ '@doctrine.orm.entity_manager' ]
@@ -38,12 +47,9 @@ services:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.controller' }
 
-    Olix\BackOfficeBundle\Controller\:
-        resource: '../src/Controller'
-        arguments: ['@parameter_bag']
-        tags: ['controller.service_arguments']
-        calls:
-            - ['setContainer', ['@service_container']]
+    Olix\BackOfficeBundle\Controller\SecurityController: ~
+    Olix\BackOfficeBundle\Controller\ProfileController: ~
+    Olix\BackOfficeBundle\Controller\ManagerController: ~
 
     Olix\BackOfficeBundle\Form\Type\Select2AjaxType:
         arguments: [ '@doctrine.orm.entity_manager', '@router' ]

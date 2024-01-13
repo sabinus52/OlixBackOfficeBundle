@@ -15,13 +15,14 @@ use Doctrine\Persistence\ManagerRegistry;
 use Olix\BackOfficeBundle\Helper\Gravatar;
 use Olix\BackOfficeBundle\Model\User;
 use Olix\BackOfficeBundle\Security\UserManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Contrôleur des pages du profil de l'utilisateur.
@@ -34,7 +35,7 @@ class ProfileController extends AbstractController
      * Page de profile.
      */
     #[Route(path: '/profile', name: 'olix_profile')]
-    #[Security("is_granted('ROLE_USER')")]
+    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     public function profile(Request $request, UserManager $manager): Response
     {
         // Utilisation de la classe UserManager
@@ -79,9 +80,9 @@ class ProfileController extends AbstractController
         }
 
         // Rendu de la page
-        return $this->renderForm('@OlixBackOffice/Security/profile.html.twig', [
-            'form1' => $form1,
-            'form2' => $form2,
+        return $this->render('@OlixBackOffice/Security/profile.html.twig', [
+            'form1' => $form1->createView(),
+            'form2' => $form2->createView(),
         ]);
     }
 
@@ -89,7 +90,7 @@ class ProfileController extends AbstractController
      * Affichage des avatars.
      */
     #[Route(path: '/profile/avatar', name: 'olix_profile_avatar')]
-    #[Security("is_granted('ROLE_USER')")]
+    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     public function choiceAvatar(): Response
     {
         // Chargement des éléments
@@ -115,7 +116,7 @@ class ProfileController extends AbstractController
      * Change l'avatar de l'utilisateur.
      */
     #[Route(path: '/profile/avatar/change', name: 'olix_profile_avatar_change')]
-    #[Security("is_granted('ROLE_USER')")]
+    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     public function changeAvatar(Request $request, ManagerRegistry $doctrine): Response
     {
         // Chargement des éléments

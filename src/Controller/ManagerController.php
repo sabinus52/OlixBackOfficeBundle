@@ -11,18 +11,17 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Controller;
 
-use Olix\BackOfficeBundle\Datatable\DatatableFactory;
-use Olix\BackOfficeBundle\Datatable\DatatableInterface;
-use Olix\BackOfficeBundle\Datatable\Response\DatatableResponse;
 use Olix\BackOfficeBundle\Security\UserDatatable;
 use Olix\BackOfficeBundle\Security\UserManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller des pages de la gestion des utilisateurs.
@@ -60,38 +59,26 @@ class ManagerController extends AbstractController
      * Affichage de la liste des utiliseurs.
      */
     #[Route(path: '/security/users', name: 'olix_users__list')]
-    #[Security("is_granted('ROLE_ADMIN')")]
-    public function listUsers(UserManager $manager, Request $request, DatatableFactory $factory, DatatableResponse $responseService): Response
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN")'))]
+    public function listUsers(UserManager $manager, Request $request, DataTableFactory $factory): Response
     {
         $this->checkAccess();
 
-        $isAjax = $request->isXmlHttpRequest();
-
-        /** @var DatatableInterface $datatable */
-        $datatable = $factory->create(UserDatatable::class, [
-            'entityUser' => $manager->getClass(),
-        ]);
-        $datatable->buildDatatable([
+        $datatable = $factory->createFromType(UserDatatable::class, [
+            'entity' => $manager->getClass(),
             'delay' => $this->parameters['delay_activity'],
-        ]);
+        ], [
+            'searching' => true,
+        ])
+            ->handleRequest($request)
+        ;
 
-        if ($isAjax) {
-            $responseService->setDatatable($datatable);
-            $responseService->getDatatableQueryBuilder();
-
-            return $responseService->getResponse();
+        if ($datatable->isCallback()) {
+            return $datatable->getResponse();
         }
 
-        // Formulaire pour la suppression d'un élément
-        $form = $this->createFormBuilder()->getForm();
-
-        // Get all users
-        $users = $manager->findAll();
-
-        return $this->renderForm('@OlixBackOffice/Security/users-list.html.twig', [
+        return $this->render('@OlixBackOffice/Security/users-list.html.twig', [
             'datatable' => $datatable,
-            'form' => $form,
-            'users' => $users,
         ]);
     }
 
@@ -99,7 +86,7 @@ class ManagerController extends AbstractController
      * Création d'un nouvel utilisateur.
      */
     #[Route(path: '/security/users/create', name: 'olix_users__create')]
-    #[Security("is_granted('ROLE_ADMIN')")]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN")'))]
     public function createUser(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
@@ -120,8 +107,8 @@ class ManagerController extends AbstractController
             return $this->redirectToRoute('olix_users__edit', ['id' => $manager->getUser()->getId()]);
         }
 
-        return $this->renderForm('@OlixBackOffice/Security/users-create.html.twig', [
-            'form' => $form,
+        return $this->render('@OlixBackOffice/Security/users-create.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
@@ -129,7 +116,7 @@ class ManagerController extends AbstractController
      * Mo des avatars.
      */
     #[Route(path: '/security/users/edit/{id}', name: 'olix_users__edit')]
-    #[Security("is_granted('ROLE_ADMIN')")]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN")'))]
     public function editUser(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
@@ -153,8 +140,8 @@ class ManagerController extends AbstractController
             return $this->redirectToRoute('olix_users__list');
         }
 
-        return $this->renderForm('@OlixBackOffice/Security/users-edit.html.twig', [
-            'form' => $form,
+        return $this->render('@OlixBackOffice/Security/users-edit.html.twig', [
+            'form' => $form->createView(),
             'user' => $user,
         ]);
     }
@@ -163,7 +150,7 @@ class ManagerController extends AbstractController
      * Change le mot de passe de l'utilisateur.
      */
     #[Route(path: '/security/users/password/{id}', name: 'olix_users__password')]
-    #[Security("is_granted('ROLE_ADMIN')")]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN")'))]
     public function changePassword(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
@@ -187,8 +174,8 @@ class ManagerController extends AbstractController
             return $this->redirectToRoute('olix_users__list');
         }
 
-        return $this->renderForm('@OlixBackOffice/Security/users-password.html.twig', [
-            'form' => $form,
+        return $this->render('@OlixBackOffice/Security/users-password.html.twig', [
+            'form' => $form->createView(),
             'user' => $user,
         ]);
     }
@@ -197,7 +184,7 @@ class ManagerController extends AbstractController
      * Suppression d'un utilisateur.
      */
     #[Route(path: '/security/users/remove/{id}', name: 'olix_users__remove')]
-    #[Security("is_granted('ROLE_ADMIN')")]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN")'))]
     public function removeUser(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
@@ -218,12 +205,13 @@ class ManagerController extends AbstractController
 
             $this->addFlash('success', 'La suppression de l\'utilisateur <b>'.$user->getUserIdentifier().'</b> a bien été prise en compte');
 
-            return $this->redirectToRoute('olix_users__list');
+            return new Response('OK');
         }
 
-        $this->addFlash('error', '<b>Erreur lors de la suppression</b>');
-
-        return $this->redirectToRoute('olix_users__list');
+        return $this->render('@OlixBackOffice/Include/modal-content-delete.html.twig', [
+            'form' => $form,
+            'element' => sprintf('l\'utilisateur <strong>%s</strong>', $user->getUserIdentifier()),
+        ]);
     }
 
     /**
