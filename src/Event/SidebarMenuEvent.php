@@ -34,14 +34,14 @@ class SidebarMenuEvent extends BackOfficeEvent
     /**
      * Code du menu pour forcer son activation.
      *
-     * @var string
+     * @var ?string
      */
     protected $forceMenuActiv;
 
     /**
      * @param string|null $forceMenuActiv
      */
-    public function __construct(Request $request = null, ?string $forceMenuActiv = null)
+    public function __construct(Request $request = null, string $forceMenuActiv = null)
     {
         $this->request = $request;
         $this->forceMenuActiv = (empty($forceMenuActiv)) ? null : $forceMenuActiv;
@@ -77,7 +77,6 @@ class SidebarMenuEvent extends BackOfficeEvent
 
     /**
      * Ajoute un nouvel élémént de menu.
-     *
      *
      * @return SidebarMenuEvent
      */

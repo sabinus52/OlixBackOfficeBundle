@@ -16,7 +16,6 @@ use Olix\BackOfficeBundle\Security\UserManager;
 use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,6 +27,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
+#[IsGranted('ROLE_ADMIN', message: 'You are not allowed to access the admin dashboard.')]
 class ManagerController extends AbstractController
 {
     /**
@@ -59,7 +59,6 @@ class ManagerController extends AbstractController
      * Affichage de la liste des utiliseurs.
      */
     #[Route(path: '/security/users', name: 'olix_users__list')]
-    #[IsGranted(new Expression('is_granted("ROLE_ADMIN")'))]
     public function listUsers(UserManager $manager, Request $request, DataTableFactory $factory): Response
     {
         $this->checkAccess();
@@ -86,7 +85,6 @@ class ManagerController extends AbstractController
      * Création d'un nouvel utilisateur.
      */
     #[Route(path: '/security/users/create', name: 'olix_users__create')]
-    #[IsGranted(new Expression('is_granted("ROLE_ADMIN")'))]
     public function createUser(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
@@ -113,10 +111,9 @@ class ManagerController extends AbstractController
     }
 
     /**
-     * Mo des avatars.
+     * Modification de l'utilisateur.
      */
     #[Route(path: '/security/users/edit/{id}', name: 'olix_users__edit')]
-    #[IsGranted(new Expression('is_granted("ROLE_ADMIN")'))]
     public function editUser(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
@@ -150,7 +147,6 @@ class ManagerController extends AbstractController
      * Change le mot de passe de l'utilisateur.
      */
     #[Route(path: '/security/users/password/{id}', name: 'olix_users__password')]
-    #[IsGranted(new Expression('is_granted("ROLE_ADMIN")'))]
     public function changePassword(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
@@ -184,7 +180,6 @@ class ManagerController extends AbstractController
      * Suppression d'un utilisateur.
      */
     #[Route(path: '/security/users/remove/{id}', name: 'olix_users__remove')]
-    #[IsGranted(new Expression('is_granted("ROLE_ADMIN")'))]
     public function removeUser(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();

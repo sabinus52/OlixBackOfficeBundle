@@ -26,22 +26,10 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 class AutoCompleteService
 {
     /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    protected $formFactory;
-
-    /**
      * Constructeur.
      */
-    public function __construct(EntityManagerInterface $entityManager, FormFactoryInterface $formFactory)
+    public function __construct(protected EntityManagerInterface $entityManager, protected FormFactoryInterface $formFactory)
     {
-        $this->entityManager = $entityManager;
-        $this->formFactory = $formFactory;
     }
 
     /**

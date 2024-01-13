@@ -24,6 +24,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  * Formulaire de mise à jour du mot de passe de l'utilisateur.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
+ *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class UserPasswordType extends AbstractType

@@ -32,11 +32,11 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
     private $options;
 
     /**
-     * @param array<mixed> $configs : Configuration du bundle 'olix_back_office'
+     * @param array<mixed> $olixConfigParameter : Configuration du bundle 'olix_back_office'
      */
-    public function __construct(array $configs)
+    public function __construct(array $olixConfigParameter)
     {
-        $this->options = $configs['options'] ?? [];
+        $this->options = $olixConfigParameter['options'] ?? [];
     }
 
     /**

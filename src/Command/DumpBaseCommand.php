@@ -43,9 +43,9 @@ final class DumpBaseCommand extends Command
      * Constructeur.
      *
      * @param EntityManagerInterface $entityManager
-     * @param string                 $pathRoot      racine de l'emplacement des dumps
+     * @param string                 $pathRootBackup Racine de l'emplacement des dumps
      */
-    public function __construct(protected EntityManagerInterface $entityManager, protected string $pathRoot)
+    public function __construct(protected EntityManagerInterface $entityManager, protected string $pathRootBackup)
     {
         parent::__construct();
     }
@@ -82,11 +82,11 @@ final class DumpBaseCommand extends Command
      */
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        if (empty($this->pathRoot)) {
-            $this->pathRoot = '/tmp';
+        if (empty($this->pathRootBackup)) {
+            $this->pathRootBackup = '/tmp';
         }
         if ($input->getArgument('path')) {
-            $this->pathRoot = $input->getArgument('path');
+            $this->pathRootBackup = $input->getArgument('path');
         }
 
         if ($input->getOption('purge')) {
@@ -107,25 +107,25 @@ final class DumpBaseCommand extends Command
         $style = new SymfonyStyle($input, $output);
 
         // Test du dossier
-        if (!file_exists($this->pathRoot)) {
-            $style->error(sprintf('Le dossier "%s" n\'existe pas.', $this->pathRoot));
+        if (!file_exists($this->pathRootBackup)) {
+            $style->error(sprintf('Le dossier "%s" n\'existe pas.', $this->pathRootBackup));
 
             return Command::FAILURE;
         }
-        if (!is_writable($this->pathRoot)) {
-            $style->error(sprintf('Le dossier "%s" n\'est pas accesssible.', $this->pathRoot));
+        if (!is_writable($this->pathRootBackup)) {
+            $style->error(sprintf('Le dossier "%s" n\'est pas accesssible.', $this->pathRootBackup));
 
             return Command::FAILURE;
         }
 
         // Sauvegarde
         $helper = new DoctrineHelper($this->entityManager);
-        $return = $helper->dumpBase($this->pathRoot);
+        $return = $helper->dumpBase($this->pathRootBackup);
 
         // Purge
         if (!empty($this->filesToKeep)) {
             $helper = new SystemHelper();
-            $helper->purgeFiles($this->pathRoot, 'dump-*.sql', $this->filesToKeep);
+            $helper->purgeFiles($this->pathRootBackup, 'dump-*.sql', $this->filesToKeep);
         }
 
         if (0 === $return[0]) {
@@ -134,6 +134,6 @@ final class DumpBaseCommand extends Command
             $style->error(sprintf('Echec du dump "%s"', $return[1]));
         }
 
-        return ($return) ? Command::SUCCESS : Command::FAILURE;
+        return ($return[0]) ? Command::SUCCESS : Command::FAILURE;
     }
 }

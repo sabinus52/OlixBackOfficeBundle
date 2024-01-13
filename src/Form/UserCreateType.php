@@ -25,6 +25,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  * Formulaire de création d'un utilisateur.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
+ *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class UserCreateType extends AbstractType

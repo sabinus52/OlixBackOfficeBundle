@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Olix\BackOfficeBundle\Security;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Olix\BackOfficeBundle\Form\UserCreateType;
 use Olix\BackOfficeBundle\Form\UserEditPassType;
 use Olix\BackOfficeBundle\Form\UserPasswordType;
@@ -40,31 +39,11 @@ class UserManager implements UserManagerInterface
     protected $parameters = [
         'menu_activ' => false,
         'class' => [
-            'user' => \App\Entity\User::class,
+            'user' => User::class,
             'form_user' => \Olix\BackOfficeBundle\Form\UserEditType::class,
             'form_profile' => \Olix\BackOfficeBundle\Form\UserProfileType::class,
         ],
     ];
-
-    /**
-     * @var FormFactoryInterface
-     */
-    protected $formFactory;
-
-    /**
-     * @var ManagerRegistry
-     */
-    protected $doctrine;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * @var UserPasswordHasherInterface
-     */
-    protected $passwordHasher;
 
     /**
      * @var User
@@ -75,16 +54,11 @@ class UserManager implements UserManagerInterface
      * Constructeur.
      */
     public function __construct(
-        FormFactoryInterface $formFactory,
-        ParameterBagInterface $parameterBag,
-        ManagerRegistry $doctrine,
-        UserPasswordHasherInterface $passwordHasher
+        protected FormFactoryInterface $formFactory,
+        protected ParameterBagInterface $parameterBag,
+        protected EntityManagerInterface $entityManager,
+        protected UserPasswordHasherInterface $passwordHasher
     ) {
-        $this->formFactory = $formFactory;
-        $this->doctrine = $doctrine;
-        $this->passwordHasher = $passwordHasher;
-        $this->entityManager = $doctrine->getManager(); // @phpstan-ignore-line
-
         // Get parameter olix_back_office.security
         if (!$parameterBag->has('olix_back_office')) {
             throw new \Exception('Parameter "olix_back_office" not defined', 1);
@@ -150,7 +124,7 @@ class UserManager implements UserManagerInterface
     public function setUserById(int $idf): ?UserInterface
     {
         /** @var User $this->user */
-        $this->user = $this->doctrine->getRepository($this->getClass())->find($idf); // @phpstan-ignore-line
+        $this->user = $this->entityManager->getRepository($this->getClass())->find($idf); // @phpstan-ignore-line
 
         return $this->user;
     }
@@ -162,7 +136,7 @@ class UserManager implements UserManagerInterface
      */
     public function findAll(): array
     {
-        return $this->doctrine->getRepository($this->getClass())->findAll(); // @phpstan-ignore-line
+        return $this->entityManager->getRepository($this->getClass())->findAll(); // @phpstan-ignore-line
     }
 
     /**

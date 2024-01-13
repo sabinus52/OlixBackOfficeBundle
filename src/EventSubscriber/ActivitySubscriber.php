@@ -13,11 +13,11 @@ namespace Olix\BackOfficeBundle\EventSubscriber;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Olix\BackOfficeBundle\Model\User;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Class ActivitySubscriber pour stocker le time de la dernière activité.
@@ -26,11 +26,6 @@ use Symfony\Component\Security\Core\Security;
  */
 class ActivitySubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
     /**
      * Delai en minutes à partir duquel l'utilisateur est considéré comme non connecté.
      *
@@ -41,12 +36,11 @@ class ActivitySubscriber implements EventSubscriberInterface
     /**
      * Constructeur.
      *
-     * @param array<mixed> $parameters
+     * @param array<mixed> $olixConfigParameter
      */
-    public function __construct(EntityManagerInterface $entityManager, private readonly Security $security, array $parameters)
+    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly Security $security, array $olixConfigParameter)
     {
-        $this->entityManager = $entityManager;
-        $this->delay = $parameters['security']['delay_activity'];
+        $this->delay = $olixConfigParameter['security']['delay_activity'];
     }
 
     /**

@@ -11,12 +11,11 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Controller;
 
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Olix\BackOfficeBundle\Helper\Gravatar;
 use Olix\BackOfficeBundle\Model\User;
 use Olix\BackOfficeBundle\Security\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,13 +28,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
+#[IsGranted('ROLE_USER', message: 'You are not allowed to access the user profile.')]
 class ProfileController extends AbstractController
 {
     /**
      * Page de profile.
      */
     #[Route(path: '/profile', name: 'olix_profile')]
-    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     public function profile(Request $request, UserManager $manager): Response
     {
         // Utilisation de la classe UserManager
@@ -90,7 +89,6 @@ class ProfileController extends AbstractController
      * Affichage des avatars.
      */
     #[Route(path: '/profile/avatar', name: 'olix_profile_avatar')]
-    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     public function choiceAvatar(): Response
     {
         // Chargement des éléments
@@ -116,12 +114,8 @@ class ProfileController extends AbstractController
      * Change l'avatar de l'utilisateur.
      */
     #[Route(path: '/profile/avatar/change', name: 'olix_profile_avatar_change')]
-    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
-    public function changeAvatar(Request $request, ManagerRegistry $doctrine): Response
+    public function changeAvatar(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Chargement des éléments
-        $entityManager = $doctrine->getManager();
-
         /** @var User $user */
         $user = $this->getUser();
         /** @var string $avatar */

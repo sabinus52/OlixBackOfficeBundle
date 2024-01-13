@@ -21,6 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Formulaire de mise à jour des infos de l'utilisateur.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
+ *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class UserProfileType extends AbstractType
@@ -38,7 +39,6 @@ class UserProfileType extends AbstractType
             ->add('email', TextType::class, [
                 'label' => 'Email',
             ])
-
         ;
     }
 

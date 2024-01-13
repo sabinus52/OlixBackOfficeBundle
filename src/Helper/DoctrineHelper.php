@@ -21,16 +21,10 @@ use Doctrine\ORM\EntityManagerInterface;
 class DoctrineHelper
 {
     /**
-     * @var EntityManagerInterface
-     */
-    public $entityManager;
-
-    /**
      * Constructeur.
      */
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $manager;
     }
 
     /**

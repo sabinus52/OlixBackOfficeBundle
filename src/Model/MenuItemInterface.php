@@ -88,6 +88,11 @@ interface MenuItemInterface extends \Countable, \IteratorAggregate
     public function getChild(string $code): self;
 
     /**
+     * @return MenuItemInterface|null
+     */
+    public function getActiveChild(): ?self;
+
+    /**
      * @param MenuItemInterface $child
      *
      * @return MenuItemInterface

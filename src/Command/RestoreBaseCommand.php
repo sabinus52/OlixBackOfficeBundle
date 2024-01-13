@@ -14,6 +14,7 @@ namespace Olix\BackOfficeBundle\Command;
 use Doctrine\ORM\EntityManagerInterface;
 use Olix\BackOfficeBundle\Helper\DoctrineHelper;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -37,9 +38,9 @@ final class RestoreBaseCommand extends Command
      * Constructeur.
      *
      * @param EntityManagerInterface $entityManager
-     * @param string                 $pathRoot      racine de l'emplacement des dumps
+     * @param string                 $pathRootBackup Racine de l'emplacement des dumps
      */
-    public function __construct(protected EntityManagerInterface $entityManager, protected string $pathRoot)
+    public function __construct(protected EntityManagerInterface $entityManager, protected string $pathRootBackup)
     {
         parent::__construct();
     }
@@ -74,11 +75,11 @@ final class RestoreBaseCommand extends Command
      */
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        if (empty($this->pathRoot)) {
-            $this->pathRoot = '/tmp';
+        if (empty($this->pathRootBackup)) {
+            $this->pathRootBackup = '/tmp';
         }
         if ($input->getOption('dir')) {
-            $this->pathRoot = $input->getOption('dir');
+            $this->pathRootBackup = $input->getOption('dir');
         }
     }
 
@@ -100,7 +101,7 @@ final class RestoreBaseCommand extends Command
         } else {
             $dumpFile = $this->getLastDumpFile();
             if (null === $dumpFile) {
-                $style->warning(sprintf('Aucun dump trouvé dans le dossier "%s"', $this->pathRoot));
+                $style->warning(sprintf('Aucun dump trouvé dans le dossier "%s"', $this->pathRootBackup));
 
                 return Command::INVALID;
             }
@@ -115,6 +116,7 @@ final class RestoreBaseCommand extends Command
         // Confirmation de la restauration
         $style->caution('Toutes les données de la base vont être supprimés.');
         $style->info(sprintf('Dump qui sera restauré : %s', $dumpFile));
+        /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion('Voulez vous continuer [y/N] ? ', false);
         if (!$helper->ask($input, $output, $question)) {
@@ -147,7 +149,7 @@ final class RestoreBaseCommand extends Command
         $finder = new Finder();
 
         // Recherche les fichiers
-        $finder->ignoreUnreadableDirs()->files()->in($this->pathRoot)->depth('== 0')->name(sprintf('dump-%s-*.sql', $helper->getDataBaseName()));
+        $finder->ignoreUnreadableDirs()->files()->in($this->pathRootBackup)->depth('== 0')->name(sprintf('dump-%s-*.sql', $helper->getDataBaseName()));
         $finder->sortByModifiedTime();
         if (!$finder->hasResults()) {
             return null;

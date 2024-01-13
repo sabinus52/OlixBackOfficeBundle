@@ -16,9 +16,9 @@ use Olix\BackOfficeBundle\Event\BreadcrumbEvent;
 use Olix\BackOfficeBundle\Event\SidebarMenuEvent;
 use Olix\BackOfficeBundle\Model\MenuItemInterface;
 use Olix\BackOfficeBundle\Model\MenuItemModel;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Subscriber sur le menu de la barre latérale à hériter pour créer son propre menu.
@@ -36,15 +36,8 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
         'menu_activ' => false,
     ];
 
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    public function __construct(ParameterBagInterface $parameterBag, EntityManagerInterface $entityManager, private readonly Security $security)
+    public function __construct(ParameterBagInterface $parameterBag, protected EntityManagerInterface $entityManager, private readonly Security $security)
     {
-        $this->entityManager = $entityManager;
-
         // Get parameter "olix_back_office.security"
         if (!$parameterBag->has('olix_back_office')) {
             throw new \Exception('Parameter "olix_back_office" not defined', 1);

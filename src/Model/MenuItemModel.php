@@ -362,7 +362,7 @@ class MenuItemModel implements MenuItemInterface
     /**
      * @see Countable::count()
      */
-    public function count()
+    public function count(): int
     {
         return count($this->children);
     }
@@ -370,7 +370,7 @@ class MenuItemModel implements MenuItemInterface
     /**
      * @see IteratorAggregate::getIterator()
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->getChildren());
     }

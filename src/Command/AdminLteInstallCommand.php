@@ -17,10 +17,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Command that places bundle web assets into a given directory.
@@ -56,9 +54,9 @@ class AdminLteInstallCommand extends Command
      * Constructeur.
      *
      * @param Filesystem $filesystem
-     * @param string     $projectDir
+     * @param string     $kernelProjectDir
      */
-    public function __construct(private readonly Filesystem $filesystem, private readonly string $projectDir)
+    public function __construct(private readonly Filesystem $filesystem, private readonly string $kernelProjectDir)
     {
         parent::__construct();
         $this->exitCode = 0;
@@ -87,22 +85,20 @@ class AdminLteInstallCommand extends Command
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        /** @var KernelInterface $kernel */
-        $kernel = $this->getApplication()->getKernel(); /** @phpstan-ignore-line */
         $targetArg = rtrim($input->getArgument('target') ?? '', '/');
         if (!$targetArg) {
-            $targetArg = $this->getPublicDirectory($kernel->getContainer());
+            $targetArg = $this->getPublicDirectory();
         }
 
         if (!is_dir($targetArg)) {
-            $targetArg = $kernel->getProjectDir().'/'.$targetArg;
+            $targetArg = $this->kernelProjectDir.'/'.$targetArg;
 
             if (!is_dir($targetArg)) {
                 throw new InvalidArgumentException(sprintf('The target directory "%s" does not exist.', $targetArg));
             }
         }
 
-        $this->originDir = $kernel->getProjectDir().self::PATH_ASSETS_ADMINLTE;
+        $this->originDir = $this->kernelProjectDir.self::PATH_ASSETS_ADMINLTE;
         $this->targetDir = $targetArg.'/bundles/adminlte';
 
         $inOut = new SymfonyStyle($input, $output);
@@ -197,15 +193,18 @@ class AdminLteInstallCommand extends Command
         }
     }
 
-    private function getPublicDirectory(ContainerInterface $container): string
+    /**
+     * Retourne le chemin absolu du dossier web public.
+     */
+    private function getPublicDirectory(): string
     {
         $defaultPublicDir = 'public';
 
-        if (null === $this->projectDir && !$container->hasParameter('kernel.project_dir')) {
+        if (empty($this->kernelProjectDir)) {
             return $defaultPublicDir;
         }
 
-        $composerFilePath = $this->projectDir.'/composer.json';
+        $composerFilePath = $this->kernelProjectDir.'/composer.json';
 
         if (!file_exists($composerFilePath)) {
             return $defaultPublicDir;

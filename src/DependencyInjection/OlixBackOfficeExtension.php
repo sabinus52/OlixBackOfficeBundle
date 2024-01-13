@@ -27,8 +27,6 @@ class OlixBackOfficeExtension extends Extension
 {
     /**
      * {@inheritdoc}
-     *
-     * @phpstan-ignore-next-line
      */
     public function load(array $configs, ContainerBuilder $container): void
     {

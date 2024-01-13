@@ -112,7 +112,7 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('class')
             ->addDefaultsIfNotSet()
             ->children()
-            ->scalarNode('user')->defaultValue(\App\Entity\User::class)->end()
+            ->scalarNode('user')->defaultValue(\Olix\BackOfficeBundle\Model\User::class)->end()
             ->scalarNode('form_user')->defaultValue(\Olix\BackOfficeBundle\Form\UserEditType::class)->end()
             ->scalarNode('form_profile')->defaultValue(\Olix\BackOfficeBundle\Form\UserProfileType::class)->end()
             ->end()

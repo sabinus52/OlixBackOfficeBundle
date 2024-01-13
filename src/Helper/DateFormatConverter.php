@@ -17,8 +17,6 @@ namespace Olix\BackOfficeBundle\Helper;
  * @author      Sabinus52 <sabinus52@gmail.com>
  *
  * @see         https://github.com/sonata-project/form-extensions/blob/2.x/src/Date/MomentFormatConverter.php
- *
- * @SuppressWarnings(PHPMD.ElseExpression)
  */
 final class DateFormatConverter
 {
