@@ -28,10 +28,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+#[\Symfony\Component\Console\Attribute\AsCommand('app:database:dump', 'Alias de la commande mysqldump')]
 final class DumpBaseCommand extends Command
 {
-    protected static $defaultName = 'app:database:dump';
-
     /**
      * Nombre de fichiers à conserver.
      */
@@ -55,7 +54,6 @@ final class DumpBaseCommand extends Command
         $this
             ->addArgument('path', InputArgument::OPTIONAL, 'Emplacement du fichier de dump de la base de données')
             ->addOption('purge', 'p', InputOption::VALUE_REQUIRED, 'Nombre de fichier à purger')
-            ->setDescription('Alias de la commande mysqldump')
             ->setHelp(<<<'EOT'
                 La commande <info>%command.name%</info> réalise un dump dans le chemin de son choix.
                 (par défaut <comment>/tmp</comment> ou défini dans le paramètre <info>%env(BACKUP_PATH)%</info>

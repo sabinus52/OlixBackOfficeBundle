@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\DBAL\Types\Types;
 
 /**
  * Classe abstraite de l'entité de la table utilisateurs de connexion.
@@ -37,47 +38,44 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     protected int $id;
 
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 180)]
     protected string $username;
 
-    #[ORM\Column(type: 'string', length: 150, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 150, nullable: true)]
     #[Assert\Email]
     protected ?string $email = null;
 
-    #[ORM\Column(type: 'string', length: 150, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 150, nullable: true)]
     #[Assert\Length(min: 2, max: 180)]
     protected ?string $name = null;
 
-    /**
-     * @var bool
-     */
-    #[ORM\Column(type: 'smallint', options: ['default' => 1])]
+    #[ORM\Column(type: Types::SMALLINT, options: ['default' => 1])]
     protected bool $enabled = true;
 
-    #[ORM\Column(name: 'expiresat', type: 'date', nullable: true)]
+    #[ORM\Column(name: 'expiresat', type: Types::DATE_MUTABLE, nullable: true)]
     protected ?\DateTime $expiresAt = null;
 
-    #[ORM\Column(type: 'string', length: 250, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 250, nullable: true)]
     protected ?string $avatar = null;
 
-    #[ORM\Column(name: 'last_login', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'last_login', type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?\DateTime $lastLogin = null;
 
-    #[ORM\Column(name: 'last_activity', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'last_activity', type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?\DateTime $lastActivity = null;
 
     /**
      * @var array<string> liste des roles
      */
-    #[ORM\Column(type: 'json')]
+    #[ORM\Column(type: Types::JSON)]
     protected $roles = [];
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: Types::STRING)]
     protected string $password; // Mot de passe hashé
 
     public function getId(): ?int

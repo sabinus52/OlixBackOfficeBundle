@@ -17,6 +17,7 @@ use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SensiolabsSetList;
+use Rector\Symfony\Set\SymfonyLevelSetList;
 use Rector\Symfony\Set\SymfonySetList;
 
 return static function (RectorConfig $rectorConfig): void {
@@ -38,16 +39,18 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::TYPE_DECLARATION,
         SetList::EARLY_RETURN,
         SetList::INSTANCEOF,
+        SymfonyLevelSetList::UP_TO_SYMFONY_64,
+        SymfonySetList::CONFIGS,
+        SymfonySetList::SYMFONY_CODE_QUALITY,
+        SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
+        SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
+        DoctrineSetList::DOCTRINE_CODE_QUALITY,
+        DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
+        SensiolabsSetList::ANNOTATIONS_TO_ATTRIBUTES,
     ]);
 
     $rectorConfig->skip([
         Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector::class,
-    ]);
-
-    $rectorConfig->sets([
-        DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
-        SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
-        SensiolabsSetList::ANNOTATIONS_TO_ATTRIBUTES,
     ]);
 
     $rectorConfig->ruleWithConfiguration(AnnotationToAttributeRector::class, [

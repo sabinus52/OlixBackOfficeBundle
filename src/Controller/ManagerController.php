@@ -106,7 +106,7 @@ class ManagerController extends AbstractController
         }
 
         return $this->render('@OlixBackOffice/Security/users-create.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
@@ -138,7 +138,7 @@ class ManagerController extends AbstractController
         }
 
         return $this->render('@OlixBackOffice/Security/users-edit.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form,
             'user' => $user,
         ]);
     }
@@ -171,7 +171,7 @@ class ManagerController extends AbstractController
         }
 
         return $this->render('@OlixBackOffice/Security/users-password.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form,
             'user' => $user,
         ]);
     }

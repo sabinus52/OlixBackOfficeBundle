@@ -28,13 +28,10 @@ use Symfony\Component\Finder\Finder;
  *
  * @final
  */
+#[\Symfony\Component\Console\Attribute\AsCommand('assets:adminlte', 'Install assets AdminLTE under a public directory')]
 class AdminLteInstallCommand extends Command
 {
     protected const PATH_ASSETS_ADMINLTE = '/vendor/almasaeed2010/adminlte';
-
-    protected static $defaultName = 'assets:adminlte';
-
-    protected static $defaultDescription = 'Install assets AdminLTE under a public directory';
 
     private ?string $originDir = null;
 
@@ -56,7 +53,6 @@ class AdminLteInstallCommand extends Command
             ->setDefinition([
                 new InputArgument('target', InputArgument::OPTIONAL, 'The target directory', null),
             ])
-            ->setDescription(self::$defaultDescription)
             ->setHelp(<<<'EOT'
                 The <info>%command.name%</info> command installs bundle assets AdminLTE into a given
                 directory (e.g. the <comment>public</comment> directory).

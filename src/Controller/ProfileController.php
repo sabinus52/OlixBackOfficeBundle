@@ -82,8 +82,8 @@ class ProfileController extends AbstractController
 
         // Rendu de la page
         return $this->render('@OlixBackOffice/Security/profile.html.twig', [
-            'form1' => $form1->createView(),
-            'form2' => $form2->createView(),
+            'form1' => $form1,
+            'form2' => $form2,
         ]);
     }
 

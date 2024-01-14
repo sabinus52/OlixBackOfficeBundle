@@ -30,10 +30,9 @@ use Symfony\Component\Finder\Finder;
  *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+#[\Symfony\Component\Console\Attribute\AsCommand('app:database:restore', 'Alias de la commande mysqlrestore')]
 final class RestoreBaseCommand extends Command
 {
-    protected static $defaultName = 'app:database:restore';
-
     /**
      * Constructeur.
      *
@@ -52,7 +51,6 @@ final class RestoreBaseCommand extends Command
         $this
             ->addArgument('dump', InputArgument::OPTIONAL, 'Emplacement complet du dump à restaurer')
             ->addOption('dir', 'd', InputOption::VALUE_REQUIRED, 'Emplacement des derniers dumps disponibles')
-            ->setDescription('Alias de la commande mysqlrestore')
             ->setHelp(<<<'EOT'
                 La commande <info>%command.name%</info> réalise une restauration d'un dump.
 
