@@ -20,8 +20,6 @@ interface UserManagerInterface
 {
     /**
      * Retourne le nom de la classe qui sera défini lors de la surcharge.
-     *
-     * @return string
      */
     public function getClass(): string;
 }

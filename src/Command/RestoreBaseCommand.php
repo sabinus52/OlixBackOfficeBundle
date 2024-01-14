@@ -37,8 +37,7 @@ final class RestoreBaseCommand extends Command
     /**
      * Constructeur.
      *
-     * @param EntityManagerInterface $entityManager
-     * @param string                 $pathRootBackup Racine de l'emplacement des dumps
+     * @param string $pathRootBackup Racine de l'emplacement des dumps
      */
     public function __construct(protected EntityManagerInterface $entityManager, protected string $pathRootBackup)
     {
@@ -69,27 +68,20 @@ final class RestoreBaseCommand extends Command
 
     /**
      * Initialise la commande.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         if (empty($this->pathRootBackup)) {
             $this->pathRootBackup = '/tmp';
         }
+
         if ($input->getOption('dir')) {
             $this->pathRootBackup = $input->getOption('dir');
         }
     }
 
     /**
-     * Fait le dump.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int
+     * Fait la restauration.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -135,13 +127,11 @@ final class RestoreBaseCommand extends Command
             $style->error(sprintf('Echec de la restauration du dump "%s"', $dumpFile));
         }
 
-        return ($return) ? Command::SUCCESS : Command::FAILURE;
+        return (0 === $return) ? Command::SUCCESS : Command::FAILURE;
     }
 
     /**
      * Retourne le dernier dump réalisé.
-     *
-     * @return string|null
      */
     private function getLastDumpFile(): ?string
     {

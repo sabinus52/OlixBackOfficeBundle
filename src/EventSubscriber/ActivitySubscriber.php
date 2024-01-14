@@ -28,10 +28,8 @@ class ActivitySubscriber implements EventSubscriberInterface
 {
     /**
      * Delai en minutes à partir duquel l'utilisateur est considéré comme non connecté.
-     *
-     * @var int
      */
-    protected $delay;
+    protected int $delay;
 
     /**
      * Constructeur.

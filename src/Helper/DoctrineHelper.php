@@ -29,8 +29,6 @@ class DoctrineHelper
 
     /**
      * Purge la table.
-     *
-     * @return string|null
      */
     public function truncate(string $entityClass): ?string
     {
@@ -42,8 +40,8 @@ class DoctrineHelper
             $connection->executeStatement('SET FOREIGN_KEY_CHECKS=0;');
             $connection->executeStatement($platform->getTruncateTableSQL($table, false /* whether to cascade */));
             $connection->executeStatement('SET FOREIGN_KEY_CHECKS=1;');
-        } catch (\Exception $e) {
-            return $e->getMessage();
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
         }
 
         return null;
@@ -51,8 +49,6 @@ class DoctrineHelper
 
     /**
      * Retourne le nom de la table d'une entité.
-     *
-     * @return string
      */
     public function getTableNameForEntity(string $entityClass): string
     {
@@ -63,8 +59,6 @@ class DoctrineHelper
 
     /**
      * Retourne le nom de la base de données.
-     *
-     * @return string
      */
     public function getDataBaseName(): string
     {
@@ -96,7 +90,7 @@ class DoctrineHelper
         $password = escapeshellarg((string) $params['password']);
         $database = escapeshellarg($connection->getDatabase());
 
-        $cmd = "mysqldump -h {$host} -P {$port} -u {$username} -p{$password} {$database} > '{$dumpfile}'";
+        $cmd = sprintf("mysqldump -h %s -P %s -u %s -p%s %s > '%s'", $host, $port, $username, $password, $database, $dumpfile);
         passthru($cmd, $return);
 
         return [$return, $dumpfile];
@@ -104,8 +98,6 @@ class DoctrineHelper
 
     /**
      * Restauration d'un dump.
-     *
-     * @return int
      */
     public function restoreBase(string $dumpFile): int
     {
@@ -123,7 +115,7 @@ class DoctrineHelper
         $password = escapeshellarg((string) $params['password']);
         $database = escapeshellarg($connection->getDatabase());
 
-        $cmd = "mysql -h {$host} -P {$port} -u {$username} -p{$password} {$database} < '{$dumpFile}'";
+        $cmd = sprintf("mysql -h %s -P %s -u %s -p%s %s < '%s'", $host, $port, $username, $password, $database, $dumpFile);
         passthru($cmd, $return);
 
         return $return;

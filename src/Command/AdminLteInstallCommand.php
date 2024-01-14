@@ -33,33 +33,21 @@ class AdminLteInstallCommand extends Command
     protected const PATH_ASSETS_ADMINLTE = '/vendor/almasaeed2010/adminlte';
 
     protected static $defaultName = 'assets:adminlte';
+
     protected static $defaultDescription = 'Install assets AdminLTE under a public directory';
 
-    /**
-     * @var string
-     */
-    private $originDir;
+    private ?string $originDir = null;
 
-    /**
-     * @var string
-     */
-    private $targetDir;
+    private ?string $targetDir = null;
 
-    /**
-     * @var int
-     */
-    private $exitCode;
+    private int $exitCode = 0;
 
     /**
      * Constructeur.
-     *
-     * @param Filesystem $filesystem
-     * @param string     $kernelProjectDir
      */
     public function __construct(private readonly Filesystem $filesystem, private readonly string $kernelProjectDir)
     {
         parent::__construct();
-        $this->exitCode = 0;
     }
 
     protected function configure(): void
@@ -86,7 +74,7 @@ class AdminLteInstallCommand extends Command
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $targetArg = rtrim($input->getArgument('target') ?? '', '/');
-        if (!$targetArg) {
+        if ('' === $targetArg) {
             $targetArg = $this->getPublicDirectory();
         }
 
@@ -116,9 +104,9 @@ class AdminLteInstallCommand extends Command
         try {
             $this->filesystem->remove($this->targetDir);
             $rows[] = $this->getRowMessage('Remove dir', $this->targetDir);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $this->exitCode = 1;
-            $rows[] = $this->getRowMessage('Remove dir', $this->targetDir, $e->getMessage());
+            $rows[] = $this->getRowMessage('Remove dir', $this->targetDir, $exception->getMessage());
         }
 
         $rows[] = $this->copyPlugins($this->originDir.'/plugins', $this->targetDir.'/plugins');
@@ -148,10 +136,10 @@ class AdminLteInstallCommand extends Command
             $this->filesystem->mirror($originDir, $targetDir, Finder::create()->ignoreDotFiles(false)->in($originDir));
 
             return $this->getRowMessage('Copy plugins', $targetDir);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $this->exitCode = 1;
 
-            return $this->getRowMessage('Copy plugins', $targetDir, $e->getMessage());
+            return $this->getRowMessage('Copy plugins', $targetDir, $exception->getMessage());
         }
     }
 
@@ -167,10 +155,10 @@ class AdminLteInstallCommand extends Command
             $this->filesystem->mirror($originDir, $targetDir, Finder::create()->depth('== 0')->ignoreDotFiles(false)->name('admin*.css*')->in($originDir));
 
             return $this->getRowMessage('Copy styles', $targetDir);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $this->exitCode = 1;
 
-            return $this->getRowMessage('Copy styles', $targetDir, $e->getMessage());
+            return $this->getRowMessage('Copy styles', $targetDir, $exception->getMessage());
         }
     }
 
@@ -186,10 +174,10 @@ class AdminLteInstallCommand extends Command
             $this->filesystem->mirror($originDir, $targetDir, Finder::create()->depth('== 0')->ignoreDotFiles(false)->name('admin*.js*')->in($originDir));
 
             return $this->getRowMessage('Copy scripts', $targetDir);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $this->exitCode = 1;
 
-            return $this->getRowMessage('Copy scripts', $targetDir, $e->getMessage());
+            return $this->getRowMessage('Copy scripts', $targetDir, $exception->getMessage());
         }
     }
 

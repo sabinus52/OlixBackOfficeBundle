@@ -27,23 +27,10 @@ class SidebarMenuEvent extends BackOfficeEvent
     protected $rootItems = [];
 
     /**
-     * @var Request
-     */
-    protected $request;
-
-    /**
-     * Code du menu pour forcer son activation.
-     *
-     * @var ?string
-     */
-    protected $forceMenuActiv;
-
-    /**
      * @param string|null $forceMenuActiv
      */
-    public function __construct(Request $request = null, string $forceMenuActiv = null)
+    public function __construct(protected ?Request $request = null, protected ?string $forceMenuActiv = null)
     {
-        $this->request = $request;
         $this->forceMenuActiv = (empty($forceMenuActiv)) ? null : $forceMenuActiv;
     }
 
@@ -57,8 +44,6 @@ class SidebarMenuEvent extends BackOfficeEvent
 
     /**
      * Retourne le code à correspondre pour mettre en surbrillance le menu de la sidebar.
-     *
-     * @return string
      */
     public function getMenuActiv(): string
     {
@@ -77,8 +62,6 @@ class SidebarMenuEvent extends BackOfficeEvent
 
     /**
      * Ajoute un nouvel élémént de menu.
-     *
-     * @return SidebarMenuEvent
      */
     public function addItem(MenuItemInterface $item): self
     {
@@ -91,8 +74,6 @@ class SidebarMenuEvent extends BackOfficeEvent
      * Enlève un élément au menu.
      *
      * @param MenuItemInterface|string $item
-     *
-     * @return SidebarMenuEvent
      */
     public function removeItem($item): self
     {
@@ -106,19 +87,15 @@ class SidebarMenuEvent extends BackOfficeEvent
     }
 
     /**
-     * @param string $code
-     *
-     * @return MenuItemInterface|null
+     * Retourne l'item en fonction de son code.
      */
-    public function getItem($code): ?MenuItemInterface
+    public function getItem(string $code): ?MenuItemInterface
     {
         return $this->rootItems[$code] ?? null;
     }
 
     /**
      * Retourne le menu actif du niveau 1.
-     *
-     * @return MenuItemInterface|null
      */
     public function getActive(): ?MenuItemInterface
     {

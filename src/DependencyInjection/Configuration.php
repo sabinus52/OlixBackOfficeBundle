@@ -47,8 +47,6 @@ class Configuration implements ConfigurationInterface
 
     /**
      * Retourne la configuration de la branche "options" du thème du layout.
-     *
-     * @return NodeDefinition
      */
     private function getOptionsConfig(): NodeDefinition
     {
@@ -96,8 +94,6 @@ class Configuration implements ConfigurationInterface
 
     /**
      * Retourne la configuration de la branche "security" sur la gestions des utilisateurs.
-     *
-     * @return NodeDefinition
      */
     private function getSecurityConfig(): NodeDefinition
     {

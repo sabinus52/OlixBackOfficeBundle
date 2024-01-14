@@ -42,6 +42,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
         if (!$parameterBag->has('olix_back_office')) {
             throw new \Exception('Parameter "olix_back_office" not defined', 1);
         }
+
         /** @var array<mixed> $parameters */
         $parameters = $parameterBag->get('olix_back_office');
         if (array_key_exists('security', $parameters)) {
@@ -96,6 +97,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
                 } elseif ($this->getPrefixRoute($item->getCode()) === $match) {
                     $item->setIsActive(true);
                 }
+
                 $this->activateByRoute($match, $item->getChildren());
             } elseif ($this->getPrefixRoute($item->getRoute()) === $match) {
                 $item->setIsActive(true);
@@ -107,10 +109,6 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
 
     /**
      * Retourne la route ou le prefixe de la route avant '__' pour les sous pages du menu.
-     *
-     * @param string|null $route
-     *
-     * @return string|null
      */
     protected function getPrefixRoute(?string $route): ?string
     {

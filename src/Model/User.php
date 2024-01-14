@@ -30,69 +30,46 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     protected const AVATAR_PATH = 'bundles/olixbackoffice/images/avatar/';
+
     protected const AVATAR_DEFAULT = 'default.png';
 
     protected const DELAY_ACTIVITY = 5;
 
-    /**
-     * @var int
-     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    protected $id;
+    protected int $id;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 180)]
-    protected $username;
+    protected string $username;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(type: 'string', length: 150, nullable: true)]
     #[Assert\Email]
-    protected $email;
+    protected ?string $email = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(type: 'string', length: 150, nullable: true)]
     #[Assert\Length(min: 2, max: 180)]
-    protected $name;
+    protected ?string $name = null;
 
     /**
      * @var bool
      */
     #[ORM\Column(type: 'smallint', options: ['default' => 1])]
-    protected $enabled = true;
+    protected bool $enabled = true;
 
-    /**
-     * @var \DateTime
-     */
     #[ORM\Column(name: 'expiresat', type: 'date', nullable: true)]
-    protected $expiresAt;
+    protected ?\DateTime $expiresAt = null;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(type: 'string', length: 250, nullable: true)]
-    protected $avatar;
+    protected ?string $avatar = null;
 
-    /**
-     * @var \DateTime
-     */
     #[ORM\Column(name: 'last_login', type: 'datetime', nullable: true)]
-    protected $lastLogin;
+    protected ?\DateTime $lastLogin = null;
 
-    /**
-     * @var \DateTime
-     */
     #[ORM\Column(name: 'last_activity', type: 'datetime', nullable: true)]
-    protected $lastActivity;
+    protected ?\DateTime $lastActivity = null;
 
     /**
      * @var array<string> liste des roles
@@ -100,15 +77,9 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')]
     protected $roles = [];
 
-    /**
-     * @var string Mot de passe hashé
-     */
     #[ORM\Column(type: 'string')]
-    protected $password;
+    protected string $password; // Mot de passe hashé
 
-    /**
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
@@ -119,7 +90,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return $this->username;
     }
 
     public function setUsername(string $username): self
@@ -133,27 +104,17 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      * A visual identifier that represents this user.
      *
      * @see UserInterface
-     *
-     * @return string
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->username;
+        return $this->username;
     }
 
-    /**
-     * @return string|null
-     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     *
-     * @return User
-     */
     public function setEmail(?string $email): self
     {
         $this->email = $email;
@@ -161,19 +122,11 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return User
-     */
     public function setName(?string $name): self
     {
         $this->name = $name;
@@ -183,35 +136,29 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Retourne le badge du statut en cours de l'utilisateur.
-     *
-     * @return string
      */
     public function getStateBadge(): string
     {
         if (!$this->isEnabled()) {
             return '<span class="badge bg-red">DISABLED</span>';
         }
+
         if ($this->isExpired()) {
             return '<span class="badge bg-red">EXPIRED</span>';
         }
-        if (null !== $this->getExpiresAt()) {
+
+        if ($this->getExpiresAt() instanceof \DateTime) {
             return '<span class="badge bg-orange">Expires at '.$this->getExpiresAt()->format('d/m/Y').'</span>';
         }
 
         return '<span class="badge bg-green">ACTIVE</span>';
     }
 
-    /**
-     * @return bool
-     */
     public function isEnabled(): bool
     {
-        return (bool) $this->enabled;
+        return $this->enabled;
     }
 
-    /**
-     * @return User
-     */
     public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
@@ -219,32 +166,17 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isExpired(): bool
     {
-        if (null !== $this->expiresAt && $this->expiresAt->getTimestamp() < time()) {
-            return true;
-        }
-
-        return false;
+        return $this->expiresAt instanceof \DateTime && $this->expiresAt->getTimestamp() < time();
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getExpiresAt(): ?\DateTimeInterface
+    public function getExpiresAt(): ?\DateTime
     {
         return $this->expiresAt;
     }
 
-    /**
-     * @param \DateTime $date
-     *
-     * @return User
-     */
-    public function setExpiresAt(\DateTimeInterface $date = null): self
+    public function setExpiresAt(\DateTime $date = null): self
     {
         $this->expiresAt = $date;
 
@@ -253,14 +185,13 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @param string $prefix : pour ajouter un préfix dans l'URL comme un '/'
-     *
-     * @return string|null
      */
     public function getAvatar(string $prefix = ''): ?string
     {
-        if (!$this->avatar) {
+        if (null === $this->avatar || '' === $this->avatar || '0' === $this->avatar) {
             return $prefix.self::AVATAR_PATH.self::AVATAR_DEFAULT;
         }
+
         if (str_starts_with($this->avatar, 'http')) {
             return $this->avatar;
         }
@@ -268,11 +199,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $prefix.self::AVATAR_PATH.$this->avatar;
     }
 
-    /**
-     * @param string|null $avatar
-     *
-     * @return User
-     */
     public function setAvatar(?string $avatar): self
     {
         $this->avatar = $avatar;
@@ -280,20 +206,12 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getLastLogin(): ?\DateTimeInterface
+    public function getLastLogin(): ?\DateTime
     {
         return $this->lastLogin;
     }
 
-    /**
-     * @param \DateTime $lastLogin
-     *
-     * @return User
-     */
-    public function setLastLogin(?\DateTimeInterface $lastLogin): self
+    public function setLastLogin(?\DateTime $lastLogin): self
     {
         $this->lastLogin = $lastLogin;
 
@@ -302,28 +220,31 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Retourne le temps écoulé depuis la dernière connexion.
-     *
-     * @return string
      */
     public function getIntervalLastLogin(): string
     {
-        if (null === $this->lastLogin) {
+        if (!$this->lastLogin instanceof \DateTime) {
             return '';
         }
+
         $now = new \DateTime();
         $interval = $now->diff($this->lastLogin);
         if (1 === $interval->days) {
             return $interval->format('%a jour');
         }
+
         if ($interval->days > 1) {
             return $interval->format('%a jours');
         }
+
         if (1 === $interval->h) {
             return $interval->format('%h heure');
         }
+
         if ($interval->h > 1) {
             return $interval->format('%h heures');
         }
+
         if (1 === $interval->i) {
             return $interval->format('%i minute');
         }
@@ -331,30 +252,20 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $interval->format('%i minutes');
     }
 
-    /**
-     * @param \DateTime $lastActivity
-     *
-     * @return User
-     */
-    public function setLastActivity(?\DateTimeInterface $lastActivity): self
+    public function setLastActivity(?\DateTime $lastActivity): self
     {
         $this->lastActivity = $lastActivity;
 
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getLastActivity(): ?\DateTimeInterface
+    public function getLastActivity(): ?\DateTime
     {
         return $this->lastActivity;
     }
 
     /**
      * Indique que l'utilisateur est en activité.
-     *
-     * @return User
      */
     public function setOnline(): self
     {
@@ -367,10 +278,8 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      * Verifie si l'utilisateur est en activité.
      *
      * @param int $minDelay Minutes d'inactivité
-     *
-     * @return bool
      */
-    public function isOnline(int $minDelay = self::DELAY_ACTIVITY)
+    public function isOnline(int $minDelay = self::DELAY_ACTIVITY): bool
     {
         $delay = new \DateTime();
         $timeDelay = (int) strtotime(sprintf('%s minutes ago', $minDelay));
@@ -381,8 +290,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @param int $minDelay Minutes d'inactivité
-     *
-     * @return string
      */
     public function getOnlineBadge(int $minDelay = self::DELAY_ACTIVITY): string
     {
@@ -409,8 +316,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @param array<string> $roles
-     *
-     * @return User
      */
     public function setRoles(array $roles): self
     {
@@ -421,17 +326,12 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @see PasswordAuthenticatedUserInterface
-     *
-     * @return string
      */
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    /**
-     * @return User
-     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -444,8 +344,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
      *
      * @see UserInterface
-     *
-     * @return string|null
      */
     public function getSalt(): ?string
     {

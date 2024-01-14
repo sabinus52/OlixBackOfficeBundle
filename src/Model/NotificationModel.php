@@ -18,65 +18,38 @@ namespace Olix\BackOfficeBundle\Model;
  */
 class NotificationModel implements NotificationInterface
 {
-    /**
-     * @var string
-     */
-    protected $code;
+    protected string $icon;
 
-    /**
-     * @var string
-     */
-    protected $icon;
+    protected ?string $color;
 
-    /**
-     * @var string
-     */
-    protected $color;
+    protected string $message;
 
-    /**
-     * @var string
-     */
-    protected $message;
-
-    /**
-     * @var string
-     */
-    protected $info;
+    protected ?string $info;
 
     /**
      * Constructeur.
      *
-     * @param string|null  $code    : Code identifiant de la notif
+     * @param ?string      $code    : Code identifiant de la notif
      * @param array<mixed> $options : Options de la notif
      */
-    public function __construct(string $code = null, array $options = [])
+    public function __construct(protected ?string $code = null, array $options = [])
     {
-        $this->code = $code;
         $this->icon = $options['icon'] ?? 'fas fa-exclamation-triangle';
         $this->color = $options['color'] ?? null;
         $this->message = $options['message'] ?? '';
         $this->info = $options['info'] ?? null;
     }
 
-    /**
-     * @return string
-     */
     public function getCode(): ?string
     {
         return $this->code;
     }
 
-    /**
-     * @return string
-     */
     public function getIcon(): string
     {
         return $this->icon;
     }
 
-    /**
-     * @return NotificationModel
-     */
     public function setIcon(string $icon): self
     {
         $this->icon = $icon;
@@ -84,19 +57,11 @@ class NotificationModel implements NotificationInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getColor(): ?string
     {
         return $this->color;
     }
 
-    /**
-     * @param string $color
-     *
-     * @return NotificationModel
-     */
     public function setColor(?string $color): self
     {
         $this->color = $color;
@@ -104,17 +69,11 @@ class NotificationModel implements NotificationInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;
     }
 
-    /**
-     * @return NotificationModel
-     */
     public function setMessage(string $message): self
     {
         $this->message = $message;
@@ -122,19 +81,11 @@ class NotificationModel implements NotificationInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getInfo(): ?string
     {
         return $this->info;
     }
 
-    /**
-     * @param string $info
-     *
-     * @return NotificationModel
-     */
     public function setInfo(?string $info): self
     {
         $this->info = $info;

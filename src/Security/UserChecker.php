@@ -22,22 +22,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @author     Sabinus52 <sabinus52@gmail.com>
  *
  * @see        https://symfony.com/doc/current/security/user_checkers.html
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class UserChecker implements UserCheckerInterface
 {
-    /**
-     * @param UserInterface $user
-     */
     public function checkPreAuth(UserInterface $user): void
     {
-        if (!$user instanceof User) {
-            return;
-        }
     }
 
-    /**
-     * @param UserInterface $user
-     */
     public function checkPostAuth(UserInterface $user): void
     {
         if (!$user instanceof User) {

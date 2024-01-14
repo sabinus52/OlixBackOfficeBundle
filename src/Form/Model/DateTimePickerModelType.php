@@ -34,15 +34,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 abstract class DateTimePickerModelType extends AbstractModelType
 {
-    /**
-     * @var DateFormatConverter
-     */
-    private $dateFormatConverter;
+    private readonly DateFormatConverter $dateFormatConverter;
 
-    /**
-     * @var string
-     */
-    private $locale = 'fr'; // TODO
+    private string $locale = 'fr'; // TODO
 
     /**
      * Constructeur.
@@ -130,6 +124,7 @@ abstract class DateTimePickerModelType extends AbstractModelType
         foreach ($options['js_disabled_dates'] as $key => $value) {
             $options['js_disabled_dates'][$key] = $this->formatIsDate($value, $format);
         }
+
         foreach ($options['js_enabled_dates'] as $key => $value) {
             $options['js_enabled_dates'][$key] = $this->formatIsDate($value, $format);
         }
@@ -166,14 +161,14 @@ abstract class DateTimePickerModelType extends AbstractModelType
     }
 
     /**
-     * @param string|\DateTimeInterface $option
+     * @param bool|string|\DateTimeInterface $option
      *
-     * @return string
+     * @return string|bool
      */
     private function formatIsDate($option, string $format)
     {
         if ($option instanceof \DateTimeInterface) {
-            $option = $this->formatObject($option, $format);
+            return $this->formatObject($option, $format);
         }
 
         return $option;
@@ -181,8 +176,6 @@ abstract class DateTimePickerModelType extends AbstractModelType
 
     /**
      * Formate une date de type DateTime dans le format spécifié du widget.
-     *
-     * @return string
      */
     private function formatObject(\DateTimeInterface $dateTime, string $format): string
     {

@@ -100,7 +100,7 @@ class ManagerController extends AbstractController
             $manager->setUser($form->getData());
             $manager->add($form->get('password')->getData());
 
-            $this->addFlash('success', 'La création de l\'utilisateur <b>'.$manager->getUser()->getUserIdentifier().'</b> a bien été prise en compte');
+            $this->addFlash('success', sprintf("La création de l'utilisateur <b>%s</b> a bien été prise en compte", $manager->getUser()->getUserIdentifier()));
 
             return $this->redirectToRoute('olix_users__edit', ['id' => $manager->getUser()->getId()]);
         }
@@ -132,7 +132,7 @@ class ManagerController extends AbstractController
             // Update datas of this user
             $manager->setUser($form->getData())->update();
 
-            $this->addFlash('success', 'La modification de l\'utilisateur <b>'.$user->getUserIdentifier().'</b> a bien été prise en compte');
+            $this->addFlash('success', sprintf("La modification de l'utilisateur <b>%s</b> a bien été prise en compte", $user->getUserIdentifier()));
 
             return $this->redirectToRoute('olix_users__list');
         }
@@ -165,7 +165,7 @@ class ManagerController extends AbstractController
             // Change password for this user
             $manager->update($form->get('password')->getData());
 
-            $this->addFlash('success', 'La modification du mot de passe de l\'utilisateur <b>'.$user->getUserIdentifier().'</b> a bien été prise en compte');
+            $this->addFlash('success', sprintf("La modification du mot de passe de l'utilisateur <b>%s</b> a bien été prise en compte", $user->getUserIdentifier()));
 
             return $this->redirectToRoute('olix_users__list');
         }
@@ -198,14 +198,14 @@ class ManagerController extends AbstractController
             // Remove this user
             $manager->remove();
 
-            $this->addFlash('success', 'La suppression de l\'utilisateur <b>'.$user->getUserIdentifier().'</b> a bien été prise en compte');
+            $this->addFlash('success', sprintf("La suppression de l'utilisateur <b>%s</b> a bien été prise en compte", $user->getUserIdentifier()));
 
             return new Response('OK');
         }
 
         return $this->render('@OlixBackOffice/Include/modal-content-delete.html.twig', [
             'form' => $form,
-            'element' => sprintf('l\'utilisateur <strong>%s</strong>', $user->getUserIdentifier()),
+            'element' => sprintf("l'utilisateur <strong>%s</strong>", $user->getUserIdentifier()),
         ]);
     }
 

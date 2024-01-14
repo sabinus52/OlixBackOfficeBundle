@@ -130,56 +130,56 @@ final class MenuItemTest extends TestCase
 
     public function testCreateItem(): void
     {
-        static::assertSame('child1', $this->child1->getCode());
-        static::assertSame('Child one', $this->child1->getLabel());
-        static::assertSame('olix_admin_route_child1', $this->child1->getRoute());
-        static::assertSame(['param1' => 1, 'param2' => 'toto'], $this->child1->getRouteArgs());
-        static::assertSame('ico1.png', $this->child1->getIcon());
-        static::assertSame('red', $this->child1->getIconColor());
-        static::assertSame('badge1', $this->child1->getBadge());
-        static::assertSame('primary', $this->child1->getBadgeColor());
-        static::assertFalse($this->child1->isActive());
+        self::assertSame('child1', $this->child1->getCode());
+        self::assertSame('Child one', $this->child1->getLabel());
+        self::assertSame('olix_admin_route_child1', $this->child1->getRoute());
+        self::assertSame(['param1' => 1, 'param2' => 'toto'], $this->child1->getRouteArgs());
+        self::assertSame('ico1.png', $this->child1->getIcon());
+        self::assertSame('red', $this->child1->getIconColor());
+        self::assertSame('badge1', $this->child1->getBadge());
+        self::assertSame('primary', $this->child1->getBadgeColor());
+        self::assertFalse($this->child1->isActive());
 
-        static::assertSame('Child C32', $this->c32->getLabel());
-        static::assertSame('olix_admin_route_child32', $this->c32->getRoute());
-        static::assertSame(['param1' => 32, 'param2' => 'titi'], $this->c32->getRouteArgs());
-        static::assertSame('icon32.png', $this->c32->getIcon());
-        static::assertNull($this->c32->getBadge());
-        static::assertTrue($this->c32->isActive());
-        static::assertTrue($this->child3->isActive());
+        self::assertSame('Child C32', $this->c32->getLabel());
+        self::assertSame('olix_admin_route_child32', $this->c32->getRoute());
+        self::assertSame(['param1' => 32, 'param2' => 'titi'], $this->c32->getRouteArgs());
+        self::assertSame('icon32.png', $this->c32->getIcon());
+        self::assertNull($this->c32->getBadge());
+        self::assertTrue($this->c32->isActive());
+        self::assertTrue($this->child3->isActive());
     }
 
     public function testGetParent(): void
     {
-        static::assertNull($this->root->getParent());
-        static::assertSame($this->root, $this->child1->getParent());
-        static::assertSame($this->child3, $this->c32->getParent());
+        self::assertNull($this->root->getParent());
+        self::assertSame($this->root, $this->child1->getParent());
+        self::assertSame($this->child3, $this->c32->getParent());
     }
 
     public function testCountable(): void
     {
-        static::assertFalse($this->child1->hasChildren());
-        static::assertCount(3, $this->root);
-        static::assertCount(2, $this->child3);
+        self::assertFalse($this->child1->hasChildren());
+        self::assertCount(3, $this->root);
+        self::assertCount(2, $this->child3);
         // Test ajout et suppression en mode objet
         $new = new MenuItemModel('new', []);
         $this->root->addChild($new);
-        static::assertCount(4, $this->root);
+        self::assertCount(4, $this->root);
         $this->root->removeChild($new);
-        static::assertCount(3, $this->root);
+        self::assertCount(3, $this->root);
         // Test ajout et suppression en mode string
         $new = new MenuItemModel('new2', []);
         $this->root->addChild($new);
-        static::assertCount(4, $this->root);
+        self::assertCount(4, $this->root);
         $this->root->removeChild('new2');
-        static::assertCount(3, $this->root);
+        self::assertCount(3, $this->root);
     }
 
     public function testIterator(): void
     {
-        static::assertSame($this->child2, $this->root->getChild('child2'));
+        self::assertSame($this->child2, $this->root->getChild('child2'));
         foreach ($this->root as $key => $child) {
-            static::assertSame($key, $child->getCode());
+            self::assertSame($key, $child->getCode());
         }
     }
 }

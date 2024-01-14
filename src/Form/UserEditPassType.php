@@ -23,8 +23,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class UserEditPassType extends UserPasswordType
 {
     /**
-     * @param FormBuilderInterface $builder
-     * @param array<mixed>         $options
+     * @param array<mixed> $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

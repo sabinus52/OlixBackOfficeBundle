@@ -34,16 +34,13 @@ final class DumpBaseCommand extends Command
 
     /**
      * Nombre de fichiers à conserver.
-     *
-     * @var int
      */
-    protected $filesToKeep;
+    protected int $filesToKeep;
 
     /**
      * Constructeur.
      *
-     * @param EntityManagerInterface $entityManager
-     * @param string                 $pathRootBackup Racine de l'emplacement des dumps
+     * @param string $pathRootBackup Racine de l'emplacement des dumps
      */
     public function __construct(protected EntityManagerInterface $entityManager, protected string $pathRootBackup)
     {
@@ -76,15 +73,13 @@ final class DumpBaseCommand extends Command
 
     /**
      * Initialise la commande.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         if (empty($this->pathRootBackup)) {
             $this->pathRootBackup = '/tmp';
         }
+
         if ($input->getArgument('path')) {
             $this->pathRootBackup = $input->getArgument('path');
         }
@@ -96,11 +91,6 @@ final class DumpBaseCommand extends Command
 
     /**
      * Fait le dump.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -112,6 +102,7 @@ final class DumpBaseCommand extends Command
 
             return Command::FAILURE;
         }
+
         if (!is_writable($this->pathRootBackup)) {
             $style->error(sprintf('Le dossier "%s" n\'est pas accesssible.', $this->pathRootBackup));
 

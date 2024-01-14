@@ -18,28 +18,13 @@ namespace Olix\BackOfficeBundle\Model;
  */
 interface NotificationInterface
 {
-    /**
-     * @return string
-     */
     public function getCode(): ?string;
 
-    /**
-     * @return string
-     */
     public function getIcon(): string;
 
-    /**
-     * @return string
-     */
     public function getColor(): ?string;
 
-    /**
-     * @return string
-     */
     public function getMessage(): string;
 
-    /**
-     * @return string
-     */
     public function getInfo(): ?string;
 }

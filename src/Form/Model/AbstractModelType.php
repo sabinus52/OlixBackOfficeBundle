@@ -52,8 +52,6 @@ abstract class AbstractModelType extends AbstractType
 
     /**
      * Camelize a option name "days_of_week_disabled" -> "daysOfWeekDisabled".
-     *
-     * @return string
      */
     public function camelize(string $name): string
     {

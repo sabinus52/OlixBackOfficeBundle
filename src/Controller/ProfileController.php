@@ -65,10 +65,12 @@ class ProfileController extends AbstractController
                 $form2->addError(new FormError('Nouveau mot de passe incorrect'));
                 $isError = true;
             }
+
             if (!$manager->isPasswordValid($form2->get('oldPassword')->getData())) {
                 $form2->addError(new FormError('Ancien mot de passe incorrect'));
                 $isError = true;
             }
+
             if (!$isError) {
                 // Change password for this user
                 $manager->update($form2->get('password')->getData());

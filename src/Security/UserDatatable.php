@@ -28,7 +28,6 @@ class UserDatatable implements DataTableTypeInterface
     /**
      * DataTable des utilisateurs.
      *
-     * @param DataTable    $dataTable
      * @param array<mixed> $options
      */
     public function configure(DataTable $dataTable, array $options): void
@@ -38,13 +37,13 @@ class UserDatatable implements DataTableTypeInterface
                 'label' => '',
                 'className' => 'avatar text-center',
                 'raw' => true,
-                'data' => static fn ($row) => sprintf('<img src="%s">', $row->getAvatar('/')),
+                'data' => static fn ($row): string => sprintf('<img src="%s">', $row->getAvatar('/')),
             ])
             ->add('online', TextColumn::class, [
                 'label' => 'Connecté',
                 'className' => 'text-center',
                 'raw' => true,
-                'data' => static fn ($row) => $row->getOnlineBadge($options['delay']),
+                'data' => static fn ($row): string => $row->getOnlineBadge($options['delay']),
             ])
             ->add('username', TextColumn::class, [
                 'label' => 'Utilisateur',
@@ -62,7 +61,7 @@ class UserDatatable implements DataTableTypeInterface
                 'label' => 'Statut',
                 'className' => 'text-center',
                 'raw' => true,
-                'data' => static fn ($row) => $row->getStateBadge(),
+                'data' => static fn ($row): string => $row->getStateBadge(),
             ])
             ->add('enabled', TextColumn::class, [
                 'visible' => false,

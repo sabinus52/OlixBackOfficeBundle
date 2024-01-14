@@ -46,20 +46,8 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class Select2AjaxType extends Select2ModelType
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
-
-    public function __construct(EntityManagerInterface $entityManager, RouterInterface $router)
+    public function __construct(protected EntityManagerInterface $entityManager, protected RouterInterface $router)
     {
-        $this->entityManager = $entityManager;
-        $this->router = $router;
     }
 
     /**

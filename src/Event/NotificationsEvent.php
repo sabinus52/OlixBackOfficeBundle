@@ -29,31 +29,23 @@ class NotificationsEvent extends BackOfficeEvent
 
     /**
      * Nombre max d'affichage de notifs dans la barre.
-     *
-     * @var int
      */
-    protected $max = 3;
+    protected int $max = 3;
 
     /**
      * Nombre total de notifs.
-     *
-     * @var int
      */
-    protected $total = 0;
+    protected int $total = 0;
 
     /**
      * Route vers une notif.
-     *
-     * @var string
      */
-    protected $route;
+    protected string $route;
 
     /**
      * Route vers toutes les notifs.
-     *
-     * @var string
      */
-    protected $routeAll;
+    protected string $routeAll;
 
     /**
      * Constructor.
@@ -62,17 +54,11 @@ class NotificationsEvent extends BackOfficeEvent
     {
     }
 
-    /**
-     * @return int
-     */
     public function getMax(): int
     {
         return $this->max;
     }
 
-    /**
-     * @return NotificationsEvent
-     */
     public function setMax(int $max): self
     {
         $this->max = $max;
@@ -80,17 +66,11 @@ class NotificationsEvent extends BackOfficeEvent
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTotal(): int
     {
         return 0 === $this->total ? count($this->notifications) : $this->total;
     }
 
-    /**
-     * @return NotificationsEvent
-     */
     public function setTotal(int $total): self
     {
         $this->total = $total;
@@ -98,17 +78,11 @@ class NotificationsEvent extends BackOfficeEvent
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getRoute(): string
     {
         return $this->route;
     }
 
-    /**
-     * @return NotificationsEvent
-     */
     public function setRoute(string $route): self
     {
         $this->route = $route;
@@ -116,17 +90,11 @@ class NotificationsEvent extends BackOfficeEvent
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getRouteAll(): ?string
     {
         return $this->routeAll;
     }
 
-    /**
-     * @return NotificationsEvent
-     */
     public function setRouteAll(string $routeAll): self
     {
         $this->routeAll = $routeAll;
@@ -146,8 +114,6 @@ class NotificationsEvent extends BackOfficeEvent
 
     /**
      * Ajoute un nouvelle notif.
-     *
-     * @return NotificationsEvent
      */
     public function addNotification(NotificationInterface $item): self
     {

@@ -45,10 +45,7 @@ class UserManager implements UserManagerInterface
         ],
     ];
 
-    /**
-     * @var User
-     */
-    protected $user;
+    protected User $user;
 
     /**
      * Constructeur.
@@ -63,6 +60,7 @@ class UserManager implements UserManagerInterface
         if (!$parameterBag->has('olix_back_office')) {
             throw new \Exception('Parameter "olix_back_office" not defined', 1);
         }
+
         /** @var array<mixed> $parameters */
         $parameters = $parameterBag->get('olix_back_office');
         if (array_key_exists('security', $parameters)) {
@@ -72,8 +70,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Retourne la classe de l'utilisateur.
-     *
-     * @return string
      */
     public function getClass(): string
     {
@@ -82,8 +78,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Retourne l'utilisateur.
-     *
-     * @return User
      */
     public function getUser(): User
     {
@@ -92,8 +86,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Crée un nouvel objet utilisateur.
-     *
-     * @return UserInterface
      */
     public function newUser(): UserInterface
     {
@@ -106,8 +98,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Affecte un utilisateur dans le manager.
-     *
-     * @return UserManager
      */
     public function setUser(User $user): self
     {
@@ -118,8 +108,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Affecte un utilisateur dans le manager via son identifiant.
-     *
-     * @return UserInterface|null
      */
     public function setUserById(int $idf): ?UserInterface
     {
@@ -153,9 +141,10 @@ class UserManager implements UserManagerInterface
      */
     public function update(string $password = null): void
     {
-        if ($password) {
+        if (null !== $password) {
             $this->user->setPassword($this->getHashedPassword($password));
         }
+
         $this->entityManager->persist($this->user);
         $this->entityManager->flush();
     }
@@ -171,8 +160,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Retourne un mot de passe haché.
-     *
-     * @return string
      */
     protected function getHashedPassword(string $plaintextPassword): string
     {
@@ -181,8 +168,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Vérifie si le mot courant est le bon.
-     *
-     * @return bool
      */
     public function isPasswordValid(string $password): bool
     {
@@ -193,8 +178,6 @@ class UserManager implements UserManagerInterface
      * Crée le formulaire de création d'un utilisateur.
      *
      * @param array<mixed> $options
-     *
-     * @return FormInterface
      */
     public function createFormCreateUser(array $options = []): FormInterface
     {
@@ -205,8 +188,6 @@ class UserManager implements UserManagerInterface
      * Crée le formulaire de modification d'un utilisateur.
      *
      * @param array<mixed> $options
-     *
-     * @return FormInterface
      */
     public function createFormEditUser(array $options = []): FormInterface
     {
@@ -219,8 +200,6 @@ class UserManager implements UserManagerInterface
      * Crée le formulaire de profile d'un utilisateur.
      *
      * @param array<mixed> $options
-     *
-     * @return FormInterface
      */
     public function createFormProfileUser(array $options = []): FormInterface
     {
@@ -233,8 +212,6 @@ class UserManager implements UserManagerInterface
      * Crée le formulaire de changement de mot de passe depuis le profile utilisateur.
      *
      * @param array<mixed> $options
-     *
-     * @return FormInterface
      */
     public function createFormProfilePassword(array $options = []): FormInterface
     {
@@ -245,8 +222,6 @@ class UserManager implements UserManagerInterface
      * Crée le formulaire de changement de mot de passe d'un utilisateur.
      *
      * @param array<mixed> $options
-     *
-     * @return FormInterface
      */
     public function createFormChangePassword(array $options = []): FormInterface
     {
@@ -258,8 +233,6 @@ class UserManager implements UserManagerInterface
      *
      * @param string       $type    : Nom de la classe fu formulaire
      * @param array<mixed> $options
-     *
-     * @return FormInterface
      */
     protected function createForm(string $type, array $options = []): FormInterface
     {

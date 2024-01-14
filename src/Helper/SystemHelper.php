@@ -21,10 +21,7 @@ use Symfony\Component\Finder\Finder;
  */
 class SystemHelper
 {
-    /**
-     * @var Filesystem;
-     */
-    private $filesystem;
+    private readonly Filesystem $filesystem;
 
     /**
      * Constructeur.
@@ -58,6 +55,7 @@ class SystemHelper
                 if ($idx <= $filesToKeep) {
                     continue;
                 }
+
                 $this->filesystem->remove($file->getRealPath());
             }
         }

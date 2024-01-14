@@ -23,25 +23,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  */
 class EntitiesToValuesTransformer implements DataTransformerInterface
 {
-    /**
-     * @var string
-     */
-    protected $entityName;
-
-    /**
-     * @var string
-     */
-    protected $primaryKey;
-
-    /**
-     * @var string
-     */
-    protected $fieldLabel;
-
-    /**
-     * @var PropertyAccessor
-     */
-    protected $accessor;
+    protected PropertyAccessor $accessor;
 
     /**
      * Constructeur.
@@ -50,11 +32,8 @@ class EntitiesToValuesTransformer implements DataTransformerInterface
      * @param string $primaryKey : Clé primaire de l'entité de la valeur de la liste de choix
      * @param string $fieldLabel : Label de la valeur correspondant à un champs de l'entité
      */
-    public function __construct(protected EntityManagerInterface $entityManager, string $entityName, string $primaryKey, string $fieldLabel)
+    public function __construct(protected EntityManagerInterface $entityManager, protected string $entityName, protected string $primaryKey, protected string $fieldLabel)
     {
-        $this->entityName = $entityName;
-        $this->primaryKey = $primaryKey;
-        $this->fieldLabel = $fieldLabel;
         $this->accessor = new PropertyAccessor();
     }
 

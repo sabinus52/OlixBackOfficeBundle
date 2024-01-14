@@ -41,8 +41,6 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
 
     /**
      * Retourne la liste des classes pour la balise BODY.
-     *
-     * @return string
      */
     public function getClassBody(): string
     {
@@ -53,19 +51,24 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
             if (isset($this->options['navbar']['fixed']) && true === $this->options['navbar']['fixed']) {
                 $classes[] = 'layout-navbar-fixed';
             }
+
             if (isset($this->options['sidebar']['fixed']) && true === $this->options['sidebar']['fixed']) {
                 $classes[] = 'layout-fixed';
             }
         }
+
         if (isset($this->options['footer']['fixed']) && true === $this->options['footer']['fixed']) {
             $classes[] = 'layout-footer-fixed';
         }
+
         if (isset($this->options['sidebar']['collapsed']) && true === $this->options['sidebar']['collapsed']) {
             $classes[] = 'sidebar-collapse';
         }
+
         if (isset($this->options['sidebar']['color']) && '' !== $this->options['sidebar']['color']) {
             $classes[] = 'accent-'.$this->options['sidebar']['color'];
         }
+
         if (isset($this->options['dark_mode']) && true === $this->options['dark_mode']) {
             $classes[] = 'dark-mode';
         }
@@ -75,8 +78,6 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
 
     /**
      * Retourne la liste des classes pour la barre de navigation.
-     *
-     * @return string
      */
     public function getClassNavbar(): string
     {
@@ -86,6 +87,7 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
         } else {
             $classes[] = 'navbar-light';
         }
+
         if (isset($this->options['navbar']['color']) && '' !== $this->options['navbar']['color']) {
             $classes[] = 'navbar-'.$this->options['navbar']['color'];
         }
@@ -95,8 +97,6 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
 
     /**
      * Retourne la liste des classes pour la barre latérale.
-     *
-     * @return string
      */
     public function getClassSidebar(): string
     {
@@ -105,10 +105,8 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
             if (isset($this->options['sidebar']['color']) && '' !== $this->options['sidebar']['color']) {
                 $classes[] = 'sidebar-light-'.$this->options['sidebar']['color'];
             }
-        } else {
-            if (isset($this->options['sidebar']['color']) && '' !== $this->options['sidebar']['color']) {
-                $classes[] = 'sidebar-dark-'.$this->options['sidebar']['color'];
-            }
+        } elseif (isset($this->options['sidebar']['color']) && '' !== $this->options['sidebar']['color']) {
+            $classes[] = 'sidebar-dark-'.$this->options['sidebar']['color'];
         }
 
         return implode(' ', $classes);
@@ -116,8 +114,6 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
 
     /**
      * Retourne la liste des classes pour le menu de la barre de navigation.
-     *
-     * @return string
      */
     public function getClassMenu(): string
     {
@@ -125,12 +121,15 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
         if (isset($this->options['sidebar']['flat']) && true === $this->options['sidebar']['flat']) {
             $classes[] = 'nav-flat';
         }
+
         if (isset($this->options['sidebar']['legacy']) && true === $this->options['sidebar']['legacy']) {
             $classes[] = 'nav-legacy';
         }
+
         if (isset($this->options['sidebar']['compact']) && true === $this->options['sidebar']['compact']) {
             $classes[] = 'nav-compact';
         }
+
         if (isset($this->options['sidebar']['child_indent']) && true === $this->options['sidebar']['child_indent']) {
             $classes[] = 'nav-child-indent';
         }

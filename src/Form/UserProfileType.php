@@ -27,8 +27,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class UserProfileType extends AbstractType
 {
     /**
-     * @param FormBuilderInterface $builder
-     * @param array<mixed>         $options
+     * @param array<mixed> $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -42,9 +41,6 @@ class UserProfileType extends AbstractType
         ;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
