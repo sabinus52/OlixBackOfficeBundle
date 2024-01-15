@@ -41,7 +41,7 @@ class EntityToValueTransformer implements DataTransformerInterface
     /**
      * {@inheritDoc}
      */
-    public function transform($entity)
+    public function transform($entity): mixed
     {
         $result = [];
         if (empty($entity)) {
@@ -58,7 +58,7 @@ class EntityToValueTransformer implements DataTransformerInterface
     /**
      * {@inheritDoc}
      */
-    public function reverseTransform($value)
+    public function reverseTransform($value): mixed
     {
         if (empty($value)) {
             return null;

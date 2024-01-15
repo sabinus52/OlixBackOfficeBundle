@@ -28,7 +28,7 @@ class BackOfficeExtension extends AbstractExtension
      *
      * @return TwigFunction[]
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('olixbo_class_body', [BackOfficeRuntime::class, 'getClassBody']),

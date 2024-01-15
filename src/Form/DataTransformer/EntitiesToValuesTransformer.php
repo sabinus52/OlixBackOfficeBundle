@@ -40,7 +40,7 @@ class EntitiesToValuesTransformer implements DataTransformerInterface
     /**
      * {@inheritDoc}
      */
-    public function transform($entities)
+    public function transform($entities): mixed
     {
         $result = [];
         if (empty($entities)) {
@@ -59,7 +59,7 @@ class EntitiesToValuesTransformer implements DataTransformerInterface
     /**
      * {@inheritDoc}
      */
-    public function reverseTransform($values)
+    public function reverseTransform($values): mixed
     {
         if (empty($values) || !is_array($values)) {
             return [];

@@ -40,10 +40,10 @@ class EventsRuntime implements RuntimeExtensionInterface
      *
      * @return MenuItemInterface[]
      */
-    public function getSidebarMenu(Request $request, string $forceMenuActiv): ?array
+    public function getSidebarMenu(Request $request, string $forceMenuActiv): array
     {
         if (!$this->eventDispatcher->hasListeners(SidebarMenuEvent::class)) {
-            return null;
+            return [];
         }
 
         /** @var SidebarMenuEvent $event */
@@ -57,10 +57,10 @@ class EventsRuntime implements RuntimeExtensionInterface
      *
      * @return MenuItemInterface[]
      */
-    public function getBreadcrumb(Request $request, string $forceMenuActiv): ?array
+    public function getBreadcrumb(Request $request, string $forceMenuActiv): array
     {
         if (!$this->eventDispatcher->hasListeners(BreadcrumbEvent::class)) {
-            return null;
+            return [];
         }
 
         /** @var BreadcrumbEvent $event */

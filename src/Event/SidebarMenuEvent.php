@@ -34,10 +34,7 @@ class SidebarMenuEvent extends BackOfficeEvent
         $this->forceMenuActiv = (empty($forceMenuActiv)) ? null : $forceMenuActiv;
     }
 
-    /**
-     * @return Request
-     */
-    public function getRequest(): ?Request
+    public function getRequest(): Request
     {
         return $this->request;
     }

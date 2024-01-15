@@ -162,10 +162,8 @@ abstract class DateTimePickerModelType extends AbstractModelType
 
     /**
      * @param bool|string|\DateTimeInterface $option
-     *
-     * @return string|bool
      */
-    private function formatIsDate($option, string $format)
+    private function formatIsDate($option, string $format): bool|string
     {
         if ($option instanceof \DateTimeInterface) {
             return $this->formatObject($option, $format);
