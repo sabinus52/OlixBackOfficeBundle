@@ -31,10 +31,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     protected const AVATAR_PATH = 'bundles/olixbackoffice/images/avatar/';
-
     protected const AVATAR_DEFAULT = 'default.png';
-
     protected const DELAY_ACTIVITY = 5;
+
+    final public const THEME_LIGHT = 0;
+    final public const THEME_DARK = 1;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -80,6 +81,12 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column(length: 250, nullable: true)]
     protected ?string $avatar = null;
+
+    /**
+     * Thème clair ou sombre.
+     */
+    #[ORM\Column(type: Types::SMALLINT, options: ['default' => 0])]
+    protected ?int $theme = self::THEME_LIGHT;
 
     /**
      * Date de la dernière connexion.
@@ -227,6 +234,18 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatar(?string $avatar): static
     {
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    public function getTheme(): int
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(int $theme): static
+    {
+        $this->theme = $theme;
 
         return $this;
     }

@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Twig;
 
+use Olix\BackOfficeBundle\Model\User;
 use Twig\Extension\RuntimeExtensionInterface;
 
 /**
@@ -42,7 +43,7 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
     /**
      * Retourne la liste des classes pour la balise BODY.
      */
-    public function getClassBody(): string
+    public function getClassBody(?User $user): string
     {
         $classes = [];
         if (isset($this->options['boxed']) && true === $this->options['boxed']) {
@@ -69,7 +70,11 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
             $classes[] = 'accent-'.$this->options['sidebar']['color'];
         }
 
-        if (isset($this->options['dark_mode']) && true === $this->options['dark_mode']) {
+        if ($user instanceof User) {
+            if (User::THEME_DARK === $user->getTheme()) {
+                $classes[] = 'dark-mode';
+            }
+        } elseif (isset($this->options['dark_mode']) && true === $this->options['dark_mode']) {
             $classes[] = 'dark-mode';
         }
 

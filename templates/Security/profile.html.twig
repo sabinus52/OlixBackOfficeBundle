@@ -26,6 +26,13 @@
                     <h3 class="profile-username text-center">{{ app.user.name }}</h3>
                     <p class="text-muted text-center">{{ app.user.email }}</p>
                     <ul class="list-group list-group-unbordered mb-3">
+                        <li class="list-group-item"><b>Thème favori</b>
+                            <a href="{{ path('olix_profile_theme') }}" class="float-right">
+                                <i class="fas fa-moon" style="color: black"></i>
+                                <input type="checkbox" id="user_edit_enabled" name="user_edit[enabled]" data-toggle="switch" data-on-color="dark" data-off-color="default" data-on-text="SOMBRE" data-off-text="CLAIR" value="1" {% if app.user.theme == 1 %}checked="checked"{% endif %} />
+                                <i class="far fa-sun" style="color: black"></i>
+                            </a>
+                        </li>
                         <li class="list-group-item"><b>Rôle</b>
                             <a class="float-right">
                                 {% for role in app.user.roles %}<span class="badge bg-green">{{ role }}</span> {% endfor %}

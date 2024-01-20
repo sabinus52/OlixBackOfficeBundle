@@ -88,6 +88,24 @@ class ProfileController extends AbstractController
     }
 
     /**
+     * Change le thème (clair / sombre).
+     */
+    #[Route(path: '/profile/theme', name: 'olix_profile_theme')]
+    public function switchTheme(UserManager $manager): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        // Switche le thème
+        $user->setTheme(($user->getTheme() + 1) % 2);
+
+        $manager->setUser($user);
+        $manager->update();
+
+        return $this->redirectToRoute('olix_profile');
+    }
+
+    /**
      * Affichage des avatars.
      */
     #[Route(path: '/profile/avatar', name: 'olix_profile_avatar')]
