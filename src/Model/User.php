@@ -38,45 +38,72 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: Types::INTEGER)]
-    protected int $id;
+    #[ORM\Column]
+    protected ?int $id = null;
 
-    #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
+    /**
+     * Identifiant du login.
+     */
+    #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 180)]
-    protected string $username;
+    protected ?string $username = null;
 
-    #[ORM\Column(type: Types::STRING, length: 150, nullable: true)]
+    /**
+     * Email.
+     */
+    #[ORM\Column(length: 150, nullable: true)]
     #[Assert\Email]
     protected ?string $email = null;
 
-    #[ORM\Column(type: Types::STRING, length: 150, nullable: true)]
+    /**
+     * Nom de l'utilisateur.
+     */
+    #[ORM\Column(length: 150, nullable: true)]
     #[Assert\Length(min: 2, max: 180)]
     protected ?string $name = null;
 
-    #[ORM\Column(type: Types::SMALLINT, options: ['default' => 1])]
-    protected bool $enabled = true;
+    /**
+     * Utilisateur activé ou pas.
+     */
+    #[ORM\Column]
+    protected ?bool $enabled = true;
 
-    #[ORM\Column(name: 'expiresat', type: Types::DATE_MUTABLE, nullable: true)]
-    protected ?\DateTime $expiresAt = null;
+    /**
+     * Date d'expiration du compte.
+     */
+    #[ORM\Column(nullable: true)]
+    protected ?\DateTimeImmutable $expiresAt = null;
 
-    #[ORM\Column(type: Types::STRING, length: 250, nullable: true)]
+    /**
+     * Url de l'avatar.
+     */
+    #[ORM\Column(length: 250, nullable: true)]
     protected ?string $avatar = null;
 
-    #[ORM\Column(name: 'last_login', type: Types::DATETIME_MUTABLE, nullable: true)]
-    protected ?\DateTime $lastLogin = null;
+    /**
+     * Date de la dernière connexion.
+     */
+    #[ORM\Column(nullable: true)]
+    protected ?\DateTimeImmutable $lastLogin = null;
 
-    #[ORM\Column(name: 'last_activity', type: Types::DATETIME_MUTABLE, nullable: true)]
-    protected ?\DateTime $lastActivity = null;
+    /**
+     * Date et heure de la dernière activité.
+     */
+    #[ORM\Column(nullable: true)]
+    protected ?\DateTimeImmutable $lastActivity = null;
 
     /**
      * @var array<string> liste des roles
      */
     #[ORM\Column(type: Types::JSON)]
-    protected $roles = [];
+    protected array $roles = [];
 
-    #[ORM\Column(type: Types::STRING)]
-    protected string $password; // Mot de passe hashé
+    /**
+     * Mot de passe hashé.
+     */
+    #[ORM\Column]
+    protected ?string $password = null;
 
     public function getId(): ?int
     {
@@ -91,7 +118,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->username;
     }
 
-    public function setUsername(string $username): self
+    public function setUsername(string $username): static
     {
         $this->username = $username;
 
@@ -113,7 +140,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail(?string $email): self
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
 
@@ -125,7 +152,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(?string $name): static
     {
         $this->name = $name;
 
@@ -145,7 +172,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
             return '<span class="badge bg-red">EXPIRED</span>';
         }
 
-        if ($this->getExpiresAt() instanceof \DateTime) {
+        if ($this->getExpiresAt() instanceof \DateTimeImmutable) {
             return '<span class="badge bg-orange">Expires at '.$this->getExpiresAt()->format('d/m/Y').'</span>';
         }
 
@@ -157,7 +184,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->enabled;
     }
 
-    public function setEnabled(bool $enabled): self
+    public function setEnabled(bool $enabled): static
     {
         $this->enabled = $enabled;
 
@@ -166,15 +193,15 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isExpired(): bool
     {
-        return $this->expiresAt instanceof \DateTime && $this->expiresAt->getTimestamp() < time();
+        return $this->expiresAt instanceof \DateTimeImmutable && $this->expiresAt->getTimestamp() < time();
     }
 
-    public function getExpiresAt(): ?\DateTime
+    public function getExpiresAt(): ?\DateTimeImmutable
     {
         return $this->expiresAt;
     }
 
-    public function setExpiresAt(\DateTime $date = null): self
+    public function setExpiresAt(?\DateTimeImmutable $date): static
     {
         $this->expiresAt = $date;
 
@@ -186,7 +213,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getAvatar(string $prefix = ''): ?string
     {
-        if (null === $this->avatar || '' === $this->avatar || '0' === $this->avatar) {
+        if (null === $this->avatar || '' === $this->avatar) {
             return $prefix.self::AVATAR_PATH.self::AVATAR_DEFAULT;
         }
 
@@ -197,19 +224,19 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $prefix.self::AVATAR_PATH.$this->avatar;
     }
 
-    public function setAvatar(?string $avatar): self
+    public function setAvatar(?string $avatar): static
     {
         $this->avatar = $avatar;
 
         return $this;
     }
 
-    public function getLastLogin(): ?\DateTime
+    public function getLastLogin(): ?\DateTimeImmutable
     {
         return $this->lastLogin;
     }
 
-    public function setLastLogin(?\DateTime $lastLogin): self
+    public function setLastLogin(?\DateTimeImmutable $lastLogin): static
     {
         $this->lastLogin = $lastLogin;
 
@@ -221,7 +248,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getIntervalLastLogin(): string
     {
-        if (!$this->lastLogin instanceof \DateTime) {
+        if (!$this->lastLogin instanceof \DateTimeImmutable) {
             return '';
         }
 
@@ -250,14 +277,14 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $interval->format('%i minutes');
     }
 
-    public function setLastActivity(?\DateTime $lastActivity): self
+    public function setLastActivity(?\DateTimeImmutable $lastActivity): static
     {
         $this->lastActivity = $lastActivity;
 
         return $this;
     }
 
-    public function getLastActivity(): ?\DateTime
+    public function getLastActivity(): ?\DateTimeImmutable
     {
         return $this->lastActivity;
     }
@@ -265,9 +292,9 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Indique que l'utilisateur est en activité.
      */
-    public function setOnline(): self
+    public function setOnline(): static
     {
-        $this->setLastActivity(new \DateTime());
+        $this->setLastActivity(new \DateTimeImmutable());
 
         return $this;
     }
@@ -315,7 +342,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @param array<string> $roles
      */
-    public function setRoles(array $roles): self
+    public function setRoles(array $roles): static
     {
         $this->roles = $roles;
 
@@ -330,7 +357,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(string $password): static
     {
         $this->password = $password;
 

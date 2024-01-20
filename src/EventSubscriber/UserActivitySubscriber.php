@@ -18,13 +18,16 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
 /**
- * Class ActivitySubscriber pour stocker le time de la dernière activité.
+ * Class UserActivitySubscriber pour les évènements de l'utilisateur
+ *  - Enregistrement de la dernière activité
+ *  - Enregistrement de la dernière connexion.
  *
  * @author Sabinus52 <sabinus52@gmail.com>
  */
-class ActivitySubscriber implements EventSubscriberInterface
+class UserActivitySubscriber implements EventSubscriberInterface
 {
     /**
      * Delai en minutes à partir duquel l'utilisateur est considéré comme non connecté.
@@ -50,6 +53,7 @@ class ActivitySubscriber implements EventSubscriberInterface
     {
         return [
             KernelEvents::CONTROLLER => 'onKernelController',
+            LoginSuccessEvent::class => ['onSecurityInteractiveLogin', -10],
         ];
     }
 
@@ -79,5 +83,21 @@ class ActivitySubscriber implements EventSubscriberInterface
                 $this->entityManager->flush();
             }
         }
+    }
+
+    /**
+     * Evenement au moment de la connexion de l'utilisateur.
+     */
+    public function onSecurityInteractiveLogin(LoginSuccessEvent $event): void
+    {
+        /** @var User $user */
+        $user = $event->getUser();
+
+        // Mise à jour de la date de login
+        $user->setLastLogin(new \DateTimeImmutable());
+
+        // Persist the data to database.
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
     }
 }
