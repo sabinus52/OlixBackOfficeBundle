@@ -1,12 +1,12 @@
 /**
  * Module sur les fenêtres modales des formulaires
- * 
+ *
  * @author Sabinus52 <sabinus52@gmail.com>
  */
 
 import $ from "jquery";
 import "bootstrap/js/src/modal.js";
-import Olix from "./functions";
+import Olix from "./functions.js";
 
 /**
  * Constants

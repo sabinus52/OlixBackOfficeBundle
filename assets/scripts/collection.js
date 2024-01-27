@@ -1,8 +1,8 @@
 /**
  * Plugin jQuery pour la prise en charge du formulaire de type collection
- * 
+ *
  * @author Olivier <sabinus52@gmail.com>
- * 
+ *
  * @package Olix
  */
 
@@ -24,9 +24,7 @@ const Default = {
     onDeleteItem: undefined,
 };
 
-
 class OlixCollection {
-
     /**
      * Constructeur
      * @param {Element} element
@@ -43,9 +41,8 @@ class OlixCollection {
      * Ajout d'un élément à la collection
      */
     addItem() {
-
         // Récupère l'élément ayant l'attribut data-prototype
-        var newItem = this._element.data('prototype');
+        var newItem = this._element.data("prototype");
         // Remplace '__name__' dans le HTML du prototype par un nombre basé sur la longueur de la collection courante
         newItem = newItem.replace(/__name__/g, this._nextId);
         var $newItem = $(newItem);
@@ -55,11 +52,11 @@ class OlixCollection {
 
         // Incrémente l'index des éléments de la collection
         this._nextId++;
-        $newItem.find(':input').first().focus();
+        $newItem.find(":input").first().focus();
 
         if (this._settings.onAddItem !== undefined) {
-            console.log('onAddItem');
-            this._settings.onAddItem($newItem, $newItem.find(':input').first());
+            console.log("onAddItem");
+            this._settings.onAddItem($newItem, $newItem.find(":input").first());
         }
     }
 
@@ -69,12 +66,12 @@ class OlixCollection {
      * @param {Element} $elt Elément du bouton 'delete' selectionné
      */
     deleteItem($elt) {
-        if (confirm('Veux tu enlever cet élément ?')) {
-            $elt.closest('.collection-item').fadeOut(500, function () {
+        if (confirm("Veux tu enlever cet élément ?")) {
+            $elt.closest(".collection-item").fadeOut(500, function () {
                 $(this).remove();
             });
             if (this._settings.onDeleteItem !== undefined) {
-                console.log('onDeleteItem');
+                console.log("onDeleteItem");
                 this._settings.onDeleteItem();
             }
         }
@@ -84,33 +81,39 @@ class OlixCollection {
      * Initialisation du plugin
      */
     _init() {
-
         // Prochain Index de la collection
-        this._nextId = this._element.children('div').length;
-        console.log('NextID = ' + this._nextId);
+        this._nextId = this._element.children("div").length;
+        console.log("NextID = " + this._nextId);
 
         // Evènement du bouton 'ADD'
         if (this._settings.allow_add) {
-            this._element.parent().on('click', '.collection-btn-add', this, function (e) {
-                e.preventDefault();
-                e.data.addItem();
-            });
+            this._element
+                .parent()
+                .on("click", ".collection-btn-add", this, function (e) {
+                    e.preventDefault();
+                    e.data.addItem();
+                });
         }
 
         // Evènement sur les boutons 'DELETE'
         if (this._settings.allow_delete) {
-            this._element.on('click', '.collection-btn-delete', this, function (e) {
-                e.preventDefault();
-                e.data.deleteItem($(this));
-            });
+            this._element.on(
+                "click",
+                ".collection-btn-delete",
+                this,
+                function (e) {
+                    e.preventDefault();
+                    e.data.deleteItem($(this));
+                }
+            );
         }
     }
 
     /**
      * Interface JQUERY
-     * 
-     * @param {Object} config 
-     * @returns 
+     *
+     * @param {Object} config
+     * @returns
      */
     static _jQueryInterface(config) {
         return this.each(function () {
@@ -137,9 +140,7 @@ class OlixCollection {
             }
         });
     }
-
 }
-
 
 /**
  * Data selector API

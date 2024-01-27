@@ -1,20 +1,76 @@
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: italic;
+    font-weight: 400;
+    font-display: fallback;
+    src: url(./fonts/source-sans-pro-300-normal.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 300;
+    font-display: fallback;
+    src: url(./fonts/source-sans-pro-400-normal.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-display: fallback;
+    src: url(./fonts/source-sans-pro-400-italic.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 700;
+    font-display: fallback;
+    src: url(./fonts/source-sans-pro-700-normal.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.avatar img {
+    width: 40px;
+    border-radius: 50%;
+    border: 2px solid #abb5bd;
+    padding: 1px;
+}
+
+legend.col-form-label {
+    font-weight: 700;
+}
+
 
 /**
- * Chargement des plugins
+ * Formulaire autocomplete
  */
-@import "@fortawesome/fontawesome-free/css/all.css";
-@import "toastr/build/toastr.css";
-@import "icheck-bootstrap/icheck-bootstrap.css";
-@import "admin-lte/plugins/select2/css/select2.css";
-@import "tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.css";
-@import "bootstrap4-duallistbox/dist/bootstrap-duallistbox.css";
-@import "admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.css";
-@import "admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.css";
+.autocomplete-suggestions {
+    border: 1px solid #999;
+    background: #FFF;
+    overflow: auto;
+}
 
-/**
- * Styles de base pour le BackOffice
- */
-@import "styles/fonts.css";
-@import "admin-lte/dist/css/adminlte.css";
-@import "styles/style.css";
+.autocomplete-suggestion {
+    padding: 2px 5px;
+    white-space: nowrap;
+    overflow: hidden;
+}
 
+.autocomplete-selected {
+    background: #F0F0F0;
+}
+
+.autocomplete-suggestions strong {
+    font-weight: bold;
+}
+
+.autocomplete-group {
+    padding: 2px 5px;
+}
+
+.autocomplete-group strong {
+    display: block;
+    border-bottom: 1px solid #000;
+}
