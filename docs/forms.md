@@ -117,7 +117,22 @@ $builder->add('ajax_ips', Select2ChoiceType::class, [
 
 ## Select2 with AJAX remote datas
 
-### Exemple
+### Exemple 1
+
+~~~ php
+use Olix\BackOfficeBundle\Form\Type\Select2AjaxType;
+// ...
+
+$builder->add('ajax_ips', Select2AjaxType::class, [
+    'label' => 'Sélection IPs',
+    'class' => AddressIP::class,
+    'class_property' => 'ip',
+    'class_pkey' => 'id',
+    'class_label' => 'ip',
+]);
+~~~
+
+### Example 2 with define a custom route
 
 ~~~ php
 use Olix\BackOfficeBundle\Form\Type\Select2AjaxType;
@@ -162,8 +177,8 @@ public function getSearchIPs(Request $request, AutoCompleteService $autoComplete
 | class_property       |                    | String  | The name of the property used to search the query                                              | null      |
 | class_pkey           |                    | String  | The name of the property used to uniquely identify entities                                    | 'id'      |
 | class_label          |                    | String  | The entity property used to retrieve the text for existing data                                | null      |
-| page_limit           |                    | Integer | Number items by page for the scroll
-| remote_route         | ajax / url         | String  | Route of ajax remote datas                                                                     | null      | 
+| page_limit           |                    | Integer | Number items by page for the scroll                                                            | 25        |
+| remote_route         | ajax / url         | String  | Route of ajax remote datas                                                                     | olix_autocomplete_select2
 | remote_params        |                    | Array   | Parameters of route                                                                            | []        | 
 | ajax_js_scroll       |                    | Boolean | True will enable infinite scrolling                                                            | true      | true, false
 | ajax_js_delay        | ajax / delay       | Integer | The number of milliseconds to wait for the user to stop typing before issuing the ajax request | 250       | 

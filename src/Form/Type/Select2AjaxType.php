@@ -79,7 +79,7 @@ class Select2AjaxType extends Select2ModelType
 
         // Options supplémentaires pour l'appel url en Ajax
         $resolver->setDefaults([
-            'remote_route' => null,
+            'remote_route' => 'olix_autocomplete_select2', // Route par défaut
             'remote_params' => [],
         ]);
         $resolver->setAllowedTypes('remote_route', ['null', 'string']);
@@ -118,7 +118,12 @@ class Select2AjaxType extends Select2ModelType
         $view->vars['allow_clear'] = $options['js_allow_clear'];
 
         // Génération de la route
-        $options['ajax_js_route'] = $this->router->generate($options['remote_route'], array_merge($options['remote_params'], ['widget' => $form->getName()]));
+        $options['ajax_js_route'] = $this->router->generate($options['remote_route'], array_merge(
+            $options['remote_params'], [
+                'class' => $form->getParent()->getConfig()->getType()->getInnerType()::class,
+                'widget' => $form->getName(),
+            ])
+        );
 
         // Options Javascript pour les sources de données distantes
         $view->vars['attr'] += ['data-ajax' => json_encode($this->getOptionsWidgetCamelized($options, 'ajax_js_'))];
