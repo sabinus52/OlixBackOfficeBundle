@@ -10,7 +10,6 @@ import "bootstrap4-duallistbox/dist/bootstrap-duallistbox.min.css";
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
 import "datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css";
 import "admin-lte/dist/css/adminlte.min.css";
-import "@olix-backoffice/styles.css";
 
 /**
  * Import des modules

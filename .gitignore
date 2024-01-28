@@ -20,3 +20,4 @@
 /DEVELOP*.md
 /*.code-workspace
 /*.conf
+/assets/tmp

@@ -7,7 +7,6 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
-            $kernelProjectDir: '%kernel.project_dir%' 
             $pathRootBackup: '%olix.backup.path%' # Racine des backups pour les commandes de sauvegarde/restauration
             $olixConfigParameter: '%olix_back_office%' # Configuration du bundle (config/olix_bo.yml)
     

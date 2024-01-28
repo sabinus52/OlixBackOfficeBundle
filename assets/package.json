@@ -1,0 +1,52 @@
+{
+    "name": "olix-backoffice",
+    "version": "1.0.6",
+    "description": "Responsive open source admin theme dashboard and control panel for bundle Symfony OlixBackOfficeBundle.",
+    "main": "olixbo.js",
+    "style": "olixbo.css",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/sabinus52/OlixBackOfficeBundle.git"
+    },
+    "keywords": [
+        "admin",
+        "lte",
+        "template",
+        "framework",
+        "bundle",
+        "symfony",
+        "dashboard",
+        "control-panel",
+        "responsive"
+    ],
+    "author": "Sabinus52",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/sabinus52/OlixBackOfficeBundle/issues"
+    },
+    "homepage": "https://github.com/sabinus52/OlixBackOfficeBundle#readme",
+    "dependencies": {
+        "admin-lte": "~3.2",
+        "bootstrap": "4.*",
+        "@fortawesome/fontawesome-free": "5.*",
+        "icheck-bootstrap": "*",
+        "select2": "4.0.*",
+        "bootstrap-switch": "3.*",
+        "toastr": "*",
+        "bootstrap4-duallistbox": "*",
+        "datatables.net-bs4": "~1.13.8",
+        "datatables.net-responsive-bs4": "~2.5.0",
+        "@popperjs/core": "~2.11.8",
+        "@eonasdan/tempus-dominus": "~6.9.4"
+    },
+    "files": [
+        "README.md",
+        "olixbo.*",
+        "scripts/",
+        "fonts/",
+        "images/"
+    ]
+}
