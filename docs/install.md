@@ -4,29 +4,18 @@
 composer require olix/backoffice-bundle
 ~~~
 
-A rajouter dans le fichier `composer.json` :
-~~~ json
-"scripts": {
-    "auto-scripts": {
-        (...)
-        "fos:js-routing:dump --format=json --target=config/routes/fos_js_routes.json": "symfony-cmd"
-    }
-}
-~~~
 
 ## Initialisation
 
 Déclaration du bundle dans `config/bundles.php`
 ~~~ php
 Olix\BackOfficeBundle\OlixBackOfficeBundle::class => ['all' => true],
-FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
 Omines\DataTablesBundle\DataTablesBundle::class => ['all' => true],
 ~~~
 
 Génération des assets
 ~~~ bash
 ./bin/console assets:install
-./bin/console fos:js-routing:dump --format=json --target=config/routes/fos_js_routes.json
 ~~~
 
 Ajout des routes du bundle dans son application dans `config/routes.yaml`

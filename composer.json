@@ -1,7 +1,7 @@
 {
     "name": "olix/backoffice-bundle",
-    "description": "Admin theme bundle for Symfony 5+ based on AdminLTE 3.2 with FOSUserBundle, Forms",
-    "type": "symfony-bundle",  
+    "description": "Admin theme bundle for Symfony 5+ based on AdminLTE 3.2 with Forms",
+    "type": "symfony-bundle",
     "license": "GPL-2.0",
     "authors": [
         {
@@ -9,7 +9,7 @@
             "email": "sabinus52@gmail.com"
         }
     ],
-    "keywords" : [
+    "keywords": [
         "olix",
         "symfony",
         "admin",
@@ -36,7 +36,6 @@
         "symfony/validator": "6.4.*",
         "doctrine/orm": "^2.17",
         "doctrine/doctrine-bundle": "^2.11",
-        "friendsofsymfony/jsrouting-bundle": "^2.0|^3.0",
         "twig/twig": "^2.12|^3.0",
         "omines/datatables-bundle": "^0"
     },
