@@ -61,7 +61,54 @@ export default {
     finalize() {
         // JavaScript to be fired on the home page, after the init JS
         if (typeof olixDataTables !== "undefined") {
-            $("#olixDataTables").initDataTables(olixDataTables);
+            $("#olixDataTables").initDataTables(olixDataTables, {
+                initComplete: function () {
+                    var api = this.api();
+
+                    // For each column
+                    api.columns()
+                        .eq(0)
+                        .each(function (colIdx) {
+                            // On every keypress in this input
+                            $("select[tabindex=" + colIdx + "]").on(
+                                "change",
+                                function (e) {
+                                    api.column(colIdx)
+                                        .search(
+                                            this.value != "" ? this.value : "",
+                                            this.value != "",
+                                            this.value == ""
+                                        )
+                                        .draw();
+                                }
+                            );
+
+                            // $("input", $(".filters th").eq($(api.column(colIdx).header()).index()))
+                            $("input[tabindex=" + colIdx + "]")
+                                .off("keyup change")
+                                .on("change", function (e) {
+                                    api.column(colIdx)
+                                        .search(
+                                            this.value != "" ? this.value : "",
+                                            this.value != "",
+                                            this.value == ""
+                                        )
+                                        .draw();
+                                })
+                                .on("keyup", function (e) {
+                                    e.stopPropagation();
+
+                                    $(this).trigger("change");
+                                    $(this)
+                                        .focus()[0]
+                                        .setSelectionRange(
+                                            cursorPosition,
+                                            cursorPosition
+                                        );
+                                });
+                        });
+                },
+            });
         }
     },
 };
