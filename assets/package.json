@@ -40,7 +40,8 @@
         "datatables.net-bs4": "~1.13.8",
         "datatables.net-responsive-bs4": "~2.5.0",
         "@popperjs/core": "~2.11.8",
-        "@eonasdan/tempus-dominus": "~6.9.4"
+        "@eonasdan/tempus-dominus": "~6.9.4",
+        "devbridge-autocomplete": "~1.4.11"
     },
     "files": [
         "README.md",

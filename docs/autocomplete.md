@@ -4,14 +4,20 @@ Autocompletion in the search of the sidebar in block `sidebar_search`
 
 Github : https://github.com/devbridge/jQuery-Autocomplete
 
+## Template
+
+~~~ twig
+<!-- base.html.twig -->
+{% block sidebar_search %}
+    {% include '@OlixBackOffice/Sidebar/search.html.twig' with {'route': 'sidebar_autocomplete'} %}
+{% endblock %}
+~~~
+
 ## Script JS
 
 ~~~ javascript
-import Routing from "./dist/scripts/routing";
-import "devbridge-autocomplete";
-
 $('#sdSearch').autocomplete({
-  serviceUrl: Routing.generate('sidebar_autocomplete'),
+  serviceUrl: $("#sdSearch").data("remote"),
   onSelect: function (suggestion) {
       console.log('You selected: ' + suggestion.value + ', ' + suggestion.data);
   }
