@@ -23,6 +23,14 @@ $.fn.OlixSelect2 = function (options) {
         if ($elt.data("ajax")) {
             let opts = $elt.data("ajax");
             optionsAjax = {
+                createTag: function (data) {
+                    if ($elt.data("prefix-new") && data.term.length > 0) {
+                        return {
+                            id: $elt.data("prefix-new") + data.term,
+                            text: data.term,
+                        };
+                    }
+                },
                 ajax: {
                     url: opts.route,
                     dataType: "json",

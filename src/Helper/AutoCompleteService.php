@@ -60,6 +60,11 @@ class AutoCompleteService
             ->orderBy('entity.'.$select2Options['class_property'], 'ASC')
         ;
 
+        if (is_callable($select2Options['callback'])) {
+            $callFunction = $select2Options['callback'];
+            $callFunction($query);
+        }
+
         // Si tous les items ou bien par page
         if (0 === $page) {
             $query = $query->getQuery();
@@ -75,9 +80,10 @@ class AutoCompleteService
         // Mapping des resultats
         $results = [];
         foreach ($items as $item) {
+            $text = (null === $select2Options['class_label']) ? (string) $item : $accessor->getValue($item, $select2Options['class_label']);
             $results[] = [
                 'id' => $accessor->getValue($item, $select2Options['class_pkey']),
-                'text' => $accessor->getValue($item, $select2Options['class_label']),
+                'text' => $text,
             ];
         }
 

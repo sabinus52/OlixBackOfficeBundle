@@ -71,11 +71,17 @@ class Select2AjaxType extends Select2ModelType
             'class_pkey' => 'id',
             'class_label' => null,
             'page_limit' => 25,
+            'allow_add' => false,
+            'allow_add_prefix' => 'onew:',
+            'callback' => null,
         ]);
         $resolver->setAllowedTypes('class_property', ['string']);
         $resolver->setAllowedTypes('class_pkey', ['string']);
-        $resolver->setAllowedTypes('class_label', ['string']);
+        $resolver->setAllowedTypes('class_label', ['null', 'string']);
         $resolver->setAllowedTypes('page_limit', ['int']);
+        $resolver->setAllowedTypes('allow_add', ['bool']);
+        $resolver->setAllowedTypes('allow_add_prefix', ['string']);
+        $resolver->setAllowedTypes('callback', ['null', 'callable']);
 
         // Options supplémentaires pour l'appel url en Ajax
         $resolver->setDefaults([
@@ -102,8 +108,8 @@ class Select2AjaxType extends Select2ModelType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $transformer = ($options['multiple'])
-            ? new EntitiesToValuesTransformer($this->entityManager, $options['class'], $options['class_pkey'], $options['class_label'])
-            : new EntityToValueTransformer($this->entityManager, $options['class'], $options['class_pkey'], $options['class_label']);
+            ? new EntitiesToValuesTransformer($this->entityManager, $options['class'], $options['class_pkey'], $options['class_label'], $options['allow_add_prefix'])
+            : new EntityToValueTransformer($this->entityManager, $options['class'], $options['class_pkey'], $options['class_label'], $options['allow_add_prefix']);
         $builder->addViewTransformer($transformer, true);
     }
 
@@ -112,6 +118,14 @@ class Select2AjaxType extends Select2ModelType
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
+        // Autorisation d'ajout d'un nouvel élément
+        if (true === $options['allow_add']) {
+            // Pour autoriser Select2 à ajouter un élément
+            $options['js_tags'] = true;
+            // Pour déterminer que l'id est bien une nouvelle valeur <option value='onew:toto'>
+            $view->vars['attr'] += ['data-prefix-new' => $options['allow_add_prefix']];
+        }
+
         parent::buildView($view, $form, $options);
 
         // Options pour la création du widget

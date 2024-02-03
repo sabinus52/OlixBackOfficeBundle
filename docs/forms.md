@@ -127,8 +127,6 @@ $builder->add('ajax_ips', Select2AjaxType::class, [
     'label' => 'Sélection IPs',
     'class' => AddressIP::class,
     'class_property' => 'ip',
-    'class_pkey' => 'id',
-    'class_label' => 'ip',
 ]);
 ~~~
 
@@ -168,6 +166,41 @@ public function getSearchIPs(Request $request, AutoCompleteService $autoComplete
 }
 ~~~
 
+### Example 3 with allow add and create item
+
+~~~ php
+use Olix\BackOfficeBundle\Form\Type\Select2AjaxType;
+// ...
+
+$builder->add('ajax_ips', Select2AjaxType::class, [
+    'label' => 'Sélection IPs',
+    'class' => AddressIP::class,
+    'class_property' => 'ip',
+    'class_label' => 'ip', // !!! REQUIRED
+    'js_allow_clear' => true,
+    'allow_add' => true,
+]);
+~~~
+
+### Example 4 with callback
+
+~~~ php
+use Olix\BackOfficeBundle\Form\Type\Select2AjaxType;
+// ...
+
+$builder->add('ajax_ips', Select2AjaxType::class, [
+    'label' => 'Sélection IPs',
+    'class' => AddressIP::class,
+    'class_property' => 'ip',
+    // Example 1
+    'callback' => static function (QueryBuilder $qb): void {
+        $qb->andWhere('entity.ip LIKE \'10.%\'');
+    },
+    // Example 2
+    'callback' => static fn (QueryBuilder $qb) => $qb->andWhere("entity.ip LIKE '10.%'"),
+]);
+~~~
+
 ### Options
 
 | Nom SF               | Nom JS             | Type    |	Description                                                                                    | Defaut    | Valeurs 
@@ -176,13 +209,15 @@ public function getSearchIPs(Request $request, AutoCompleteService $autoComplete
 | class                |                    | String  | The class of your entity                                                                       | null      |
 | class_property       |                    | String  | The name of the property used to search the query                                              | null      |
 | class_pkey           |                    | String  | The name of the property used to uniquely identify entities                                    | 'id'      |
-| class_label          |                    | String  | The entity property used to retrieve the text for existing data                                | null      |
+| class_label          |                    | String  | The entity property used to retrieve the text for existing data                                | null      | __toString()
 | page_limit           |                    | Integer | Number items by page for the scroll                                                            | 25        |
 | remote_route         | ajax / url         | String  | Route of ajax remote datas                                                                     | olix_autocomplete_select2
 | remote_params        |                    | Array   | Parameters of route                                                                            | []        | 
 | ajax_js_scroll       |                    | Boolean | True will enable infinite scrolling                                                            | true      | true, false
 | ajax_js_delay        | ajax / delay       | Integer | The number of milliseconds to wait for the user to stop typing before issuing the ajax request | 250       | 
 | ajax_js_cache        | ajax / cache       | Boolean |                                                                                                | true      | true, false
+| allow_add            | tags               | Boolean | Option for the add tags or value of Select2. 'class_label' is required                         | false     | true, false
+| callback             |                    | Funct   | Callback you get the QueryBuilder to modify the result query                                   | null      | 
 
 
 
