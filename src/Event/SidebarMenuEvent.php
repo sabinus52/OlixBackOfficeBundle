@@ -58,9 +58,17 @@ class SidebarMenuEvent extends BackOfficeEvent
     }
 
     /**
-     * Ajoute un nouvel élémént de menu.
+     * @deprecated use "addMenuItem"
      */
     public function addItem(MenuItemInterface $item): self
+    {
+        return $this->addMenuItem($item);
+    }
+
+    /**
+     * Ajoute un nouvel élémént de menu.
+     */
+    public function addMenuItem(MenuItemInterface $item): self
     {
         $this->rootItems[$item->getCode()] = $item;
 
@@ -68,11 +76,21 @@ class SidebarMenuEvent extends BackOfficeEvent
     }
 
     /**
-     * Enlève un élément au menu.
+     * @deprecated use "removeMenuItem"
      *
      * @param MenuItemInterface|string $item
      */
     public function removeItem($item): self
+    {
+        return $this->removeMenuItem($item);
+    }
+
+    /**
+     * Enlève un élément au menu.
+     *
+     * @param MenuItemInterface|string $item
+     */
+    public function removeMenuItem($item): self
     {
         if ($item instanceof MenuItemInterface && isset($this->rootItems[$item->getCode()])) {
             unset($this->rootItems[$item->getCode()]);
@@ -84,17 +102,33 @@ class SidebarMenuEvent extends BackOfficeEvent
     }
 
     /**
-     * Retourne l'item en fonction de son code.
+     * @deprecated use "getMenuItem"
      */
     public function getItem(string $code): ?MenuItemInterface
+    {
+        return $this->getMenuItem($code);
+    }
+
+    /**
+     * Retourne l'item en fonction de son code.
+     */
+    public function getMenuItem(string $code): ?MenuItemInterface
     {
         return $this->rootItems[$code] ?? null;
     }
 
     /**
-     * Retourne le menu actif du niveau 1.
+     * @deprecated  use "getMenuItemActive"
      */
     public function getActive(): ?MenuItemInterface
+    {
+        return $this->getMenuItemActive();
+    }
+
+    /**
+     * Retourne le menu actif du niveau 1.
+     */
+    public function getMenuItemActive(): ?MenuItemInterface
     {
         foreach ($this->getSidebarMenu() as $item) {
             if ($item->isActive()) {

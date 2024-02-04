@@ -51,6 +51,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->skip([
         Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector::class,
+        Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector::class,
     ]);
 
     $rectorConfig->ruleWithConfiguration(AnnotationToAttributeRector::class, [

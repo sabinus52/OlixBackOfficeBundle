@@ -42,8 +42,8 @@ class MenuBuilderSubscriber extends MenuFactorySubscriber
         $child2->addChild($c21);
 
         $event
-            ->addItem($child1)
-            ->addItem($child2);
+            ->addMenuItem($child1)
+            ->addMenuItem($child2);
     }
 }
 ~~~
@@ -93,4 +93,4 @@ class MenuItem extends MenuItemModel
 ~~~
 
 
-Pour construire sont menu avec des éléments issus de la BDD, le gestionnaire d'entité est disponible `$this->entityManager`
+Pour construire son menu avec des éléments issus de la BDD, le gestionnaire d'entité est disponible `$this->entityManager`

@@ -34,6 +34,8 @@ Création du fichier de configuration du bundle `config/packages/olix_bo.yaml` p
 olix_back_office:
     options:
     security:
+        class:
+            user: App\Entity\User
 ~~~
 
 [Voir les options](options.md)

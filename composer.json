@@ -55,6 +55,8 @@
         "phpstan": "phpstan analyse src --level=7 --configuration=phpstan.neon",
         "codestyle": "php-cs-fixer fix --dry-run --verbose --diff",
         "codestyle-fix": "php-cs-fixer fix",
+        "rector": "rector --dry-run process",
+        "rector-fix": "rector process",
         "csniff": "phpcs src tests --colors --standard=PSR12 ",
         "csniff-fix": "phpcbf src --colors --standard=PSR12"
     }

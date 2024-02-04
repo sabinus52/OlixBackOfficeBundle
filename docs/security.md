@@ -60,7 +60,6 @@ class UserRepository extends ServiceEntityRepository
 
 ~~~ yml
 security:
-    enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -86,6 +85,7 @@ security:
             lazy: true
 ### BEGIN add
             provider: app_user_provider
+            user_checker: Olix\BackOfficeBundle\Security\UserChecker
 
             form_login:
                 # "login" is the name of the route created previously
@@ -94,7 +94,7 @@ security:
                 enable_csrf: true
             logout:
                 path: olix_logout
-### BEGIN add
+### END
 ~~~
 
 
