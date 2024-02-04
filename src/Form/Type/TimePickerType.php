@@ -13,6 +13,8 @@ namespace Olix\BackOfficeBundle\Form\Type;
 
 use Olix\BackOfficeBundle\Form\Model\DateTimePickerModelType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -24,6 +26,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class TimePickerType extends DateTimePickerModelType
 {
+    private const COMPONENTS = [
+        'calendar' => false,
+        'date' => false,
+        'month' => false,
+        'year' => false,
+        'decades' => false,
+        'clock' => true,
+        'hours' => true,
+        'minutes' => true,
+        'seconds' => false,
+    ];
+
     /**
      * {@inheritDoc}
      */
@@ -35,6 +49,17 @@ class TimePickerType extends DateTimePickerModelType
             'button_icon' => 'far fa-clock',
             'format' => 'hh:mm',
         ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options): void
+    {
+        parent::buildView($view, $form, $options);
+        $view->vars['js_options']['display'] += [
+            'components' => self::COMPONENTS,
+        ];
     }
 
     /**

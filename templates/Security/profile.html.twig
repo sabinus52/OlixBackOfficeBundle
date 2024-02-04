@@ -21,11 +21,18 @@
             <div class="card card-primary card-outline">
                 <div class="card-body box-profile">
                     <div class="text-center">
-                        <a href="#" title="Changer son avatar" data-toggle="modal" data-target="#modal-avatar" data-remote="{{ path('olix_profile_avatar') }}"><img class="profile-user-img img-fluid img-circle" src="{{ asset(app.user.avatar) }}" alt="{{ app.user.username }}"></a>
+                        <a href="{{ path('olix_profile_avatar') }}" title="Changer son avatar" data-toggle="olix-modal" data-target="#modalOlix"><img class="profile-user-img img-fluid img-circle" src="{{ asset(app.user.avatar) }}" alt="{{ app.user.username }}"></a>
                     </div>
                     <h3 class="profile-username text-center">{{ app.user.name }}</h3>
                     <p class="text-muted text-center">{{ app.user.email }}</p>
                     <ul class="list-group list-group-unbordered mb-3">
+                        <li class="list-group-item"><b>Thème favori</b>
+                            <a href="{{ path('olix_profile_theme') }}" class="float-right">
+                                <i class="fas fa-moon" style="color: black"></i>
+                                <input type="checkbox" id="user_edit_enabled" name="user_edit[enabled]" data-toggle="switch" data-on-color="dark" data-off-color="default" data-on-text="SOMBRE" data-off-text="CLAIR" value="1" {% if app.user.theme == 1 %}checked="checked"{% endif %} />
+                                <i class="far fa-sun" style="color: black"></i>
+                            </a>
+                        </li>
                         <li class="list-group-item"><b>Rôle</b>
                             <a class="float-right">
                                 {% for role in app.user.roles %}<span class="badge bg-green">{{ role }}</span> {% endfor %}
@@ -80,19 +87,6 @@
     </div>
 </div>
 
-
-<div class="modal fade" id="modal-avatar">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Choisir son avatar</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body">
-                <p class="text-center"><img alt="" src="{{ asset('bundles/olixbackoffice/images/spinner-rectangle.gif') }}"></p>
-            </div>
-        </div>
-    </div>
-</div>
+{% include '@OlixBackOffice/Include/modal.html.twig' with {'element': 'cet utilisateur'} %}
 
 {% endblock %}

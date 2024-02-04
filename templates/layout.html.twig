@@ -8,12 +8,12 @@
         <title>{% block title %}{% endblock %}</title>
 
         {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
+            <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
         {% endblock %}
 
     </head>
 
-    <body class="hold-transition sidebar-mini {{ olixbo_class_body() }}">
+    <body class="hold-transition sidebar-mini {{ olixbo_class_body(app.user) }}">
 
         <div class="wrapper">
 
@@ -79,9 +79,7 @@
                         {% include '@OlixBackOffice/Sidebar/user.html.twig' %}
                     {% endblock %}
 
-                    {% block sidebar_search %}
-                        {% include '@OlixBackOffice/Sidebar/search.html.twig' %}
-                    {% endblock %}
+                    {% block sidebar_search %}{% endblock %}
 
                     {% include '@OlixBackOffice/Sidebar/menu.html.twig' %}
 
@@ -131,7 +129,7 @@
         </div>
 
         {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
 
         <script type="text/javascript">

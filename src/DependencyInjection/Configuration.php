@@ -47,8 +47,6 @@ class Configuration implements ConfigurationInterface
 
     /**
      * Retourne la configuration de la branche "options" du thème du layout.
-     *
-     * @return NodeDefinition
      */
     private function getOptionsConfig(): NodeDefinition
     {
@@ -96,8 +94,6 @@ class Configuration implements ConfigurationInterface
 
     /**
      * Retourne la configuration de la branche "security" sur la gestions des utilisateurs.
-     *
-     * @return NodeDefinition
      */
     private function getSecurityConfig(): NodeDefinition
     {
@@ -112,9 +108,9 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('class')
             ->addDefaultsIfNotSet()
             ->children()
-            ->scalarNode('user')->defaultValue('App\Entity\User')->end()
-            ->scalarNode('form_user')->defaultValue('Olix\BackOfficeBundle\Form\UserEditType')->end()
-            ->scalarNode('form_profile')->defaultValue('Olix\BackOfficeBundle\Form\UserProfileType')->end()
+            ->scalarNode('user')->defaultValue(\Olix\BackOfficeBundle\Model\User::class)->end()
+            ->scalarNode('form_user')->defaultValue(\Olix\BackOfficeBundle\Form\UserEditType::class)->end()
+            ->scalarNode('form_profile')->defaultValue(\Olix\BackOfficeBundle\Form\UserProfileType::class)->end()
             ->end()
             ->end()
             ->end()

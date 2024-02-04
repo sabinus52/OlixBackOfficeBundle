@@ -21,13 +21,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Formulaire de mise à jour des infos de l'utilisateur.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
+ *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class UserProfileType extends AbstractType
 {
     /**
-     * @param FormBuilderInterface $builder
-     * @param array<mixed>         $options
+     * @param array<mixed> $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -38,13 +38,9 @@ class UserProfileType extends AbstractType
             ->add('email', TextType::class, [
                 'label' => 'Email',
             ])
-
         ;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

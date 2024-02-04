@@ -51,24 +51,24 @@ final class NotificationTest extends TestCase
 
     public function testGetSet(): void
     {
-        static::assertSame('not', $this->notice1->getCode());
-        static::assertSame('triangle', $this->notice1->getIcon());
-        static::assertSame('red', $this->notice1->getColor());
-        static::assertSame('Coucou attention', $this->notice1->getMessage());
-        static::assertSame('3 min', $this->notice1->getInfo());
+        self::assertSame('not', $this->notice1->getCode());
+        self::assertSame('triangle', $this->notice1->getIcon());
+        self::assertSame('red', $this->notice1->getColor());
+        self::assertSame('Coucou attention', $this->notice1->getMessage());
+        self::assertSame('3 min', $this->notice1->getInfo());
 
-        static::assertNull($this->notice0->getCode());
-        static::assertSame('fas fa-exclamation-triangle', $this->notice0->getIcon());
-        static::assertNull($this->notice0->getColor());
-        static::assertSame('', $this->notice0->getMessage());
-        static::assertNull($this->notice0->getInfo());
+        self::assertNull($this->notice0->getCode());
+        self::assertSame('fas fa-exclamation-triangle', $this->notice0->getIcon());
+        self::assertNull($this->notice0->getColor());
+        self::assertSame('', $this->notice0->getMessage());
+        self::assertNull($this->notice0->getInfo());
         $this->notice0->setIcon('circle');
-        static::assertSame('circle', $this->notice0->getIcon());
+        self::assertSame('circle', $this->notice0->getIcon());
         $this->notice0->setColor('green');
-        static::assertSame('green', $this->notice0->getColor());
+        self::assertSame('green', $this->notice0->getColor());
         $this->notice0->setMessage('Coucou attention');
-        static::assertSame('Coucou attention', $this->notice0->getMessage());
+        self::assertSame('Coucou attention', $this->notice0->getMessage());
         $this->notice0->setInfo('---');
-        static::assertSame('---', $this->notice0->getInfo());
+        self::assertSame('---', $this->notice0->getInfo());
     }
 }

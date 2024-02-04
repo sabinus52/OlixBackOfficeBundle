@@ -12,14 +12,12 @@ declare(strict_types=1);
 namespace Olix\BackOfficeBundle\Security;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Olix\BackOfficeBundle\Form\UserCreateType;
 use Olix\BackOfficeBundle\Form\UserEditPassType;
 use Olix\BackOfficeBundle\Form\UserPasswordType;
 use Olix\BackOfficeBundle\Model\User;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -41,60 +39,28 @@ class UserManager implements UserManagerInterface
     protected $parameters = [
         'menu_activ' => false,
         'class' => [
-            'user' => 'App\Entity\User',
-            'form_user' => 'Olix\BackOfficeBundle\Form\UserEditType',
-            'form_profile' => 'Olix\BackOfficeBundle\Form\UserProfileType',
+            'user' => User::class,
+            'form_user' => \Olix\BackOfficeBundle\Form\UserEditType::class,
+            'form_profile' => \Olix\BackOfficeBundle\Form\UserProfileType::class,
         ],
     ];
 
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * @var ManagerRegistry
-     */
-    protected $doctrine;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * @var UserPasswordHasherInterface
-     */
-    protected $passwordHasher;
-
-    /**
-     * @var User
-     */
-    protected $user;
+    protected User $user;
 
     /**
      * Constructeur.
-     *
-     * @param ContainerInterface          $container
-     * @param ParameterBagInterface       $parameterBag
-     * @param ManagerRegistry             $doctrine
-     * @param UserPasswordHasherInterface $passwordHasher
      */
     public function __construct(
-        ContainerInterface $container,
-        ParameterBagInterface $parameterBag,
-        ManagerRegistry $doctrine,
-        UserPasswordHasherInterface $passwordHasher
+        protected FormFactoryInterface $formFactory,
+        protected ParameterBagInterface $parameterBag,
+        protected EntityManagerInterface $entityManager,
+        protected UserPasswordHasherInterface $passwordHasher
     ) {
-        $this->container = $container;
-        $this->doctrine = $doctrine;
-        $this->passwordHasher = $passwordHasher;
-        $this->entityManager = $doctrine->getManager(); // @phpstan-ignore-line
-
         // Get parameter olix_back_office.security
         if (!$parameterBag->has('olix_back_office')) {
-            throw new Exception('Parameter "olix_back_office" not defined', 1);
+            throw new \Exception('Parameter "olix_back_office" not defined', 1);
         }
+
         /** @var array<mixed> $parameters */
         $parameters = $parameterBag->get('olix_back_office');
         if (array_key_exists('security', $parameters)) {
@@ -104,8 +70,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Retourne la classe de l'utilisateur.
-     *
-     * @return string
      */
     public function getClass(): string
     {
@@ -114,8 +78,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Retourne l'utilisateur.
-     *
-     * @return User
      */
     public function getUser(): User
     {
@@ -124,8 +86,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Crée un nouvel objet utilisateur.
-     *
-     * @return UserInterface
      */
     public function newUser(): UserInterface
     {
@@ -138,10 +98,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Affecte un utilisateur dans le manager.
-     *
-     * @param User $user
-     *
-     * @return UserManager
      */
     public function setUser(User $user): self
     {
@@ -152,13 +108,11 @@ class UserManager implements UserManagerInterface
 
     /**
      * Affecte un utilisateur dans le manager via son identifiant.
-     *
-     * @return UserInterface|null
      */
     public function setUserById(int $idf): ?UserInterface
     {
         /** @var User $this->user */
-        $this->user = $this->doctrine->getRepository($this->getClass())->find($idf); // @phpstan-ignore-line
+        $this->user = $this->entityManager->getRepository($this->getClass())->find($idf); // @phpstan-ignore-line
 
         return $this->user;
     }
@@ -170,13 +124,11 @@ class UserManager implements UserManagerInterface
      */
     public function findAll(): array
     {
-        return $this->doctrine->getRepository($this->getClass())->findAll(); // @phpstan-ignore-line
+        return $this->entityManager->getRepository($this->getClass())->findAll(); // @phpstan-ignore-line
     }
 
     /**
      * Ajoute un nouvel utilisateur en base.
-     *
-     * @param string $password
      */
     public function add(string $password): void
     {
@@ -186,14 +138,13 @@ class UserManager implements UserManagerInterface
 
     /**
      * Mets à jour les données de l'utilisateur.
-     *
-     * @param string $password
      */
     public function update(string $password = null): void
     {
-        if ($password) {
+        if (null !== $password) {
             $this->user->setPassword($this->getHashedPassword($password));
         }
+
         $this->entityManager->persist($this->user);
         $this->entityManager->flush();
     }
@@ -209,10 +160,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Retourne un mot de passe haché.
-     *
-     * @param string $plaintextPassword
-     *
-     * @return string
      */
     protected function getHashedPassword(string $plaintextPassword): string
     {
@@ -221,10 +168,6 @@ class UserManager implements UserManagerInterface
 
     /**
      * Vérifie si le mot courant est le bon.
-     *
-     * @param string $password
-     *
-     * @return bool
      */
     public function isPasswordValid(string $password): bool
     {
@@ -235,8 +178,6 @@ class UserManager implements UserManagerInterface
      * Crée le formulaire de création d'un utilisateur.
      *
      * @param array<mixed> $options
-     *
-     * @return FormInterface
      */
     public function createFormCreateUser(array $options = []): FormInterface
     {
@@ -247,8 +188,6 @@ class UserManager implements UserManagerInterface
      * Crée le formulaire de modification d'un utilisateur.
      *
      * @param array<mixed> $options
-     *
-     * @return FormInterface
      */
     public function createFormEditUser(array $options = []): FormInterface
     {
@@ -261,8 +200,6 @@ class UserManager implements UserManagerInterface
      * Crée le formulaire de profile d'un utilisateur.
      *
      * @param array<mixed> $options
-     *
-     * @return FormInterface
      */
     public function createFormProfileUser(array $options = []): FormInterface
     {
@@ -275,8 +212,6 @@ class UserManager implements UserManagerInterface
      * Crée le formulaire de changement de mot de passe depuis le profile utilisateur.
      *
      * @param array<mixed> $options
-     *
-     * @return FormInterface
      */
     public function createFormProfilePassword(array $options = []): FormInterface
     {
@@ -287,8 +222,6 @@ class UserManager implements UserManagerInterface
      * Crée le formulaire de changement de mot de passe d'un utilisateur.
      *
      * @param array<mixed> $options
-     *
-     * @return FormInterface
      */
     public function createFormChangePassword(array $options = []): FormInterface
     {
@@ -300,13 +233,11 @@ class UserManager implements UserManagerInterface
      *
      * @param string       $type    : Nom de la classe fu formulaire
      * @param array<mixed> $options
-     *
-     * @return FormInterface
      */
     protected function createForm(string $type, array $options = []): FormInterface
     {
-        $options = $options + ['data_class' => $this->getClass()];
+        $options += ['data_class' => $this->getClass()];
 
-        return $this->container->get('form.factory')->create($type, $this->user, $options);
+        return $this->formFactory->create($type, $this->user, $options);
     }
 }

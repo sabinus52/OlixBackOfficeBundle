@@ -11,11 +11,7 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Form\Model;
 
-use DateTimeInterface;
-use IntlDateFormatter;
 use Locale;
-use Olix\BackOfficeBundle\Helper\DateFormatConverter;
-use RuntimeException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
@@ -28,31 +24,22 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @example     @param string button_icon : Icon from right input
  * @example     @param string locale
  * @example     Config widget JS parameter :
- * @example     @see https://getdatepicker.com/5-4/Options/ Liste des différentes options
+ * @example     @see https://getdatepicker.com/6/options/ Liste des différentes options
  *
  * @author      Sabinus52 <sabinus52@gmail.com>
  *
- * @see         https://github.com/tempusdominus/bootstrap-4
- * @see         https://getdatepicker.com/5-4/
+ * @see         https://github.com/Eonasdan/tempus-dominus
+ * @see         https://getdatepicker.com/
  */
 abstract class DateTimePickerModelType extends AbstractModelType
 {
-    /**
-     * @var DateFormatConverter
-     */
-    private $dateFormatConverter;
-
-    /**
-     * @var string
-     */
-    private $locale = 'fr'; // TODO
+    private string $locale = 'fr'; // TODO
 
     /**
      * Constructeur.
      */
     public function __construct()
     {
-        $this->dateFormatConverter = new DateFormatConverter();
     }
 
     /**
@@ -74,47 +61,20 @@ abstract class DateTimePickerModelType extends AbstractModelType
 
         // Options JavaScript supplémentaires du widget
         $resolver->setDefaults([
-            'js_stepping' => 5,
-            'js_min_date' => false,
-            'js_max_date' => false,
-            'js_use_current' => false,
-            'js_collapse' => true,
-            'js_default_date' => false,
-            'js_disabled_dates' => [],
-            'js_enabled_dates' => [],
-            'js_icons' => [
-                'time' => 'far fa-clock',
-                'date' => 'far fa-calendar-alt',
-            ],
-            'js_side_by_side' => false,
-            'js_days_of_week_disabled' => [],
-            'js_calendar_weeks' => false,
-            'js_view_mode' => 'days',
-            'js_keep_open' => false,
-            'js_disabled_time_intervals' => [],
             'js_allow_input_toggle' => false,
-            'js_focus_on_show' => true,
-            'js_disabled_hours' => [],
+            'js_default_date' => null,
+            'js_use_current' => false,
+            'js_stepping' => 5,
+            'js_display' => [],
+            'js_restrictions' => [],
         ]);
 
-        $resolver->setAllowedTypes('js_stepping', 'int');
-        $resolver->setAllowedTypes('js_min_date', ['bool', 'string', DateTimeInterface::class]);
-        $resolver->setAllowedTypes('js_max_date', ['bool', 'string', DateTimeInterface::class]);
-        $resolver->setAllowedTypes('js_use_current', 'bool');
-        $resolver->setAllowedTypes('js_collapse', 'bool');
-        $resolver->setAllowedTypes('js_default_date', ['bool', 'string', DateTimeInterface::class]);
-        $resolver->setAllowedTypes('js_disabled_dates', 'array');
-        $resolver->setAllowedTypes('js_enabled_dates', 'array');
-        $resolver->setAllowedTypes('js_icons', 'array');
-        $resolver->setAllowedTypes('js_side_by_side', 'bool');
-        $resolver->setAllowedTypes('js_days_of_week_disabled', 'array');
-        $resolver->setAllowedTypes('js_calendar_weeks', 'bool');
-        $resolver->setAllowedTypes('js_view_mode', 'string');
-        $resolver->setAllowedTypes('js_keep_open', 'bool');
-        $resolver->setAllowedTypes('js_disabled_time_intervals', 'array');
         $resolver->setAllowedTypes('js_allow_input_toggle', 'bool');
-        $resolver->setAllowedTypes('js_focus_on_show', 'bool');
-        $resolver->setAllowedTypes('js_disabled_hours', 'array');
+        $resolver->setAllowedTypes('js_default_date', ['null', 'string', \DateTimeInterface::class]);
+        $resolver->setAllowedTypes('js_use_current', 'bool');
+        $resolver->setAllowedTypes('js_stepping', 'int');
+        $resolver->setAllowedTypes('js_display', 'array');
+        $resolver->setAllowedTypes('js_restrictions', 'array');
     }
 
     /**
@@ -127,14 +87,25 @@ abstract class DateTimePickerModelType extends AbstractModelType
         $view->vars['button_icon'] = $options['button_icon'];
 
         // Convert les options de types DateTime
-        $options['js_min_date'] = $this->formatIsDate($options['js_min_date'], $format);
-        $options['js_max_date'] = $this->formatIsDate($options['js_max_date'], $format);
-        $options['js_default_date'] = $this->formatIsDate($options['js_default_date'], $format);
-        foreach ($options['js_disabled_dates'] as $key => $value) {
-            $options['js_disabled_dates'][$key] = $this->formatIsDate($value, $format);
+        if (isset($options['js_restrictions']['minDate'])) {
+            $options['js_restrictions']['minDate'] = $this->formatIsDate($options['js_restrictions']['minDate'], $format);
         }
-        foreach ($options['js_enabled_dates'] as $key => $value) {
-            $options['js_enabled_dates'][$key] = $this->formatIsDate($value, $format);
+        if (isset($options['js_restrictions']['maxDate'])) {
+            $options['js_restrictions']['maxDate'] = $this->formatIsDate($options['js_restrictions']['maxDate'], $format);
+        }
+        $options['js_default_date'] = $this->formatIsDate($options['js_default_date'], $format);
+        if (null === $options['js_default_date']) {
+            unset($options['js_default_date']);
+        }
+        if (isset($options['js_restrictions']['disabledDates'])) {
+            foreach ($options['js_restrictions']['disabledDates'] as $key => $value) {
+                $options['js_restrictions']['disabledDates'][$key] = $this->formatIsDate($value, $format);
+            }
+        }
+        if (isset($options['js_restrictions']['enabledDates'])) {
+            foreach ($options['js_restrictions']['enabledDates'] as $key => $value) {
+                $options['js_restrictions']['enabledDates'][$key] = $this->formatIsDate($value, $format);
+            }
         }
 
         // Options javascript du widget
@@ -161,23 +132,24 @@ abstract class DateTimePickerModelType extends AbstractModelType
         // Camelize options for javascript
         $result = $this->getOptionsWidgetCamelized($options);
 
-        $result['locale'] = $options['locale'];
+        $result['localization']['locale'] = $options['locale'];
         // Conversion format date PHP to format moment.js
-        $result['format'] = $this->dateFormatConverter->convert($options['format']);
+        $result['localization']['format'] = $options['format'];
+
+        if ([] === $result['restrictions']) {
+            unset($result['restrictions']);
+        }
 
         return $result;
     }
 
     /**
-     * @param string|DateTimeInterface $option
-     * @param string                   $format
-     *
-     * @return string
+     * @param bool|string|\DateTimeInterface|null $option
      */
-    private function formatIsDate($option, string $format)
+    private function formatIsDate($option, string $format): null|bool|string
     {
-        if ($option instanceof DateTimeInterface) {
-            $option = $this->formatObject($option, $format);
+        if ($option instanceof \DateTimeInterface) {
+            return $this->formatObject($option, $format);
         }
 
         return $option;
@@ -185,20 +157,15 @@ abstract class DateTimePickerModelType extends AbstractModelType
 
     /**
      * Formate une date de type DateTime dans le format spécifié du widget.
-     *
-     * @param DateTimeInterface $dateTime
-     * @param string            $format
-     *
-     * @return string
      */
-    private function formatObject(DateTimeInterface $dateTime, string $format): string
+    private function formatObject(\DateTimeInterface $dateTime, string $format): string
     {
-        $formatter = new IntlDateFormatter($this->locale, IntlDateFormatter::NONE, IntlDateFormatter::NONE);
+        $formatter = new \IntlDateFormatter($this->locale, \IntlDateFormatter::NONE, \IntlDateFormatter::NONE);
         $formatter->setPattern($format);
 
         $formatted = $formatter->format($dateTime);
         if (!is_string($formatted)) {
-            throw new RuntimeException(sprintf('The format "%s" is invalid.', $format));
+            throw new \RuntimeException(sprintf('The format "%s" is invalid.', $format));
         }
 
         return $formatted;

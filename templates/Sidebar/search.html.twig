@@ -1,5 +1,5 @@
 <div class="form-inline mt-3">
     <div class="input-group">
-        <input id="sdSearch" class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+        <select name="olix-search" {{ stimulus_controller('symfony/ux-autocomplete/autocomplete', { url: path('ux_entity_autocomplete', { alias: alias })}) }}></select>
     </div>
 </div>

@@ -24,60 +24,44 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  */
 class EntityToValueTransformer implements DataTransformerInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * @var string
-     */
-    protected $entityName;
-
-    /**
-     * @var string
-     */
-    protected $primaryKey;
-
-    /**
-     * @var string
-     */
-    protected $fieldLabel;
-
-    /**
-     * @var PropertyAccessor
-     */
-    protected $accessor;
+    protected PropertyAccessor $accessor;
 
     /**
      * Constructeur.
      *
-     * @param EntityManagerInterface $entityManager
-     * @param string                 $entityName    : Nom de la classe de l'entité
-     * @param string                 $primaryKey    : Clé primaire de l'entité de la valeur de la liste de choix
-     * @param string                 $fieldLabel    : Label de la valeur correspondant à un champs de l'entité
+     * @param string $entityName     : Nom de la classe de l'entité
+     * @param string $primaryKey     : Clé primaire de l'entité de la valeur de la liste de choix
+     * @param string $fieldLabel     : Label de la valeur correspondant à un champs de l'entité
+     * @param string $prefixAllowAdd : Prefix des nouveaux tags pour les déterminer
      */
-    public function __construct(EntityManagerInterface $entityManager, string $entityName, string $primaryKey, string $fieldLabel)
+    public function __construct(
+        protected EntityManagerInterface $entityManager,
+        protected string $entityName,
+        protected string $primaryKey,
+        protected ?string $fieldLabel,
+        protected string $prefixAllowAdd)
     {
-        $this->entityManager = $entityManager;
-        $this->entityName = $entityName;
-        $this->primaryKey = $primaryKey;
-        $this->fieldLabel = $fieldLabel;
         $this->accessor = new PropertyAccessor();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function transform($entity)
+    public function transform($entity): mixed
     {
         $result = [];
         if (empty($entity)) {
             return $result;
         }
 
-        $value = $this->accessor->getValue($entity, $this->primaryKey);
-        $text = $this->accessor->getValue($entity, $this->fieldLabel);
+        $text = (null === $this->fieldLabel) ? (string) $entity : $this->accessor->getValue($entity, $this->fieldLabel);
+
+        if ($this->entityManager->contains($entity)) {
+            $value = $this->accessor->getValue($entity, $this->primaryKey);
+        } else {
+            $value = $this->prefixAllowAdd.$text;
+        }
+
         $result[$value] = $text;
 
         return $result;
@@ -86,23 +70,33 @@ class EntityToValueTransformer implements DataTransformerInterface
     /**
      * {@inheritDoc}
      */
-    public function reverseTransform($value)
+    public function reverseTransform($value): mixed
     {
         if (empty($value)) {
             return null;
         }
 
-        try {
-            $entity = $this->entityManager->createQueryBuilder()
-                ->select('entity')
-                ->from($this->entityName, 'entity')
-                ->where('entity.'.$this->primaryKey.' = :id')
-                ->setParameter('id', $value)
-                ->getQuery()
-                ->getSingleResult()
-            ;
-        } catch (UnexpectedResultException $exception) {
-            throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', $value));
+        // Vérifie si ce n'est pas une nouvelle valeur potentielle
+        $prefixLength = strlen($this->prefixAllowAdd);
+        $prefix = substr((string) $value, 0, $prefixLength);
+        if ($prefix === $this->prefixAllowAdd) {
+            $realValue = substr((string) $value, $prefixLength);
+            $entity = new $this->entityName();
+            $this->accessor->setValue($entity, $this->fieldLabel, $realValue);
+        } else {
+            // Valeur choisie dans la liste
+            try {
+                $entity = $this->entityManager->createQueryBuilder()
+                    ->select('entity')
+                    ->from($this->entityName, 'entity')
+                    ->where('entity.'.$this->primaryKey.' = :id')
+                    ->setParameter('id', $value)
+                    ->getQuery()
+                    ->getSingleResult()
+                ;
+            } catch (UnexpectedResultException) {
+                throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', $value));
+            }
         }
 
         if (!$entity) {

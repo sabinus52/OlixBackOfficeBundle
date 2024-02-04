@@ -1,19 +1,27 @@
 <?php
 
-$header = <<<'EOF'
- This file is part of OlixBackOfficeBundle.
- (c) Sabinus52 <sabinus52@gmail.com>
- For the full copyright and license information, please view the LICENSE
- file that was distributed with this source code.
-EOF;
+declare(strict_types=1);
 
+/**
+ *  This file is part of OlixBackOfficeBundle.
+ *  (c) Sabinus52 <sabinus52@gmail.com>
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
+$header = <<<'EOF'
+     This file is part of OlixBackOfficeBundle.
+     (c) Sabinus52 <sabinus52@gmail.com>
+     For the full copyright and license information, please view the LICENSE
+     file that was distributed with this source code.
+    EOF;
 
 $finder = PhpCsFixer\Finder::create()
     ->ignoreDotFiles(false)
     ->ignoreVCSIgnored(true)
     ->in([
-        __DIR__ . '/src/',
-        __DIR__ . '/tests/',
+        __DIR__.'/src/',
+        __DIR__.'/tests/',
     ])
 ;
 

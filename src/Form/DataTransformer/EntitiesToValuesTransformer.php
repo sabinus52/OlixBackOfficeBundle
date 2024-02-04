@@ -23,52 +23,30 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  */
 class EntitiesToValuesTransformer implements DataTransformerInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * @var string
-     */
-    protected $entityName;
-
-    /**
-     * @var string
-     */
-    protected $primaryKey;
-
-    /**
-     * @var string
-     */
-    protected $fieldLabel;
-
-    /**
-     * @var PropertyAccessor
-     */
-    protected $accessor;
+    protected PropertyAccessor $accessor;
 
     /**
      * Constructeur.
      *
-     * @param EntityManagerInterface $entityManager
-     * @param string                 $entityName    : Nom de la classe de l'entité
-     * @param string                 $primaryKey    : Clé primaire de l'entité de la valeur de la liste de choix
-     * @param string                 $fieldLabel    : Label de la valeur correspondant à un champs de l'entité
+     * @param string $entityName     : Nom de la classe de l'entité
+     * @param string $primaryKey     : Clé primaire de l'entité de la valeur de la liste de choix
+     * @param string $fieldLabel     : Label de la valeur correspondant à un champs de l'entité
+     * @param string $prefixAllowAdd : Prefix des nouveaux tags pour les déterminer
      */
-    public function __construct(EntityManagerInterface $entityManager, string $entityName, string $primaryKey, string $fieldLabel)
+    public function __construct(
+        protected EntityManagerInterface $entityManager,
+        protected string $entityName,
+        protected string $primaryKey,
+        protected ?string $fieldLabel,
+        protected string $prefixAllowAdd)
     {
-        $this->entityManager = $entityManager;
-        $this->entityName = $entityName;
-        $this->primaryKey = $primaryKey;
-        $this->fieldLabel = $fieldLabel;
         $this->accessor = new PropertyAccessor();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function transform($entities)
+    public function transform($entities): mixed
     {
         $result = [];
         if (empty($entities)) {
@@ -76,8 +54,14 @@ class EntitiesToValuesTransformer implements DataTransformerInterface
         }
 
         foreach ($entities as $entity) {
-            $value = $this->accessor->getValue($entity, $this->primaryKey);
-            $text = $this->accessor->getValue($entity, $this->fieldLabel);
+            $text = (null === $this->fieldLabel) ? (string) $entity : $this->accessor->getValue($entity, $this->fieldLabel);
+
+            if ($this->entityManager->contains($entity)) {
+                $value = $this->accessor->getValue($entity, $this->primaryKey);
+            } else {
+                $value = $this->prefixAllowAdd.$text;
+            }
+
             $result[$value] = $text;
         }
 
@@ -87,10 +71,24 @@ class EntitiesToValuesTransformer implements DataTransformerInterface
     /**
      * {@inheritDoc}
      */
-    public function reverseTransform($values)
+    public function reverseTransform($values): mixed
     {
         if (empty($values) || !is_array($values)) {
             return [];
+        }
+
+        $newEntities = [];
+        $prefixLength = strlen($this->prefixAllowAdd);
+        // Création des nouveaux items
+        foreach ($values as $key => $value) {
+            $realValue = substr((string) $value, $prefixLength);
+            $prefix = substr((string) $value, 0, $prefixLength);
+            if ($prefix === $this->prefixAllowAdd) {
+                $newObject = new $this->entityName();
+                $this->accessor->setValue($newObject, $this->fieldLabel, $realValue);
+                $newEntities[] = $newObject;
+                unset($values[$key]);
+            }
         }
 
         $entities = $this->entityManager->createQueryBuilder()
@@ -106,6 +104,6 @@ class EntitiesToValuesTransformer implements DataTransformerInterface
             throw new TransformationFailedException('One or more id values are invalid');
         }
 
-        return $entities;
+        return array_merge($entities, $newEntities);
     }
 }

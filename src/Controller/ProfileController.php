@@ -11,31 +11,30 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Controller;
 
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Olix\BackOfficeBundle\Helper\Gravatar;
 use Olix\BackOfficeBundle\Model\User;
 use Olix\BackOfficeBundle\Security\UserManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Contrôleur des pages du profil de l'utilisateur.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
+#[IsGranted('ROLE_USER', message: 'You are not allowed to access the user profile.')]
 class ProfileController extends AbstractController
 {
     /**
      * Page de profile.
-     *
-     * @Route("/profile", name="olix_profile")
-     * @Security("is_granted('ROLE_USER')")
      */
+    #[Route(path: '/profile', name: 'olix_profile')]
     public function profile(Request $request, UserManager $manager): Response
     {
         // Utilisation de la classe UserManager
@@ -66,10 +65,12 @@ class ProfileController extends AbstractController
                 $form2->addError(new FormError('Nouveau mot de passe incorrect'));
                 $isError = true;
             }
+
             if (!$manager->isPasswordValid($form2->get('oldPassword')->getData())) {
                 $form2->addError(new FormError('Ancien mot de passe incorrect'));
                 $isError = true;
             }
+
             if (!$isError) {
                 // Change password for this user
                 $manager->update($form2->get('password')->getData());
@@ -80,18 +81,34 @@ class ProfileController extends AbstractController
         }
 
         // Rendu de la page
-        return $this->renderForm('@OlixBackOffice/Security/profile.html.twig', [
+        return $this->render('@OlixBackOffice/Security/profile.html.twig', [
             'form1' => $form1,
             'form2' => $form2,
         ]);
     }
 
     /**
-     * Affichage des avatars.
-     *
-     * @Route("/profile/avatar", name="olix_profile_avatar")
-     * @Security("is_granted('ROLE_USER')")
+     * Change le thème (clair / sombre).
      */
+    #[Route(path: '/profile/theme', name: 'olix_profile_theme')]
+    public function switchTheme(UserManager $manager): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        // Switche le thème
+        $user->setTheme(($user->getTheme() + 1) % 2);
+
+        $manager->setUser($user);
+        $manager->update();
+
+        return $this->redirectToRoute('olix_profile');
+    }
+
+    /**
+     * Affichage des avatars.
+     */
+    #[Route(path: '/profile/avatar', name: 'olix_profile_avatar')]
     public function choiceAvatar(): Response
     {
         // Chargement des éléments
@@ -115,15 +132,10 @@ class ProfileController extends AbstractController
 
     /**
      * Change l'avatar de l'utilisateur.
-     *
-     * @Route("/profile/avatar/change", name="olix_profile_avatar_change")
-     * @Security("is_granted('ROLE_USER')")
      */
-    public function changeAvatar(Request $request, ManagerRegistry $doctrine): Response
+    #[Route(path: '/profile/avatar/change', name: 'olix_profile_avatar_change')]
+    public function changeAvatar(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Chargement des éléments
-        $entityManager = $doctrine->getManager();
-
         /** @var User $user */
         $user = $this->getUser();
         /** @var string $avatar */

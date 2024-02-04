@@ -1,5 +1,3 @@
-olixbackoffice:
+olix_back_office_bundle.routes:
+    type: attribute
     resource: '@OlixBackOfficeBundle/src/Controller/'
-    type: annotation
-fos_js_routing:
-    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing-sf4.xml"

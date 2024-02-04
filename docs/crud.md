@@ -40,6 +40,7 @@ class TablesController extends AbstractController
 
         return $this->renderForm('index.html.twig', [
             'datatable' => $datatable,
+            'filter' => $this->createForm(MyTableFilterType::class),
             'modal' => [
                 'class' => 'modal-lg',
                 'backdrop' => 'false',
@@ -148,6 +149,7 @@ class MyTableType implements DataTableTypeInterface
             ->add('state', TextColumn::class, [
                 'label' => 'Statut',
                 'raw' => true,
+                'operator' => '=', // To forc filter '=', not 'LIKE'
                 'data' => fn ($row) => sprintf('<b>%s</b>', $row->getStateLabel()),
             ])
             ->add('buttons', TwigColumn::class, [
@@ -195,6 +197,29 @@ class MyFormType extends AbstractType
 }
 ~~~
 
+
+## Form of filter
+
+~~~ php
+// src/Form//MyFormType.php
+use Symfony\Component\Form\AbstractType;
+// ...
+
+class MyTableFilterType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('state', ChoiceType::class, [
+                'label' => 'Statut',
+                'choices' => MyEntity::getChoiceStates(),
+                'attr' => [ 'tabindex' => 1 ], // Important : Number of columms to search
+            ])
+        ;
+    }
+}
+~~~
+
 ## Template list of items
 
 Pour afficher dans une fenêtre modale, il faut rajouter `data-toggle="olix-modal" data-target="#modalOlix"` dans la balise `href`.
@@ -214,7 +239,18 @@ Pour afficher dans une fenêtre modale, il faut rajouter `data-toggle="olix-moda
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Liste</h3>
+                        <a class="btn btn-sm btn-info" data-toggle="collapse" href="#collapseFilter" role="button" aria-expanded="false" aria-controls="collapseFilter"><i class="fas fa-filter"></i> Filter</a>
                         <div class="card-tools"><a href="{{ path('table__create') }}" class="btn btn-sm btn-success" data-toggle="olix-modal" data-target="#modalOlix"><i class="fas fa-plus"></i> Ajouter</a></div>
+                    </div>
+                    <div class="card-filter collapse" id="collapseFilter">
+                        <div class="row">
+                            <div class="col-6">
+                                {{ form_row(filter.field1) }}
+                            </div>
+                            <div class="col-6">
+                                {{ form_row(filter.field2) }}
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div id="olixDataTables">Loading...</div>

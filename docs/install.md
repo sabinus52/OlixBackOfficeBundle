@@ -4,46 +4,25 @@
 composer require olix/backoffice-bundle
 ~~~
 
-A rajouter dans le fichier `composer.json` :
-~~~ json
-"scripts": {
-    "auto-scripts": {
-        (...)
-        "assets:adminlte %PUBLIC_DIR%": "symfony-cmd",
-        "fos:js-routing:dump --format=json --target=config/routes/fos_js_routes.json": "symfony-cmd"
-    }
-}
-~~~
 
 ## Initialisation
 
 Déclaration du bundle dans `config/bundles.php`
 ~~~ php
 Olix\BackOfficeBundle\OlixBackOfficeBundle::class => ['all' => true],
-FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
 Omines\DataTablesBundle\DataTablesBundle::class => ['all' => true],
 ~~~
 
 Génération des assets
-~~~
+~~~ bash
 ./bin/console assets:install
-./bin/console assets:adminlte
-./bin/console fos:js-routing:dump --format=json --target=config/routes/fos_js_routes.json
 ~~~
 
 Ajout des routes du bundle dans son application dans `config/routes.yaml`
 
 ~~~ yaml
-app_file:
+olix_bakoffice_routes:
     resource: '@OlixBackOfficeBundle/config/routing.yml'
-~~~
-
-Ajout des modules nodeJS :
-
-~~~ bash
-yarn add jquery
-yarn add admin-lte
-yarn add devbridge-autocomplete
 ~~~
 
 
@@ -55,6 +34,8 @@ Création du fichier de configuration du bundle `config/packages/olix_bo.yaml` p
 olix_back_office:
     options:
     security:
+        class:
+            user: App\Entity\User
 ~~~
 
 [Voir les options](options.md)
@@ -62,7 +43,7 @@ olix_back_office:
 
 ## Template
 
-Créer **obligatoirement** le fichier `templates/base.hrml.twig` pour surcharger le layout de bundle
+Créer **obligatoirement** le fichier `templates/base.html.twig` pour surcharger le layout de bundle
 ~~~ twig
 {% extends '@OlixBackOffice/layout.html.twig' %}
 
@@ -74,20 +55,21 @@ Créer **obligatoirement** le fichier `templates/base.hrml.twig` pour surcharger
 
 ## Assets
 
+Ajout des assets depuis Import Mapper :
+
+~~~ bash
+./bin/console importmap:require olix-backoffice
+~~~
+
 Déclarer les assets javascript dans `assets/app.js` :
 
 ~~~ js
-const $ = require('jquery');
-window.$ = window.jQuery = $;
-
-import '/vendor/olix/backoffice-bundle/assets/olixbo.js';
+// Import des CSS
+import "olix-backoffice/olixbo.min.css";
+// Import du JS
+import "olix-backoffice";
 ~~~
 
-Déclarer les assets stylesheets dans `assets/styles/app.css` :
-
-~~~ css
-@import '/vendor/olix/backoffice-bundle/assets/olixbo.css';
-~~~
 
 ## Intégration de la connexion utilisateur
 
@@ -132,7 +114,6 @@ class UserRepository extends ServiceEntityRepository
 Créer le controlleur `DefaultController`
 ~~~ bash
 app/console make:controller
-yarn dev
 ~~~
 
 Pour le controller :

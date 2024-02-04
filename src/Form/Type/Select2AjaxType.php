@@ -46,24 +46,8 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class Select2AjaxType extends Select2ModelType
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
-
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param RouterInterface        $router
-     */
-    public function __construct(EntityManagerInterface $entityManager, RouterInterface $router)
+    public function __construct(protected EntityManagerInterface $entityManager, protected RouterInterface $router)
     {
-        $this->entityManager = $entityManager;
-        $this->router = $router;
     }
 
     /**
@@ -87,15 +71,21 @@ class Select2AjaxType extends Select2ModelType
             'class_pkey' => 'id',
             'class_label' => null,
             'page_limit' => 25,
+            'allow_add' => false,
+            'allow_add_prefix' => 'onew:',
+            'callback' => null,
         ]);
         $resolver->setAllowedTypes('class_property', ['string']);
         $resolver->setAllowedTypes('class_pkey', ['string']);
-        $resolver->setAllowedTypes('class_label', ['string']);
+        $resolver->setAllowedTypes('class_label', ['null', 'string']);
         $resolver->setAllowedTypes('page_limit', ['int']);
+        $resolver->setAllowedTypes('allow_add', ['bool']);
+        $resolver->setAllowedTypes('allow_add_prefix', ['string']);
+        $resolver->setAllowedTypes('callback', ['null', 'callable']);
 
         // Options supplémentaires pour l'appel url en Ajax
         $resolver->setDefaults([
-            'remote_route' => null,
+            'remote_route' => 'olix_autocomplete_select2', // Route par défaut
             'remote_params' => [],
         ]);
         $resolver->setAllowedTypes('remote_route', ['null', 'string']);
@@ -118,8 +108,8 @@ class Select2AjaxType extends Select2ModelType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $transformer = ($options['multiple'])
-            ? new EntitiesToValuesTransformer($this->entityManager, $options['class'], $options['class_pkey'], $options['class_label'])
-            : new EntityToValueTransformer($this->entityManager, $options['class'], $options['class_pkey'], $options['class_label']);
+            ? new EntitiesToValuesTransformer($this->entityManager, $options['class'], $options['class_pkey'], $options['class_label'], $options['allow_add_prefix'])
+            : new EntityToValueTransformer($this->entityManager, $options['class'], $options['class_pkey'], $options['class_label'], $options['allow_add_prefix']);
         $builder->addViewTransformer($transformer, true);
     }
 
@@ -128,13 +118,26 @@ class Select2AjaxType extends Select2ModelType
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
+        // Autorisation d'ajout d'un nouvel élément
+        if (true === $options['allow_add']) {
+            // Pour autoriser Select2 à ajouter un élément
+            $options['js_tags'] = true;
+            // Pour déterminer que l'id est bien une nouvelle valeur <option value='onew:toto'>
+            $view->vars['attr'] += ['data-prefix-new' => $options['allow_add_prefix']];
+        }
+
         parent::buildView($view, $form, $options);
 
         // Options pour la création du widget
         $view->vars['allow_clear'] = $options['js_allow_clear'];
 
         // Génération de la route
-        $options['ajax_js_route'] = $this->router->generate($options['remote_route'], array_merge($options['remote_params'], ['widget' => $form->getName()]));
+        $options['ajax_js_route'] = $this->router->generate($options['remote_route'], array_merge(
+            $options['remote_params'], [
+                'class' => $form->getParent()->getConfig()->getType()->getInnerType()::class,
+                'widget' => $form->getName(),
+            ])
+        );
 
         // Options Javascript pour les sources de données distantes
         $view->vars['attr'] += ['data-ajax' => json_encode($this->getOptionsWidgetCamelized($options, 'ajax_js_'))];

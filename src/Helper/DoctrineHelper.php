@@ -12,8 +12,6 @@ declare(strict_types=1);
 namespace Olix\BackOfficeBundle\Helper;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
-use LogicException;
 
 /**
  * Aide sur le fonctions de la base de données.
@@ -23,26 +21,14 @@ use LogicException;
 class DoctrineHelper
 {
     /**
-     * @var EntityManagerInterface
-     */
-    public $entityManager;
-
-    /**
      * Constructeur.
-     *
-     * @param EntityManagerInterface $manager
      */
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $manager;
     }
 
     /**
      * Purge la table.
-     *
-     * @param string $entityClass
-     *
-     * @return string|null
      */
     public function truncate(string $entityClass): ?string
     {
@@ -54,8 +40,8 @@ class DoctrineHelper
             $connection->executeStatement('SET FOREIGN_KEY_CHECKS=0;');
             $connection->executeStatement($platform->getTruncateTableSQL($table, false /* whether to cascade */));
             $connection->executeStatement('SET FOREIGN_KEY_CHECKS=1;');
-        } catch (Exception $e) {
-            return $e->getMessage();
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
         }
 
         return null;
@@ -63,10 +49,6 @@ class DoctrineHelper
 
     /**
      * Retourne le nom de la table d'une entité.
-     *
-     * @param string $entityClass
-     *
-     * @return string
      */
     public function getTableNameForEntity(string $entityClass): string
     {
@@ -77,8 +59,6 @@ class DoctrineHelper
 
     /**
      * Retourne le nom de la base de données.
-     *
-     * @return string
      */
     public function getDataBaseName(): string
     {
@@ -99,18 +79,18 @@ class DoctrineHelper
         $params = $connection->getParams();
 
         if ('pdo_mysql' !== $params['driver']) {
-            throw new LogicException('Only MySQL database is supported');
+            throw new \LogicException('Only MySQL database is supported');
         }
 
         $dumpfile = sprintf('%s/dump-%s-%s.sql', $pathRoot, $connection->getDatabase(), date('Y-m-d-His'));
 
-        $host = escapeshellarg($params['host']);
+        $host = escapeshellarg((string) $params['host']);
         $port = escapeshellarg((string) $params['port']);
-        $username = escapeshellarg($params['user']);
-        $password = escapeshellarg($params['password']);
+        $username = escapeshellarg((string) $params['user']);
+        $password = escapeshellarg((string) $params['password']);
         $database = escapeshellarg($connection->getDatabase());
 
-        $cmd = "mysqldump -h {$host} -P {$port} -u {$username} -p{$password} {$database} > '{$dumpfile}'";
+        $cmd = sprintf("mysqldump -h %s -P %s -u %s -p%s %s > '%s'", $host, $port, $username, $password, $database, $dumpfile);
         passthru($cmd, $return);
 
         return [$return, $dumpfile];
@@ -118,10 +98,6 @@ class DoctrineHelper
 
     /**
      * Restauration d'un dump.
-     *
-     * @param string $dumpFile
-     *
-     * @return int
      */
     public function restoreBase(string $dumpFile): int
     {
@@ -130,16 +106,16 @@ class DoctrineHelper
         $params = $connection->getParams();
 
         if ('pdo_mysql' !== $params['driver']) {
-            throw new LogicException('Only MySQL database is supported');
+            throw new \LogicException('Only MySQL database is supported');
         }
 
-        $host = escapeshellarg($params['host']);
+        $host = escapeshellarg((string) $params['host']);
         $port = escapeshellarg((string) $params['port']);
-        $username = escapeshellarg($params['user']);
-        $password = escapeshellarg($params['password']);
+        $username = escapeshellarg((string) $params['user']);
+        $password = escapeshellarg((string) $params['password']);
         $database = escapeshellarg($connection->getDatabase());
 
-        $cmd = "mysql -h {$host} -P {$port} -u {$username} -p{$password} {$database} < '{$dumpFile}'";
+        $cmd = sprintf("mysql -h %s -P %s -u %s -p%s %s < '%s'", $host, $port, $username, $password, $database, $dumpFile);
         passthru($cmd, $return);
 
         return $return;

@@ -28,40 +28,22 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+#[\Symfony\Component\Console\Attribute\AsCommand('app:database:dump', 'Alias de la commande mysqldump')]
 final class DumpBaseCommand extends Command
 {
-    protected static $defaultName = 'app:database:dump';
-
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * Racine de l'emplacement des dumps.
-     *
-     * @var string
-     */
-    protected $pathRoot;
-
     /**
      * Nombre de fichiers à conserver.
-     *
-     * @var int
      */
-    protected $filesToKeep;
+    protected int $filesToKeep;
 
     /**
      * Constructeur.
      *
-     * @param EntityManagerInterface $entityManager
-     * @param string                 $pathRoot
+     * @param string $pathRootBackup Racine de l'emplacement des dumps
      */
-    public function __construct(EntityManagerInterface $entityManager, string $pathRoot)
+    public function __construct(protected EntityManagerInterface $entityManager, protected string $pathRootBackup)
     {
         parent::__construct();
-        $this->pathRoot = $pathRoot;
-        $this->entityManager = $entityManager;
     }
 
     /**
@@ -72,7 +54,6 @@ final class DumpBaseCommand extends Command
         $this
             ->addArgument('path', InputArgument::OPTIONAL, 'Emplacement du fichier de dump de la base de données')
             ->addOption('purge', 'p', InputOption::VALUE_REQUIRED, 'Nombre de fichier à purger')
-            ->setDescription('Alias de la commande mysqldump')
             ->setHelp(<<<'EOT'
                 La commande <info>%command.name%</info> réalise un dump dans le chemin de son choix.
                 (par défaut <comment>/tmp</comment> ou défini dans le paramètre <info>%env(BACKUP_PATH)%</info>
@@ -90,17 +71,15 @@ final class DumpBaseCommand extends Command
 
     /**
      * Initialise la commande.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        if (empty($this->pathRoot)) {
-            $this->pathRoot = '/tmp';
+        if (empty($this->pathRootBackup)) {
+            $this->pathRootBackup = '/tmp';
         }
+
         if ($input->getArgument('path')) {
-            $this->pathRoot = $input->getArgument('path');
+            $this->pathRootBackup = $input->getArgument('path');
         }
 
         if ($input->getOption('purge')) {
@@ -110,36 +89,32 @@ final class DumpBaseCommand extends Command
 
     /**
      * Fait le dump.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $style = new SymfonyStyle($input, $output);
 
         // Test du dossier
-        if (!file_exists($this->pathRoot)) {
-            $style->error(sprintf('Le dossier "%s" n\'existe pas.', $this->pathRoot));
+        if (!file_exists($this->pathRootBackup)) {
+            $style->error(sprintf('Le dossier "%s" n\'existe pas.', $this->pathRootBackup));
 
             return Command::FAILURE;
         }
-        if (!is_writable($this->pathRoot)) {
-            $style->error(sprintf('Le dossier "%s" n\'est pas accesssible.', $this->pathRoot));
+
+        if (!is_writable($this->pathRootBackup)) {
+            $style->error(sprintf('Le dossier "%s" n\'est pas accesssible.', $this->pathRootBackup));
 
             return Command::FAILURE;
         }
 
         // Sauvegarde
         $helper = new DoctrineHelper($this->entityManager);
-        $return = $helper->dumpBase($this->pathRoot);
+        $return = $helper->dumpBase($this->pathRootBackup);
 
         // Purge
         if (!empty($this->filesToKeep)) {
             $helper = new SystemHelper();
-            $helper->purgeFiles($this->pathRoot, 'dump-*.sql', $this->filesToKeep);
+            $helper->purgeFiles($this->pathRootBackup, 'dump-*.sql', $this->filesToKeep);
         }
 
         if (0 === $return[0]) {
@@ -148,6 +123,6 @@ final class DumpBaseCommand extends Command
             $style->error(sprintf('Echec du dump "%s"', $return[1]));
         }
 
-        return ($return) ? Command::SUCCESS : Command::FAILURE;
+        return ($return[0]) ? Command::SUCCESS : Command::FAILURE;
     }
 }

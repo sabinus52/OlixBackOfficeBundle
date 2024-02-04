@@ -24,13 +24,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  * Formulaire de mise à jour du mot de passe de l'utilisateur.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
+ *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class UserPasswordType extends AbstractType
 {
     /**
-     * @param FormBuilderInterface $builder
-     * @param array<mixed>         $options
+     * @param array<mixed> $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -54,9 +54,6 @@ class UserPasswordType extends AbstractType
         ;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

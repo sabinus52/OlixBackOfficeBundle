@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Controller;
 
-use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,9 +25,8 @@ class SecurityController extends AbstractController
 {
     /**
      * Connextion à l'interface.
-     *
-     * @Route("/login", name="olix_login")
      */
+    #[Route(path: '/login', name: 'olix_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
@@ -45,11 +43,10 @@ class SecurityController extends AbstractController
 
     /**
      * Page de déconnexion.
-     *
-     * @Route("/logout", name="olix_logout")
      */
+    #[Route(path: '/logout', name: 'olix_logout')]
     public function logout(): void
     {
-        throw new LogicException('This method can be blank - '.'it will be intercepted by the logout key on your firewall.');
+        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 }

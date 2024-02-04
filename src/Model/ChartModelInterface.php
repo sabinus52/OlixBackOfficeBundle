@@ -9,17 +9,24 @@ declare(strict_types=1);
  *  file that was distributed with this source code.
  */
 
-namespace Olix\BackOfficeBundle\Security;
+namespace Olix\BackOfficeBundle\Model;
 
 /**
- * Interface pour la gestion des utilisateurs.
+ * Interface de la classe d'un modèle de graphique.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
-interface UserManagerInterface
+interface ChartModelInterface
 {
+    public function getType(): string;
+
     /**
-     * Retourne le nom de la classe qui sera défini lors de la surcharge.
+     * @return array<mixed>
      */
-    public function getClass(): string;
+    public function getOptions(): array;
+
+    /**
+     * @param array<mixed> $datas
+     */
+    public function build(array $datas): void;
 }

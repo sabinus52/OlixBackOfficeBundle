@@ -1,4 +1,4 @@
-import toastr from 'toastr';
+import toastr from "toastr";
 
 toastr.options = {
     closeButton: true,
@@ -18,8 +18,8 @@ toastr.options = {
     hideMethod: "fadeOut",
 };
 
-if (typeof flashMessages !== 'undefined') {
-    flashMessages.forEach(element => {
+if (typeof flashMessages !== "undefined") {
+    flashMessages.forEach((element) => {
         toastr[element.type](element.message);
     });
 }

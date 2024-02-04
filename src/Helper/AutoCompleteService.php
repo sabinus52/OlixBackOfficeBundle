@@ -26,32 +26,14 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 class AutoCompleteService
 {
     /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    protected $formFactory;
-
-    /**
      * Constructeur.
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param FormFactoryInterface   $formFactory
      */
-    public function __construct(EntityManagerInterface $entityManager, FormFactoryInterface $formFactory)
+    public function __construct(protected EntityManagerInterface $entityManager, protected FormFactoryInterface $formFactory)
     {
-        $this->entityManager = $entityManager;
-        $this->formFactory = $formFactory;
     }
 
     /**
      * Retourne les resultats trouvés depuis un recherche "Select2".
-     *
-     * @param string  $formType
-     * @param Request $request
      *
      * @return array<mixed>
      */
@@ -78,6 +60,11 @@ class AutoCompleteService
             ->orderBy('entity.'.$select2Options['class_property'], 'ASC')
         ;
 
+        if (is_callable($select2Options['callback'])) {
+            $callFunction = $select2Options['callback'];
+            $callFunction($query);
+        }
+
         // Si tous les items ou bien par page
         if (0 === $page) {
             $query = $query->getQuery();
@@ -93,9 +80,10 @@ class AutoCompleteService
         // Mapping des resultats
         $results = [];
         foreach ($items as $item) {
+            $text = (null === $select2Options['class_label']) ? (string) $item : $accessor->getValue($item, $select2Options['class_label']);
             $results[] = [
                 'id' => $accessor->getValue($item, $select2Options['class_pkey']),
-                'text' => $accessor->getValue($item, $select2Options['class_label']),
+                'text' => $text,
             ];
         }
 

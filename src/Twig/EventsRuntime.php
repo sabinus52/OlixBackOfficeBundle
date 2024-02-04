@@ -29,34 +29,21 @@ use Twig\Extension\RuntimeExtensionInterface;
 class EventsRuntime implements RuntimeExtensionInterface
 {
     /**
-     * Dispatcher (listener).
-     *
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * Constructor.
-     *
-     * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct(EventDispatcherInterface $dispatcher)
+    public function __construct(private readonly EventDispatcherInterface $eventDispatcher)
     {
-        $this->eventDispatcher = $dispatcher;
     }
 
     /**
      * Retourne le menu de la barre latérale.
      *
-     * @param Request $request
-     * @param string  $forceMenuActiv
-     *
      * @return MenuItemInterface[]
      */
-    public function getSidebarMenu(Request $request, string $forceMenuActiv): ?array
+    public function getSidebarMenu(Request $request, string $forceMenuActiv): array
     {
         if (!$this->eventDispatcher->hasListeners(SidebarMenuEvent::class)) {
-            return null;
+            return [];
         }
 
         /** @var SidebarMenuEvent $event */
@@ -68,15 +55,12 @@ class EventsRuntime implements RuntimeExtensionInterface
     /**
      * Retourne le fil d'ariane.
      *
-     * @param Request $request
-     * @param string  $forceMenuActiv
-     *
      * @return MenuItemInterface[]
      */
-    public function getBreadcrumb(Request $request, string $forceMenuActiv): ?array
+    public function getBreadcrumb(Request $request, string $forceMenuActiv): array
     {
         if (!$this->eventDispatcher->hasListeners(BreadcrumbEvent::class)) {
-            return null;
+            return [];
         }
 
         /** @var BreadcrumbEvent $event */
@@ -98,8 +82,6 @@ class EventsRuntime implements RuntimeExtensionInterface
 
     /**
      * Retourne la liste des notifications de la barre de navigation.
-     *
-     * @return NotificationsEvent
      */
     public function getNotifications(): ?NotificationsEvent
     {

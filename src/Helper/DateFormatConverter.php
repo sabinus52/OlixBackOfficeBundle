@@ -17,8 +17,6 @@ namespace Olix\BackOfficeBundle\Helper;
  * @author      Sabinus52 <sabinus52@gmail.com>
  *
  * @see         https://github.com/sonata-project/form-extensions/blob/2.x/src/Date/MomentFormatConverter.php
- *
- * @SuppressWarnings(PHPMD.ElseExpression)
  */
 final class DateFormatConverter
 {
@@ -66,7 +64,7 @@ final class DateFormatConverter
             if ("'" === $format[$i]) {
                 // if the next character are T' forming 'T', send a T to the
                 // output
-                if ('T' === $format[$i + 1] && '\'' === $format[$i + 2]) {
+                if ('T' === $format[$i + 1] && "'" === $format[$i + 2]) {
                     $output .= 'T';
                     $i += 2;
                 } else {
@@ -92,6 +90,7 @@ final class DateFormatConverter
                         break;
                     }
                 }
+
                 // if no rule is matched, then just add the character to the
                 // output
                 if (!$foundOne) {

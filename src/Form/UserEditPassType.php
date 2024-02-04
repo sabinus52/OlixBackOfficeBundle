@@ -17,13 +17,13 @@ use Symfony\Component\Form\FormBuilderInterface;
  * Formulaire de mise à jour du mot de passe de l'utilisateur.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
+ *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class UserEditPassType extends UserPasswordType
 {
     /**
-     * @param FormBuilderInterface $builder
-     * @param array<mixed>         $options
+     * @param array<mixed> $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

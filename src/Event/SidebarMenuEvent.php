@@ -27,43 +27,24 @@ class SidebarMenuEvent extends BackOfficeEvent
     protected $rootItems = [];
 
     /**
-     * @var Request
-     */
-    protected $request;
-
-    /**
-     * Code du menu pour forcer son activation.
-     *
-     * @var string
-     */
-    protected $forceMenuActiv;
-
-    /**
-     * @param Request     $request
      * @param string|null $forceMenuActiv
      */
-    public function __construct(Request $request = null, ?string $forceMenuActiv = null)
+    public function __construct(protected ?Request $request = null, protected ?string $forceMenuActiv = null)
     {
-        $this->request = $request;
         $this->forceMenuActiv = (empty($forceMenuActiv)) ? null : $forceMenuActiv;
     }
 
-    /**
-     * @return Request
-     */
-    public function getRequest(): ?Request
+    public function getRequest(): Request
     {
         return $this->request;
     }
 
     /**
      * Retourne le code à correspondre pour mettre en surbrillance le menu de la sidebar.
-     *
-     * @return string
      */
     public function getMenuActiv(): string
     {
-        return (null === $this->forceMenuActiv) ? $this->request->get('_route') : $this->forceMenuActiv;
+        return $this->forceMenuActiv ?? $this->request->get('_route');
     }
 
     /**
@@ -77,13 +58,17 @@ class SidebarMenuEvent extends BackOfficeEvent
     }
 
     /**
-     * Ajoute un nouvel élémént de menu.
-     *
-     * @param MenuItemInterface $item
-     *
-     * @return SidebarMenuEvent
+     * @deprecated use "addMenuItem"
      */
     public function addItem(MenuItemInterface $item): self
+    {
+        return $this->addMenuItem($item);
+    }
+
+    /**
+     * Ajoute un nouvel élémént de menu.
+     */
+    public function addMenuItem(MenuItemInterface $item): self
     {
         $this->rootItems[$item->getCode()] = $item;
 
@@ -91,13 +76,21 @@ class SidebarMenuEvent extends BackOfficeEvent
     }
 
     /**
+     * @deprecated use "removeMenuItem"
+     *
+     * @param MenuItemInterface|string $item
+     */
+    public function removeItem($item): self
+    {
+        return $this->removeMenuItem($item);
+    }
+
+    /**
      * Enlève un élément au menu.
      *
      * @param MenuItemInterface|string $item
-     *
-     * @return SidebarMenuEvent
      */
-    public function removeItem($item): self
+    public function removeMenuItem($item): self
     {
         if ($item instanceof MenuItemInterface && isset($this->rootItems[$item->getCode()])) {
             unset($this->rootItems[$item->getCode()]);
@@ -109,21 +102,33 @@ class SidebarMenuEvent extends BackOfficeEvent
     }
 
     /**
-     * @param string $code
-     *
-     * @return MenuItemInterface|null
+     * @deprecated use "getMenuItem"
      */
-    public function getItem($code): ?MenuItemInterface
+    public function getItem(string $code): ?MenuItemInterface
+    {
+        return $this->getMenuItem($code);
+    }
+
+    /**
+     * Retourne l'item en fonction de son code.
+     */
+    public function getMenuItem(string $code): ?MenuItemInterface
     {
         return $this->rootItems[$code] ?? null;
     }
 
     /**
-     * Retourne le menu actif du niveau 1.
-     *
-     * @return MenuItemInterface|null
+     * @deprecated  use "getMenuItemActive"
      */
     public function getActive(): ?MenuItemInterface
+    {
+        return $this->getMenuItemActive();
+    }
+
+    /**
+     * Retourne le menu actif du niveau 1.
+     */
+    public function getMenuItemActive(): ?MenuItemInterface
     {
         foreach ($this->getSidebarMenu() as $item) {
             if ($item->isActive()) {

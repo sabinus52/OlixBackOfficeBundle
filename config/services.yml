@@ -1,95 +1,21 @@
 parameters:
-    olix.backup.path: '%env(string:BACKUP_PATH)%'
+    olix.backup.path.default: /tmp
+    olix.backup.path: '%env(default:olix.backup.path.default:string:BACKUP_PATH)%'
 
 services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $pathRootBackup: '%olix.backup.path%' # Racine des backups pour les commandes de sauvegarde/restauration
+            $olixConfigParameter: '%olix_back_office%' # Configuration du bundle (config/olix_bo.yml)
+    
+    Olix\BackOfficeBundle\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Resources/'
+            - '../src/Tests/'
 
     Twig\Extension\StringLoaderExtension:
         tags: [twig.extension]
-
-    olix.backoffice.twig.extension:
-        class: Olix\BackOfficeBundle\Twig\BackOfficeExtension
-        tags:
-            - { name: twig.extension }
-
-    olix.backoffice.twig.runtime:
-        class: Olix\BackOfficeBundle\Twig\BackOfficeRuntime
-        arguments: [ '%olix_back_office%' ]
-        tags:
-            - { name: twig.runtime }
-
-    olix.backoffice.twig.events:
-        class: Olix\BackOfficeBundle\Twig\EventsRuntime
-        arguments: [ '@event_dispatcher' ]
-        tags:
-            - { name: twig.runtime }
-
-    Olix\BackOfficeBundle\Security\UserChecker:
-
-    Olix\BackOfficeBundle\Security\UserManager:
-        arguments: [ '@service_container', '@parameter_bag', '@doctrine', '@security.user_password_hasher' ]
-
-    Olix\BackOfficeBundle\EventSubscriber\LoginListener:
-        arguments: [ '@doctrine.orm.entity_manager' ]
-        tags:
-            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
-
-    Olix\BackOfficeBundle\EventSubscriber\ActivitySubscriber:
-        arguments: [ '@doctrine.orm.entity_manager', '@security.helper', '%olix_back_office%' ]
-        tags:
-            - { name: 'kernel.event_listener', event: 'kernel.controller' }
-
-    Olix\BackOfficeBundle\Controller\:
-        resource: '../src/Controller'
-        arguments: ['@parameter_bag']
-        tags: ['controller.service_arguments']
-        calls:
-            - ['setContainer', ['@service_container']]
-
-    Olix\BackOfficeBundle\Form\Type\Select2AjaxType:
-        arguments: [ '@doctrine.orm.entity_manager', '@router' ]
-        tags:
-            - { name: form.type }
-    
-    Olix\BackOfficeBundle\Helper\AutoCompleteService:
-        arguments: [ '@doctrine.orm.entity_manager', '@form.factory' ]
-
-    Olix\BackOfficeBundle\Twig\DatatableRuntime:
-        public: false
-        tags:
-            - { name: twig.runtime }
-
-    Olix\BackOfficeBundle\Datatable\DatatableFactory:
-        public: true
-        arguments:
-            - '@security.authorization_checker'
-            - '@security.token_storage'
-            - '@translator'
-            - '@router'
-            - '@doctrine.orm.entity_manager'
-            - '@twig'
-
-    Olix\BackOfficeBundle\Datatable\Response\DatatableResponse:
-        public: true
-        arguments:
-            - '@request_stack'
-    
-    Olix\BackOfficeBundle\Command\AdminLteInstallCommand:
-        tags:
-            - { name: 'console.command' }
-        arguments:
-            - '@filesystem'
-            - '%kernel.project_dir%'
-
-    Olix\BackOfficeBundle\Command\DumpBaseCommand:
-        tags:
-            - { name: 'console.command' }
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '%olix.backup.path%'
-
-    Olix\BackOfficeBundle\Command\RestoreBaseCommand:
-        tags:
-            - { name: 'console.command' }
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '%olix.backup.path%'

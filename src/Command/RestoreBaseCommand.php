@@ -14,6 +14,7 @@ namespace Olix\BackOfficeBundle\Command;
 use Doctrine\ORM\EntityManagerInterface;
 use Olix\BackOfficeBundle\Helper\DoctrineHelper;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,33 +30,17 @@ use Symfony\Component\Finder\Finder;
  *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+#[\Symfony\Component\Console\Attribute\AsCommand('app:database:restore', 'Alias de la commande mysqlrestore')]
 final class RestoreBaseCommand extends Command
 {
-    protected static $defaultName = 'app:database:restore';
-
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * Racine de l'emplacement des dumps.
-     *
-     * @var string
-     */
-    protected $pathRoot;
-
     /**
      * Constructeur.
      *
-     * @param EntityManagerInterface $entityManager
-     * @param string                 $pathRoot
+     * @param string $pathRootBackup Racine de l'emplacement des dumps
      */
-    public function __construct(EntityManagerInterface $entityManager, string $pathRoot)
+    public function __construct(protected EntityManagerInterface $entityManager, protected string $pathRootBackup)
     {
         parent::__construct();
-        $this->pathRoot = $pathRoot;
-        $this->entityManager = $entityManager;
     }
 
     /**
@@ -66,7 +51,6 @@ final class RestoreBaseCommand extends Command
         $this
             ->addArgument('dump', InputArgument::OPTIONAL, 'Emplacement complet du dump à restaurer')
             ->addOption('dir', 'd', InputOption::VALUE_REQUIRED, 'Emplacement des derniers dumps disponibles')
-            ->setDescription('Alias de la commande mysqlrestore')
             ->setHelp(<<<'EOT'
                 La commande <info>%command.name%</info> réalise une restauration d'un dump.
 
@@ -82,27 +66,20 @@ final class RestoreBaseCommand extends Command
 
     /**
      * Initialise la commande.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        if (empty($this->pathRoot)) {
-            $this->pathRoot = '/tmp';
+        if (empty($this->pathRootBackup)) {
+            $this->pathRootBackup = '/tmp';
         }
+
         if ($input->getOption('dir')) {
-            $this->pathRoot = $input->getOption('dir');
+            $this->pathRootBackup = $input->getOption('dir');
         }
     }
 
     /**
-     * Fait le dump.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int
+     * Fait la restauration.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -114,7 +91,7 @@ final class RestoreBaseCommand extends Command
         } else {
             $dumpFile = $this->getLastDumpFile();
             if (null === $dumpFile) {
-                $style->warning(sprintf('Aucun dump trouvé dans le dossier "%s"', $this->pathRoot));
+                $style->warning(sprintf('Aucun dump trouvé dans le dossier "%s"', $this->pathRootBackup));
 
                 return Command::INVALID;
             }
@@ -129,6 +106,7 @@ final class RestoreBaseCommand extends Command
         // Confirmation de la restauration
         $style->caution('Toutes les données de la base vont être supprimés.');
         $style->info(sprintf('Dump qui sera restauré : %s', $dumpFile));
+        /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion('Voulez vous continuer [y/N] ? ', false);
         if (!$helper->ask($input, $output, $question)) {
@@ -147,13 +125,11 @@ final class RestoreBaseCommand extends Command
             $style->error(sprintf('Echec de la restauration du dump "%s"', $dumpFile));
         }
 
-        return ($return) ? Command::SUCCESS : Command::FAILURE;
+        return (0 === $return) ? Command::SUCCESS : Command::FAILURE;
     }
 
     /**
      * Retourne le dernier dump réalisé.
-     *
-     * @return string|null
      */
     private function getLastDumpFile(): ?string
     {
@@ -161,7 +137,7 @@ final class RestoreBaseCommand extends Command
         $finder = new Finder();
 
         // Recherche les fichiers
-        $finder->ignoreUnreadableDirs()->files()->in($this->pathRoot)->depth('== 0')->name(sprintf('dump-%s-*.sql', $helper->getDataBaseName()));
+        $finder->ignoreUnreadableDirs()->files()->in($this->pathRootBackup)->depth('== 0')->name(sprintf('dump-%s-*.sql', $helper->getDataBaseName()));
         $finder->sortByModifiedTime();
         if (!$finder->hasResults()) {
             return null;

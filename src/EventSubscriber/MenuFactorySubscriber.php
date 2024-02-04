@@ -12,14 +12,13 @@ declare(strict_types=1);
 namespace Olix\BackOfficeBundle\EventSubscriber;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Olix\BackOfficeBundle\Event\BreadcrumbEvent;
 use Olix\BackOfficeBundle\Event\SidebarMenuEvent;
 use Olix\BackOfficeBundle\Model\MenuItemInterface;
 use Olix\BackOfficeBundle\Model\MenuItemModel;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Subscriber sur le menu de la barre latérale à hériter pour créer son propre menu.
@@ -37,25 +36,13 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
         'menu_activ' => false,
     ];
 
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-
-    /**
-     * @var Security
-     */
-    private $security;
-
-    public function __construct(ParameterBagInterface $parameterBag, EntityManagerInterface $entityManager, Security $security)
+    public function __construct(ParameterBagInterface $parameterBag, protected EntityManagerInterface $entityManager, private readonly Security $security)
     {
-        $this->entityManager = $entityManager;
-        $this->security = $security;
-
         // Get parameter "olix_back_office.security"
         if (!$parameterBag->has('olix_back_office')) {
-            throw new Exception('Parameter "olix_back_office" not defined', 1);
+            throw new \Exception('Parameter "olix_back_office" not defined', 1);
         }
+
         /** @var array<mixed> $parameters */
         $parameters = $parameterBag->get('olix_back_office');
         if (array_key_exists('security', $parameters)) {
@@ -78,8 +65,6 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
 
     /**
      * Generate the main menu.
-     *
-     * @param SidebarMenuEvent $event
      */
     public function onBuildSidebar(SidebarMenuEvent $event): void
     {
@@ -112,6 +97,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
                 } elseif ($this->getPrefixRoute($item->getCode()) === $match) {
                     $item->setIsActive(true);
                 }
+
                 $this->activateByRoute($match, $item->getChildren());
             } elseif ($this->getPrefixRoute($item->getRoute()) === $match) {
                 $item->setIsActive(true);
@@ -123,10 +109,6 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
 
     /**
      * Retourne la route ou le prefixe de la route avant '__' pour les sous pages du menu.
-     *
-     * @param string|null $route
-     *
-     * @return string|null
      */
     protected function getPrefixRoute(?string $route): ?string
     {
