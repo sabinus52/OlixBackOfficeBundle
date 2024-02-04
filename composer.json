@@ -37,7 +37,9 @@
         "doctrine/orm": "^2.17",
         "doctrine/doctrine-bundle": "^2.11",
         "twig/twig": "^2.12|^3.0",
-        "omines/datatables-bundle": "^0"
+        "omines/datatables-bundle": "^0",
+        "symfony/ux-chartjs": "^2.14",
+        "symfony/ux-autocomplete": "^2.14"
     },
     "autoload": {
         "psr-4": {

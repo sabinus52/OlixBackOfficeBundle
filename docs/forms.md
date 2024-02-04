@@ -356,3 +356,8 @@ La classe `collection-btn-delete`est necessaire pour l'activation du bouton de s
 | Nom SF           | Type    | Description                 | Defaut    | Valeurs 
 |------------------|---------|-----------------------------|-----------|----------------------------------------
 | button_label_add | String  | Label of add button         | 'Add'     | 
+
+
+## Autocomplete
+
+See : https://symfony.com/bundles/ux-autocomplete/current/index.html

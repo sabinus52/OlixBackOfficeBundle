@@ -9,3 +9,4 @@
 - [Autocomplete](autocomplete.md)
 - [Datatables](datatables.md)
 - [Implements CRUD](crud.md)
+- [Charts](charts.md)
