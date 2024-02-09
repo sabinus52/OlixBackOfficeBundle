@@ -25,9 +25,7 @@ use Omines\DataTablesBundle\DataTableFactory;
 
 class TablesController extends AbstractController
 {
-    /**
-     * @Route("/tables/list", name="table__list")
-     */
+    #[Route('/tables/list', name: 'table__list')]
     public function index(Request $request, DataTableFactory $factory): Response
     {
         $datatable = $factory->createFromType(MyTableType::class)
@@ -48,9 +46,7 @@ class TablesController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/tables/create", name="table__create")
-     */
+    #[Route('/tables/create', name: 'table__create')]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
         $entity = new MyEntity();
@@ -73,9 +69,7 @@ class TablesController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/tables/edit/{id}", name="table__edit")
-     */
+    #[Route('/tables/edit/{id}', name: 'table__edit')]
     public function update(Request $request, MyEntity $entity, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(MyFormType::class, $entity);
@@ -97,9 +91,7 @@ class TablesController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/tables/delete/{id}", name="table__delete")
-     */
+    #[Route('/tables/delete/{id}', name: 'table__delete')]
     public function remove(Request $request, MyEntity $entity, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createFormBuilder()->getForm();
@@ -227,7 +219,7 @@ Pour afficher dans une fenêtre modale, il faut rajouter `data-toggle="olix-moda
 ~~~ twig
 {# templates/crud-index.html.twig #}
 
-{% extends 'base.html.twig' %}
+{% extends 'base_bo.html.twig' %}
 {# ... #}
 
 {% block content %}
@@ -280,19 +272,21 @@ Pour afficher dans une fenêtre modale, il faut rajouter `data-toggle="olix-moda
 
 ## Template form of a item
 
-Dans une fenêtre modale :
-~~~ twig
-{# templates/crud-edit.html.twig #}
+### Dans une fenêtre modale (exemple ci-dessus) :
 
-{% form_theme form '@OlixBackOffice/Twig/form-theme-horizontal-layout.html.twig' %}
-{% include '@OlixBackOffice/Include/modal-content-form.html.twig' with { form: form, title: title} %}
+Ajouter sur les boutons `data-toggle="olix-modal" data-target="#modalOlix"`
+
+Et dans la page du listing
+
+~~~ twig
+{% include '@OlixBackOffice/Include/modal.html.twig' with { title: "Chargement du formulaire" } %}~~~
 ~~~
 
-Dans une nouvelle page :
+### Dans une nouvelle page :
 ~~~ twig
 {# templates/crud-edit.html.twig #}
 
-{% extends 'base.html.twig' %}
+{% extends 'base_bo.html.twig' %}
 {# ... #}
 
 {% block content %}

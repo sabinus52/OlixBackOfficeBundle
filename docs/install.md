@@ -1,8 +1,28 @@
-# Installation du bundle
+# Installation of bundle
+
+Recommended way of installing this library is through Composer.
+
+Add in the **composer.json** for automation configuration via the Symfony Flex Composer plugin :
+
+~~~ json
+    "extra": {
+        "symfony": {
+            "endpoint": [
+                "https://api.github.com/repos/sabinus52/symfony-recipes/contents/index.json",
+                "flex://defaults"
+            ]
+        }
+    },
+~~~
 
 ~~~ bash
 composer require olix/backoffice-bundle
+./bin/console importmap:require olix-backoffice
 ~~~
+
+If you are using Symfony Flex a recipe is included in the contrib repository, providing automatic installation and configuration.
+
+if not using Flex, you should register the bundle ant configrue it :
 
 
 ## Initialisation
@@ -10,23 +30,17 @@ composer require olix/backoffice-bundle
 Déclaration du bundle dans `config/bundles.php`
 ~~~ php
 Olix\BackOfficeBundle\OlixBackOfficeBundle::class => ['all' => true],
-Omines\DataTablesBundle\DataTablesBundle::class => ['all' => true],
-~~~
-
-Génération des assets
-~~~ bash
-./bin/console assets:install
-~~~
-
-Ajout des routes du bundle dans son application dans `config/routes.yaml`
-
-~~~ yaml
-olix_bakoffice_routes:
-    resource: '@OlixBackOfficeBundle/config/routing.yml'
 ~~~
 
 
 ## Configuration du bundle
+
+Ajout des routes du bundle dans son application dans `config/routes/olix_bo.yaml`
+
+~~~ yaml
+olix_bo_routes:
+    resource: '@OlixBackOfficeBundle/config/routing.yml'
+~~~
 
 Création du fichier de configuration du bundle `config/packages/olix_bo.yaml` pour modifier les options par défaut
 
@@ -41,19 +55,12 @@ olix_back_office:
 [Voir les options](options.md)
 
 
-## Template
-
-Créer **obligatoirement** le fichier `templates/base.html.twig` pour surcharger le layout de bundle
-~~~ twig
-{% extends '@OlixBackOffice/layout.html.twig' %}
-
-...
-~~~
-
-[Plus d'infos sur les templates](template.md)
-
-
 ## Assets
+
+Génération des assets
+~~~ bash
+./bin/console assets:install
+~~~
 
 Ajout des assets depuis Import Mapper :
 
@@ -71,6 +78,19 @@ import "olix-backoffice";
 ~~~
 
 
+## Template
+
+Créer **obligatoirement** le fichier `templates/base_bo.html.twig` pour surcharger le layout de bundle
+~~~ twig
+{% extends '@OlixBackOffice/layout.html.twig' %}
+
+...
+~~~
+
+[Plus d'infos sur les templates](template.md)
+
+
+
 ## Intégration de la connexion utilisateur
 
 Il faut obligatoirement créer l'entité `User` et `UserRepository` :
@@ -79,12 +99,12 @@ Il faut obligatoirement créer l'entité `User` et `UserRepository` :
 # src/Entity/User.php
 namespace App\Entity;
 
+use App\Repository\UserRepository;
+use Doctrine\ORM\Mapping as ORM;
 use Olix\BackOfficeBundle\Model\User as BaseUser;
-...
 
-class User extends BaseUser
-{
-}
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+class User extends BaseUser {}
 ~~~
 
 ~~~ php
@@ -95,7 +115,6 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-...
 
 class UserRepository extends ServiceEntityRepository
 {
@@ -106,56 +125,13 @@ class UserRepository extends ServiceEntityRepository
 }
 ~~~
 
-[Plus d'informations](security.md)
-
-
-## Page d'acceuil
-
-Créer le controlleur `DefaultController`
-~~~ bash
-app/console make:controller
-~~~
-
-Pour le controller :
-~~~ php
-# src/Controller/DefaultController.php
-
-namespace App\Controller;
-
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-
-class DefaultController extends AbstractController
-{
-    /**
-     * @Route("/", name="home")
-     */
-    public function index(): Response
-    {
-        return $this->render('default/index.html.twig', []);
-    }
-}
-~~~
-
-Pour le template :
+Et créer le template de base `templates/base_login.html.twig`
 ~~~ twig
-{% extends 'base.html.twig' %}
+{% extends '@OlixBackOffice/Security/layout.html.twig' %}
 
-{% block title %}Hello DefaultController!{% endblock %}
+{% block login_logo %}<b>My Application</b>{% endblock %}
 
-{% block content %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Hello World !</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endblock %}
+{% block login_message %}Connection{% endblock %}
 ~~~
+
+[Plus d'informations](security.md)
