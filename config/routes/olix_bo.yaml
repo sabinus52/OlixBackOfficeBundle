@@ -1,0 +1,3 @@
+olix_bo_routes:
+    # loads routes from the given routing file stored in some bundle
+    resource: '@OlixBackOfficeBundle/config/routing.yml'

@@ -46,6 +46,14 @@
             "Olix\\BackOfficeBundle\\": "src/"
         }
     },
+    "extra": {
+        "symfony": {
+            "endpoint": [
+                "https://api.github.com/repos/sabinus52/symfony-recipes/contents/index.json",
+                "flex://defaults"
+            ]
+        }
+    },
     "scripts": {
         "test": "phpunit --debug",
         "phpmd": [
