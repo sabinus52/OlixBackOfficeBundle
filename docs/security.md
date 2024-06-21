@@ -9,26 +9,22 @@ Il faut d'abord créer et surcharger l'entité `User` :
 
 namespace App\Entity;
 
-use Olix\BackOfficeBundle\Model\User as BaseUser;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Olix\BackOfficeBundle\Model\User as BaseUser;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 class User extends BaseUser
 {
-    /**
-     * @ORM\Column(type="string", length=180)
-     */
-    private $avatar;
+    #[ORM\Column(length: 250, nullable: true)]
+    protected ?string $avatar = null;
     
-    public function getAvatar(): string
+    public function getAvatar(): ?string
     {
-        return (string) $this->avatar;
+        return $this->avatar;
     }
 
-    public function setAvatar(string $avatar): self
+    public function setAvatar(?string $avatar): static
     {
         $this->avatar = $avatar;
 
@@ -127,9 +123,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    /**
-     * @Route("/login", name="olix_login")
-     */
+    #[Route('/login', name: 'olix_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -140,9 +134,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/logout", name="olix_logout")
-     */
+    #[Route('/logout', name: 'olix_logout')]
     public function logout(AuthenticationUtils $authenticationUtils)
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
@@ -160,9 +152,7 @@ use Olix\BackOfficeBundle\Security\UserManager;
 
 class DefaultController extends AbstractController
 {
-    /**
-     * @Route("/adduser", name="adduser")
-     */
+    #[Route('/adduser', name: 'adduser')]
     public function index(UserManager $manager): Response
     {
 

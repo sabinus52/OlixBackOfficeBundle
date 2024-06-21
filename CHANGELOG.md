@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### Version 1.0.3
+
+- Documentation
+- Insert Flex
+
 ### Version 1.0.0 (Migration to symfony 6.4)
 
 - Migration to version PHP 8.2

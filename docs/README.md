@@ -1,6 +1,7 @@
 # OlixBackOffice Bundle documentation
 
 - [Bundle install and configuration](install.md)
+- [Getting started](quickstart.md)
 - [Template configuration](template.md)
 - [Theme option](options.md)
 - [Sidebar navigation menu](menu.md)

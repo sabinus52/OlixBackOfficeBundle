@@ -36,7 +36,7 @@ import jQuery from "jquery";
                 state = state.length > 1 ? deparam(state.substr(1)) : {};
                 break;
             case "local":
-                stateDuration = 0;
+                stateDuration = 3600;
                 if (
                     localStorage.getItem(
                         "DataTables_" +
@@ -83,10 +83,6 @@ import jQuery from "jquery";
                 : {
                       stateDuration: stateDuration,
                       stateSave: true,
-                      stateLoadCallback: function (s, cb) {
-                          // Only need stateSave to expose state() function as loading lazily is not possible otherwise
-                          return null;
-                      },
                   };
 
         return new Promise((fulfill, reject) => {
@@ -241,7 +237,7 @@ import jQuery from "jquery";
      */
     $.fn.initDataTables.defaults = {
         method: "POST",
-        state: "fragment",
+        state: "local",
         url: window.location.origin + window.location.pathname,
     };
 
