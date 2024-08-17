@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### Version 1.0.4
+
+- Création de la classe abstraites des listes de valeurs
+- Quelques corrections
+
 ### Version 1.0.3
 
 - Documentation
