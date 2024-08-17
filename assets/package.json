@@ -1,6 +1,6 @@
 {
     "name": "olix-backoffice",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "description": "Responsive open source admin theme dashboard and control panel for bundle Symfony OlixBackOfficeBundle.",
     "main": "olixbo.js",
     "style": "olixbo.css",
