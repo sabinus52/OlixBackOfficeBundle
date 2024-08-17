@@ -204,6 +204,7 @@ class MyTableFilterType extends AbstractType
         $builder
             ->add('state', ChoiceType::class, [
                 'label' => 'Statut',
+                'required' => false,
                 'choices' => MyEntity::getChoiceStates(),
                 'attr' => [ 'tabindex' => 1 ], // Important : Number of columms to search
             ])
@@ -220,6 +221,9 @@ Pour afficher dans une fenêtre modale, il faut rajouter `data-toggle="olix-moda
 {# templates/crud-index.html.twig #}
 
 {% extends 'base_bo.html.twig' %}
+
+{% form_theme filter '@OlixBackOffice/Twig/form-theme-horizontal-layout.html.twig' %}
+
 {# ... #}
 
 {% block content %}
