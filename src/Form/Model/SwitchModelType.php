@@ -41,28 +41,14 @@ abstract class SwitchModelType extends AbstractModelType
     {
         // Options JavaScript supplémentaires du widget
         $resolver->setDefaults([
-            'js_inverse' => false,
-            'js_on_color' => 'primary',
-            'js_off_color' => 'default',
-            'js_on_text' => 'OUI',
-            'js_off_text' => 'NON',
-            'js_size' => 'normal',
-            'js_indeterminate' => false,
-            'js_label_text' => '&nbsp;',
+            'on_color' => null,
+            'off_color' => null,
+            'chk_label' => '',
         ]);
 
-        $resolver->setAllowedTypes('js_inverse', ['bool']);
-        $resolver->setAllowedTypes('js_on_color', ['string']);
-        $resolver->setAllowedTypes('js_off_color', ['string']);
-        $resolver->setAllowedTypes('js_on_text', ['string']);
-        $resolver->setAllowedTypes('js_off_text', ['string']);
-        $resolver->setAllowedTypes('js_size', ['null', 'string']);
-        $resolver->setAllowedTypes('js_indeterminate', ['bool']);
-        $resolver->setAllowedTypes('js_label_text', ['string']);
-
-        $resolver->setAllowedValues('js_on_color', self::COLORS);
-        $resolver->setAllowedValues('js_off_color', self::COLORS);
-        $resolver->setAllowedValues('js_size', ['mini', 'small', 'normal', 'large']);
+        $resolver->setAllowedTypes('on_color', ['null', 'string']);
+        $resolver->setAllowedTypes('off_color', ['null', 'string']);
+        $resolver->setAllowedTypes('chk_label', ['string']);
     }
 
     /**
@@ -71,8 +57,15 @@ abstract class SwitchModelType extends AbstractModelType
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         // Options attributes du widget
-        $view->vars['attr'] += ['data-toggle' => 'switch'];
-        $view->vars['attr'] += ['data-options-js' => json_encode($this->getOptionsWidgetCamelized($options))];
+        $view->vars['chk_label'] = $options['chk_label'];
+
+        $view->vars['class_color'] = ['custom-control', 'custom-switch'];
+        if (null !== $options['on_color']) {
+            $view->vars['class_color'][] = sprintf('custom-switch-on-%s', $options['on_color']);
+        }
+        if (null !== $options['off_color']) {
+            $view->vars['class_color'][] = sprintf('custom-switch-off-%s', $options['off_color']);
+        }
     }
 
     /**
