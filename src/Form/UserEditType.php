@@ -45,6 +45,9 @@ class UserEditType extends AbstractType
             ])
             ->add('enabled', SwitchType::class, [
                 'label' => 'Compte actif',
+                'on_color' => 'success',
+                'off_color' => 'danger',
+                'chk_label' => 'Compte activé ou pas',
                 'required' => false,
             ])
             ->add('expiresAt', DatePickerType::class, [
@@ -59,6 +62,9 @@ class UserEditType extends AbstractType
                 ],
                 'multiple' => true,
                 'expanded' => true,
+                'label_attr' => [
+                    'class' => 'checkbox-custom',
+                ],
             ])
         ;
     }

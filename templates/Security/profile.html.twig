@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_bo.html.twig' %}
 
 {% form_theme form1 '@OlixBackOffice/Twig/form-theme-horizontal-layout.html.twig' %}
 {% form_theme form2 '@OlixBackOffice/Twig/form-theme-horizontal-layout.html.twig' %}
@@ -27,11 +27,14 @@
                     <p class="text-muted text-center">{{ app.user.email }}</p>
                     <ul class="list-group list-group-unbordered mb-3">
                         <li class="list-group-item"><b>Thème favori</b>
-                            <a href="{{ path('olix_profile_theme') }}" class="float-right">
-                                <i class="fas fa-moon" style="color: black"></i>
-                                <input type="checkbox" id="user_edit_enabled" name="user_edit[enabled]" data-toggle="switch" data-on-color="dark" data-off-color="default" data-on-text="SOMBRE" data-off-text="CLAIR" value="1" {% if app.user.theme == 1 %}checked="checked"{% endif %} />
-                                <i class="far fa-sun" style="color: black"></i>
-                            </a>
+                            <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+                                <label class="btn btn-sm btn-secondary{% if app.user.theme == 0 %} active{% endif %}">
+                                    <input type="radio" name="theme" id="theme_light"{% if app.user.theme == 0 %} checked disabled{% endif %} onclick="location.href='{{ path('olix_profile_theme') }}'"> <i class="far fa-sun"></i> CLAIR
+                                </label>
+                                <label class="btn btn-sm btn-secondary"{% if app.user.theme == 1 %} active{% endif %}>
+                                    <input type="radio" name="theme" id="theme_dark"{% if app.user.theme == 1 %} checked disabled{% endif %} onclick="location.href='{{ path('olix_profile_theme') }}'"> <i class="fas fa-moon"></i> SOMBRE
+                                </label>
+                            </div>
                         </li>
                         <li class="list-group-item"><b>Rôle</b>
                             <a class="float-right">
