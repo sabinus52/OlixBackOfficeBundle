@@ -67,7 +67,7 @@ class EventsRuntime implements RuntimeExtensionInterface
         $event = $this->eventDispatcher->dispatch(new BreadcrumbEvent($request, $forceMenuActiv));
 
         /** @var MenuItemInterface $active */
-        $active = $event->getActive();
+        $active = $event->getMenuItemActive();
         $list = [];
         if (null !== $active) {
             $list[] = $active;

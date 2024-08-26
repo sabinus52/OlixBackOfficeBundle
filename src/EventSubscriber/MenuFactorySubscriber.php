@@ -72,7 +72,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
 
         // Add menu manage of users
         if ($this->security->isGranted('ROLE_ADMIN') && true === $this->parameters['menu_activ']) {
-            $event->addItem(new MenuItemModel('security', [
+            $event->addMenuItem(new MenuItemModel('security', [
                 'label' => 'Gestion des utilisateurs',
                 'route' => 'olix_users__list',
                 'icon' => 'fas fa-users',
