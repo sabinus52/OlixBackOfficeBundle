@@ -42,6 +42,6 @@ olix_back_office:
             # Class de l'entité utilisateur
             user: App\Entity\User
             # Class de formulaire de modification des données de l'utilisateur
-            form_user: Olix\BackOffice\Form\UserEditType
+            form_user: Olix\BackOfficeBundle\Form\UserEditType
             # Class de formulaire du profile des données de l'utilisateur
-            form_profile: Olix\BackOffice\Form\UserProfileType
+            form_profile: Olix\BackOfficeBundle\Form\UserProfileType

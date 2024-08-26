@@ -1,5 +1,11 @@
 # CHANGELOG
 
+### Version 1.0.5
+
+- Changement du widget Switch en custom-switch
+- Fix sur les chemins des templates
+- Quelques corrections
+
 ### Version 1.0.4
 
 - Création de la classe abstraites des listes de valeurs

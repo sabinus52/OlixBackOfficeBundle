@@ -128,7 +128,7 @@ class SecurityController extends AbstractController
     {
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-        return $this->render('Security/login.html.twig', [
+        return $this->render('base-login.html.twig', [
             'last_username' => $lastUsername,
             'error'         => $error,
         ]);
@@ -142,6 +142,25 @@ class SecurityController extends AbstractController
 }
 ~~~
 
+
+## Activation du menu de gestion des utilisateurs
+
+Pour l'activer, il faut positionner ce paramètre à *true* dans le fichier de configuration **olix_bo.yaml**:
+~~~ yaml
+    security:
+        menu_activ: true
+~~~
+
+
+## Controle d'accès
+
+Pour interdire entièrement l'accès à l'application, il faut configurer de la manière suivante dans la configuration *config/security.yaml*
+
+~~~ yaml
+access_control:
+    - { path: ^/login, roles: PUBLIC_ACCESS }
+    - { path: ^/, roles: ROLE_USER }
+~~~
 
 ## Création d'un utilisateur
 
