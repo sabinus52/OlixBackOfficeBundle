@@ -2,6 +2,10 @@
 
 ### Version 1.0.5
 
+- Fix sur la classe User et ses évènements
+
+### Version 1.0.5
+
 - Changement du widget Switch en custom-switch
 - Fix sur les chemins des templates
 - Quelques corrections
@@ -26,7 +30,7 @@
 - Remove bundle FOSjsRouting
 - Update package js tempus dominus
 - Allow add new value in Select2
-- Filter in Datatables
+- Filter in Datatable
 - Integration ChartJS
 - Clean code
 
@@ -39,7 +43,7 @@
 
 - Add Webpack Encore
 - Add bundle Datatable Omines
-- Somes fix
+- Some fix
 
 ### Version 0.2.0
 
