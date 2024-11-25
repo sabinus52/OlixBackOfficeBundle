@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Form\Type;
@@ -50,9 +50,7 @@ class Select2AjaxType extends Select2ModelType
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
@@ -102,20 +100,16 @@ class Select2AjaxType extends Select2ModelType
         $resolver->setAllowedTypes('ajax_js_cache', ['bool']);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $transformer = ($options['multiple'])
-            ? new EntitiesToValuesTransformer($this->entityManager, $options['class'], $options['class_pkey'], $options['class_label'], $options['allow_add_prefix'])
-            : new EntityToValueTransformer($this->entityManager, $options['class'], $options['class_pkey'], $options['class_label'], $options['allow_add_prefix']);
+            ? new EntitiesToValuesTransformer($this->entityManager, (string) $options['class'], (string) $options['class_pkey'], (string) $options['class_label'], (string) $options['allow_add_prefix'])
+            : new EntityToValueTransformer($this->entityManager, (string) $options['class'], (string) $options['class_pkey'], (string) $options['class_label'], (string) $options['allow_add_prefix']);
         $builder->addViewTransformer($transformer, true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         // Autorisation d'ajout d'un nouvel élément
@@ -132,7 +126,7 @@ class Select2AjaxType extends Select2ModelType
         $view->vars['allow_clear'] = $options['js_allow_clear'];
 
         // Génération de la route
-        $options['ajax_js_route'] = $this->router->generate($options['remote_route'], array_merge(
+        $options['ajax_js_route'] = $this->router->generate((string) $options['remote_route'], array_merge(
             $options['remote_params'], [
                 'class' => $form->getParent()->getConfig()->getType()->getInnerType()::class,
                 'widget' => $form->getName(),
@@ -149,9 +143,7 @@ class Select2AjaxType extends Select2ModelType
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'olix_select2_ajax';

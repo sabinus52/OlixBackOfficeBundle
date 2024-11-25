@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Form\Model;
@@ -30,6 +30,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @see         https://github.com/Eonasdan/tempus-dominus
  * @see         https://getdatepicker.com/
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 abstract class DateTimePickerModelType extends AbstractModelType
 {
@@ -42,9 +44,7 @@ abstract class DateTimePickerModelType extends AbstractModelType
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         // Options du widget du formulaire
@@ -78,22 +78,24 @@ abstract class DateTimePickerModelType extends AbstractModelType
     }
 
     /**
-     * {@inheritDoc}
+     * @param array<string,string>|mixed[][]|mixed[][][] $options
      */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
+        /** @var string $format */
         $format = $options['format'];
         // pass the form type option directly to the template
         $view->vars['button_icon'] = $options['button_icon'];
 
         // Convert les options de types DateTime
         if (isset($options['js_restrictions']['minDate'])) {
-            $options['js_restrictions']['minDate'] = $this->formatIsDate($options['js_restrictions']['minDate'], $format);
+            $options['js_restrictions']['minDate'] = $this->formatIsDate($options['js_restrictions']['minDate'], $format); // @phpstan-ignore argument.type
         }
         if (isset($options['js_restrictions']['maxDate'])) {
             $options['js_restrictions']['maxDate'] = $this->formatIsDate($options['js_restrictions']['maxDate'], $format);
         }
-        $options['js_default_date'] = $this->formatIsDate($options['js_default_date'], $format);
+        $options['js_default_date'] = $this->formatIsDate($options['js_default_date'], $format); // @phpstan-ignore argument.type
         if (null === $options['js_default_date']) {
             unset($options['js_default_date']);
         }
@@ -123,18 +125,18 @@ abstract class DateTimePickerModelType extends AbstractModelType
     /**
      * Retourne toutes les options javascript du widget datetimepicker.
      *
-     * @param array<mixed> $options
+     * @param mixed[] $options
      *
-     * @return array<mixed>
+     * @return mixed[]
      */
     private function getOptionsWidget(array $options): array
     {
         // Camelize options for javascript
         $result = $this->getOptionsWidgetCamelized($options);
 
-        $result['localization']['locale'] = $options['locale'];
+        $result['localization']['locale'] = $options['locale']; // @phpstan-ignore offsetAccess.nonOffsetAccessible
         // Conversion format date PHP to format moment.js
-        $result['localization']['format'] = $options['format'];
+        $result['localization']['format'] = $options['format']; // @phpstan-ignore offsetAccess.nonOffsetAccessible
 
         if ([] === $result['restrictions']) {
             unset($result['restrictions']);
@@ -146,7 +148,7 @@ abstract class DateTimePickerModelType extends AbstractModelType
     /**
      * @param bool|string|\DateTimeInterface|null $option
      */
-    private function formatIsDate($option, string $format): null|bool|string
+    private function formatIsDate($option, string $format): bool|string|null
     {
         if ($option instanceof \DateTimeInterface) {
             return $this->formatObject($option, $format);

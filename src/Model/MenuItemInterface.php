@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Model;
@@ -48,7 +48,7 @@ interface MenuItemInterface extends \Countable, \IteratorAggregate
      */
     public function getChildren(): array;
 
-    public function getChild(string $code): self;
+    public function getChild(string $code): ?self;
 
     public function getActiveChild(): ?self;
 
@@ -63,5 +63,5 @@ interface MenuItemInterface extends \Countable, \IteratorAggregate
 
     public function getParent(): ?self;
 
-    public function setParent(self $parent = null): self;
+    public function setParent(?self $parent = null): self;
 }

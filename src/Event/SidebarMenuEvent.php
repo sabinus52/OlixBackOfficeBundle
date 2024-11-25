@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Event;
@@ -15,7 +15,7 @@ use Olix\BackOfficeBundle\Model\MenuItemInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Evènements sur le menu de la barre latérale.
+ * Évènements sur le menu de la barre latérale.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
@@ -26,10 +26,7 @@ class SidebarMenuEvent extends BackOfficeEvent
      */
     protected $rootItems = [];
 
-    /**
-     * @param string|null $forceMenuActiv
-     */
-    public function __construct(protected ?Request $request = null, protected ?string $forceMenuActiv = null)
+    public function __construct(protected Request $request, protected ?string $forceMenuActiv = null)
     {
         $this->forceMenuActiv = (empty($forceMenuActiv)) ? null : $forceMenuActiv;
     }
@@ -44,7 +41,7 @@ class SidebarMenuEvent extends BackOfficeEvent
      */
     public function getMenuActiv(): string
     {
-        return $this->forceMenuActiv ?? $this->request->get('_route');
+        return $this->forceMenuActiv ?? (string) $this->request->get('_route');
     }
 
     /**
@@ -66,7 +63,7 @@ class SidebarMenuEvent extends BackOfficeEvent
     }
 
     /**
-     * Ajoute un nouvel élémént de menu.
+     * Ajoute un nouvel élément de menu.
      */
     public function addMenuItem(MenuItemInterface $item): self
     {

@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Model;
@@ -29,8 +29,8 @@ class NotificationModel implements NotificationInterface
     /**
      * Constructeur.
      *
-     * @param ?string      $code    : Code identifiant de la notif
-     * @param array<mixed> $options : Options de la notif
+     * @param ?string      $code    : Code identifiant de la notification
+     * @param array<mixed> $options : Options de la notification
      */
     public function __construct(protected ?string $code = null, array $options = [])
     {

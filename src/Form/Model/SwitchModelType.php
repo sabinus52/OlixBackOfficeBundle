@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Form\Model;
@@ -31,12 +31,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @author      Sabinus52 <sabinus52@gmail.com>
  *
  * @see         https://github.com/Bttstrp/bootstrap-switch
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 abstract class SwitchModelType extends AbstractModelType
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         // Options JavaScript supplémentaires du widget
@@ -51,9 +51,7 @@ abstract class SwitchModelType extends AbstractModelType
         $resolver->setAllowedTypes('chk_label', ['string']);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         // Options attributes du widget
@@ -61,16 +59,14 @@ abstract class SwitchModelType extends AbstractModelType
 
         $view->vars['class_color'] = ['custom-control', 'custom-switch'];
         if (null !== $options['on_color']) {
-            $view->vars['class_color'][] = sprintf('custom-switch-on-%s', $options['on_color']);
+            $view->vars['class_color'][] = sprintf('custom-switch-on-%s', (string) $options['on_color']);
         }
         if (null !== $options['off_color']) {
-            $view->vars['class_color'][] = sprintf('custom-switch-off-%s', $options['off_color']);
+            $view->vars['class_color'][] = sprintf('custom-switch-off-%s', (string) $options['off_color']);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'olix_switch';

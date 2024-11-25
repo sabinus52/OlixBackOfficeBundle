@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Helper;
@@ -31,12 +31,12 @@ class Gravatar
     protected int $size = 128;
 
     /**
-     * Avatar par defaut URL externe ou ('404', 'mm', 'identicon', 'monsterid', 'wavatar', 'retro').
+     * Avatar par défaut URL externe ou ('404', 'mm', 'identicon', 'monsterid', 'wavatar', 'retro').
      */
     protected string $defaultImage = 'monsterid';
 
     /**
-     * Rating par defaut (Valeur possible 'g', 'pg', 'r', 'x').
+     * Rating par défaut (Valeur possible 'g', 'pg', 'r', 'x').
      */
     protected string $rating = 'g';
 
@@ -82,7 +82,7 @@ class Gravatar
     {
         $validDefaults = ['404', 'mm', 'identicon', 'monsterid', 'wavatar', 'retro'];
 
-        // Verifie la bonne url
+        // Vérifie la bonne url
         if (!filter_var($image, FILTER_VALIDATE_URL)) {
             throw new \InvalidArgumentException('The default image specified is not a recognized gravatar "default" and is not a valid URL');
         }
@@ -94,7 +94,7 @@ class Gravatar
     }
 
     /**
-     * Retroune le rating.
+     * Retourne le rating.
      */
     public function getRating(): string
     {
@@ -118,7 +118,7 @@ class Gravatar
     }
 
     /**
-     * Verifie si on utilise le SSL.
+     * Vérifie si on utilise le SSL.
      */
     public function usingSecureImages(): bool
     {
@@ -136,7 +136,7 @@ class Gravatar
     }
 
     /**
-     * Desactive le protocole SSL.
+     * Désactive le protocole SSL.
      */
     public function disableSecureImages(): self
     {
@@ -177,7 +177,7 @@ class Gravatar
         }
 
         if (empty($email)) {
-            $params[] = 'f=y'; // Force l'image par defaut
+            $params[] = 'f=y'; // Force l'image par défaut
         }
 
         return '?'.implode('&', $params);

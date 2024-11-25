@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Form\Model;
@@ -55,7 +55,7 @@ abstract class AbstractModelType extends AbstractType
      */
     public function camelize(string $name): string
     {
-        return preg_replace_callback(
+        return (string) preg_replace_callback(
             '/_([a-z])/',
             static fn (array $char): string => strtoupper($char[1]),
             $name

@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Security;
@@ -34,7 +34,7 @@ class UserManager implements UserManagerInterface
     /**
      * Configuration du bundle de la branche "security".
      *
-     * @var array<mixed>
+     * @var array<string,string[]>
      */
     protected $parameters = [
         'menu_activ' => false,
@@ -54,7 +54,7 @@ class UserManager implements UserManagerInterface
         protected FormFactoryInterface $formFactory,
         protected ParameterBagInterface $parameterBag,
         protected EntityManagerInterface $entityManager,
-        protected UserPasswordHasherInterface $passwordHasher
+        protected UserPasswordHasherInterface $passwordHasher,
     ) {
         // Get parameter olix_back_office.security
         if (!$parameterBag->has('olix_back_office')) {
@@ -139,7 +139,7 @@ class UserManager implements UserManagerInterface
     /**
      * Mets à jour les données de l'utilisateur.
      */
-    public function update(string $password = null): void
+    public function update(?string $password = null): void
     {
         if (null !== $password) {
             $this->user->setPassword($this->getHashedPassword($password));

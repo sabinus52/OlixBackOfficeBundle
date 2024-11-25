@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Command;
@@ -58,7 +58,7 @@ final class DumpBaseCommand extends Command
                 La commande <info>%command.name%</info> réalise un dump dans le chemin de son choix.
                 (par défaut <comment>/tmp</comment> ou défini dans le paramètre <info>%env(BACKUP_PATH)%</info>
 
-                 <info>php %command.full_name% /var/backup</info>
+                    <info>php %command.full_name% /var/backup</info>
 
                 Le dump de sortie est au format <comment>dump-[BASENAME]-YYYYMMDD-HHIISS.sql</comment>.
 
@@ -79,11 +79,11 @@ final class DumpBaseCommand extends Command
         }
 
         if ($input->getArgument('path')) {
-            $this->pathRootBackup = $input->getArgument('path');
+            $this->pathRootBackup = (string) $input->getArgument('path');
         }
 
         if ($input->getOption('purge')) {
-            $this->filesToKeep = (int) $input->getOption('purge');
+            $this->filesToKeep = (int) $input->getOption('purge'); // @phpstan-ignore cast.int
         }
     }
 
@@ -102,7 +102,7 @@ final class DumpBaseCommand extends Command
         }
 
         if (!is_writable($this->pathRootBackup)) {
-            $style->error(sprintf('Le dossier "%s" n\'est pas accesssible.', $this->pathRootBackup));
+            $style->error(sprintf('Le dossier "%s" n\'est pas accessible.', $this->pathRootBackup));
 
             return Command::FAILURE;
         }
@@ -120,7 +120,7 @@ final class DumpBaseCommand extends Command
         if (0 === $return[0]) {
             $style->success(sprintf('Le dump "%s" de la base a été sauvegardé avec succès', $return[1]));
         } else {
-            $style->error(sprintf('Echec du dump "%s"', $return[1]));
+            $style->error(sprintf('Échec du dump "%s"', $return[1]));
         }
 
         return ($return[0]) ? Command::SUCCESS : Command::FAILURE;

@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Values;
@@ -21,7 +21,7 @@ abstract class ValuesAbstract implements ValuesInterface, \Stringable
     /**
      * Liste des valeurs.
      *
-     * @var array<mixed>
+     * @var array<int,string>|array<int,array<string>>
      */
     protected static $values = [];
 
@@ -42,23 +42,19 @@ abstract class ValuesAbstract implements ValuesInterface, \Stringable
     }
 
     /**
-     * Retourne la liste pour le filtre dans les Datatables.
+     * Retourne la liste pour le filtre dans les Datatable.
      *
-     * @return array<string>
+     * @return array<int,string>
      */
     public static function getFilters(): array
     {
         $result = [];
 
         foreach (static::$values as $key => $value) {
-            if (is_array($value) && array_key_exists('label', $value)) {
-                $result[$key] = $value['label'];
-            } else {
-                $result[$key] = $value;
-            }
+            $result[$key] = is_array($value) && array_key_exists('label', $value) ? $value['label'] : $value;
         }
 
-        return $result;
+        return $result; // @phpstan-ignore return.type
     }
 
     public function __construct(protected int $value)
@@ -91,6 +87,6 @@ abstract class ValuesAbstract implements ValuesInterface, \Stringable
 
     public function getColor(): string
     {
-        return static::$values[$this->value]['color'];
+        return static::$values[$this->value]['color']; // @phpstan-ignore offsetAccess.notFound
     }
 }

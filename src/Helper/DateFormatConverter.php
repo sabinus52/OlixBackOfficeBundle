@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Helper;
@@ -70,7 +70,7 @@ final class DateFormatConverter
                 } else {
                     // if it's no a 'T' then send whatever is inside the '' to
                     // the output, but send it inside [] (useful for cases like
-                    // the brazilian translation that uses a 'de' in the date)
+                    // the Brazilian translation that uses a 'de' in the date)
                     $output .= '[';
                     $temp = current(explode("'", substr($format, $i + 1)));
                     $output .= $temp;

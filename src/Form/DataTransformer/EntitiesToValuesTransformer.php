@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Form\DataTransformer;
@@ -20,6 +20,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  * Classe de transformation entre une entité et les valeurs de la liste multiple "Select2".
  *
  * @author      Sabinus52 <sabinus52@gmail.com>
+ *
+ * @phpstan-ignore missingType.generics
  */
 class EntitiesToValuesTransformer implements DataTransformerInterface
 {
@@ -37,15 +39,16 @@ class EntitiesToValuesTransformer implements DataTransformerInterface
         protected EntityManagerInterface $entityManager,
         protected string $entityName,
         protected string $primaryKey,
-        protected ?string $fieldLabel,
-        protected string $prefixAllowAdd)
-    {
+        protected ?string $fieldLabel, // FIXME : mettre le champs non null
+        protected string $prefixAllowAdd,
+    ) {
         $this->accessor = new PropertyAccessor();
     }
 
     /**
-     * {@inheritDoc}
+     * @param array<object> $entities
      */
+    #[\Override]
     public function transform($entities): mixed
     {
         $result = [];
@@ -68,9 +71,7 @@ class EntitiesToValuesTransformer implements DataTransformerInterface
         return $result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function reverseTransform($values): mixed
     {
         if (empty($values) || !is_array($values)) {
@@ -85,12 +86,13 @@ class EntitiesToValuesTransformer implements DataTransformerInterface
             $prefix = substr((string) $value, 0, $prefixLength);
             if ($prefix === $this->prefixAllowAdd) {
                 $newObject = new $this->entityName();
-                $this->accessor->setValue($newObject, $this->fieldLabel, $realValue);
+                $this->accessor->setValue($newObject, (string) $this->fieldLabel, $realValue);
                 $newEntities[] = $newObject;
                 unset($values[$key]);
             }
         }
 
+        /** @var object[] $entities */
         $entities = $this->entityManager->createQueryBuilder()
             ->select('entity')
             ->from($this->entityName, 'entity')

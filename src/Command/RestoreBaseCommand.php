@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Command;
@@ -54,7 +54,7 @@ final class RestoreBaseCommand extends Command
             ->setHelp(<<<'EOT'
                 La commande <info>%command.name%</info> réalise une restauration d'un dump.
 
-                 <info>php %command.full_name% /var/backup/dump-base-YYYYMMDD-HHIISS</info>
+                    <info>php %command.full_name% /var/backup/dump-base-YYYYMMDD-HHIISS</info>
 
                 Si le dump est omis alors le dernier dump réalisé est utilisé depuis le dossier défini dans <info>--dir=[DIRECTORY_DUMP]</info>.
                 (par défaut <comment>/tmp</comment> ou défini dans le paramètre <info>%env(BACKUP_PATH)%</info>
@@ -74,7 +74,7 @@ final class RestoreBaseCommand extends Command
         }
 
         if ($input->getOption('dir')) {
-            $this->pathRootBackup = $input->getOption('dir');
+            $this->pathRootBackup = (string) $input->getOption('dir');
         }
     }
 
@@ -87,7 +87,7 @@ final class RestoreBaseCommand extends Command
 
         $dumpFile = '';
         if ($input->getArgument('dump')) {
-            $dumpFile = $input->getArgument('dump');
+            $dumpFile = (string) $input->getArgument('dump');
         } else {
             $dumpFile = $this->getLastDumpFile();
             if (null === $dumpFile) {
@@ -98,7 +98,7 @@ final class RestoreBaseCommand extends Command
         }
 
         if (!is_readable($dumpFile)) {
-            $style->error(sprintf('Le dump "%s" n\'est pas accesssible.', $dumpFile));
+            $style->error(sprintf('Le dump "%s" n\'est pas accessible.', $dumpFile));
 
             return Command::FAILURE;
         }
@@ -122,7 +122,7 @@ final class RestoreBaseCommand extends Command
         if (0 === $return) {
             $style->success(sprintf('Le dump "%s" a été restauré avec succès', $dumpFile));
         } else {
-            $style->error(sprintf('Echec de la restauration du dump "%s"', $dumpFile));
+            $style->error(sprintf('Échec de la restauration du dump "%s"', $dumpFile));
         }
 
         return (0 === $return) ? Command::SUCCESS : Command::FAILURE;

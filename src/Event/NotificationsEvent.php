@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Event;
@@ -14,7 +14,7 @@ namespace Olix\BackOfficeBundle\Event;
 use Olix\BackOfficeBundle\Model\NotificationInterface;
 
 /**
- * Evènements sur la liste des notifications de la barre de navigation.
+ * Évènements sur la liste des notifications de la barre de navigation.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
@@ -28,22 +28,22 @@ class NotificationsEvent extends BackOfficeEvent
     protected $notifications = [];
 
     /**
-     * Nombre max d'affichage de notifs dans la barre.
+     * Nombre max d'affichage de notifications dans la barre.
      */
     protected int $max = 3;
 
     /**
-     * Nombre total de notifs.
+     * Nombre total de notifications.
      */
     protected int $total = 0;
 
     /**
-     * Route vers une notif.
+     * Route vers une notifications.
      */
     protected string $route;
 
     /**
-     * Route vers toutes les notifs.
+     * Route vers toutes les notifications.
      */
     protected string $routeAll;
 
@@ -113,7 +113,7 @@ class NotificationsEvent extends BackOfficeEvent
     }
 
     /**
-     * Ajoute un nouvelle notif.
+     * Ajoute un nouvelle notifications.
      */
     public function addNotification(NotificationInterface $item): self
     {

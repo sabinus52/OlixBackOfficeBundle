@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Controller;
@@ -20,7 +20,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -49,8 +49,10 @@ class ProfileController extends AbstractController
         // Validation du formulaire de profile de l'utilisateur
         $form1->handleRequest($request);
         if ($form1->isSubmitted() && $form1->isValid()) {
+            /** @var User $user */
+            $user = $form1->getData();
             // Update datas of this user
-            $manager->setUser($form1->getData())->update();
+            $manager->setUser($user)->update();
             $this->addFlash('success', 'La modification des informations a bien été prise en compte');
 
             return $this->redirectToRoute('olix_profile');
@@ -66,14 +68,14 @@ class ProfileController extends AbstractController
                 $isError = true;
             }
 
-            if (!$manager->isPasswordValid($form2->get('oldPassword')->getData())) {
+            if (!$manager->isPasswordValid((string) $form2->get('oldPassword')->getData())) {
                 $form2->addError(new FormError('Ancien mot de passe incorrect'));
                 $isError = true;
             }
 
             if (!$isError) {
                 // Change password for this user
-                $manager->update($form2->get('password')->getData());
+                $manager->update((string) $form2->get('password')->getData());
                 $this->addFlash('success', 'La modification du mot de passe a bien été prise en compte');
 
                 return $this->redirectToRoute('olix_profile');
@@ -96,7 +98,7 @@ class ProfileController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        // Switche le thème
+        // Switch le thème
         $user->setTheme(($user->getTheme() + 1) % 2);
 
         $manager->setUser($user);
@@ -126,7 +128,7 @@ class ProfileController extends AbstractController
 
         return $this->render('@OlixBackOffice/Security/_avatar.html.twig', [
             'avatars' => $result,
-            'gravatar' => $gravatar->get($user->getEmail()),
+            'gravatar' => $gravatar->get((string) $user->getEmail()),
         ]);
     }
 

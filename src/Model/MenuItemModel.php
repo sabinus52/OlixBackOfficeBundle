@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Model;
@@ -115,7 +115,7 @@ class MenuItemModel implements MenuItemInterface
 
     public function setIsActive(bool $isActive): self
     {
-        if ($this->hasParent()) {
+        if ($this->hasParent() && $this->getParent() instanceof self) {
             $this->getParent()->setIsActive($isActive);
         }
 
@@ -185,7 +185,7 @@ class MenuItemModel implements MenuItemInterface
         return $this->children;
     }
 
-    public function getChild(string $code): MenuItemInterface
+    public function getChild(string $code): ?MenuItemInterface
     {
         return $this->children[$code] ?? null;
     }
@@ -235,7 +235,7 @@ class MenuItemModel implements MenuItemInterface
         return $this->parent;
     }
 
-    public function setParent(MenuItemInterface $parent = null): self
+    public function setParent(?MenuItemInterface $parent = null): self
     {
         $this->parent = $parent;
 
