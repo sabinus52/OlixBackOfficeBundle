@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Classe pour checker l'autorisation des utilsateurs.
+ * Classe pour checker l'autorisation des utilisateurs.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
  *

@@ -30,7 +30,7 @@ use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 class UserActivitySubscriber implements EventSubscriberInterface
 {
     /**
-     * Delai en minutes à partir duquel l'utilisateur est considéré comme non connecté.
+     * Délai en minutes à partir duquel l'utilisateur est considéré comme non connecté.
      */
     protected int $delay;
 
@@ -58,19 +58,19 @@ class UserActivitySubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Evènement sur l'affichage d'une page.
+     * Évènement sur l'affichage d'une page.
      */
     public function onKernelController(ControllerEvent $event): void
     {
         /** @var User $user */
         $user = $this->security->getUser();
 
-        // ici on vérifie que la requête est une "MASTER_REQUEST" pour que les sous-requêtes soient ingorées (par exemple si on fait un render() dans notre template)
+        // ici on vérifie que la requête est une "MASTER_REQUEST" pour que les sous-requêtes soient ignorées (par exemple si on fait un render() dans notre template)
         if (HttpKernelInterface::MAIN_REQUEST !== $event->getRequestType()) {
             return;
         }
 
-        // On vérifie qu'un token d'autentification est bien présent avant d'essayer manipuler l'utilisateur courant.
+        // On vérifie qu'un token d’authentification est bien présent avant d'essayer manipuler l'utilisateur courant.
         if (null !== $user) {
             // On utilise un délai pendant lequel on considère que l'utilisateur est toujours actif et qu'il n'est pas nécessaire de refaire de mise à jour
             $delay = new \DateTime();
@@ -86,18 +86,20 @@ class UserActivitySubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Evenement au moment de la connexion de l'utilisateur.
+     * Événement au moment de la connexion de l'utilisateur.
      */
     public function onSecurityInteractiveLogin(LoginSuccessEvent $event): void
     {
         /** @var User $user */
         $user = $event->getUser();
 
-        // Mise à jour de la date de login
-        $user->setLastLogin(new \DateTimeImmutable());
+        if ($user instanceof User) {
+            // Mise à jour de la date de login
+            $user->setLastLogin(new \DateTimeImmutable());
 
-        // Persist the data to database.
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+            // Persist the data to database.
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+        }
     }
 }
