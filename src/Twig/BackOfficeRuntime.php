@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Twig;
 
+use Olix\BackOfficeBundle\Helper\ParameterOlix;
 use Olix\BackOfficeBundle\Model\User;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -20,24 +21,11 @@ use Twig\Extension\RuntimeExtensionInterface;
  * @author     Sabinus52 <sabinus52@gmail.com>
  *
  * @see        https://symfony.com/doc/current/templating/twig_extension.html#creating-lazy-loaded-twig-extensions
- *
- * @SuppressWarnings(PHPMD)
  */
 class BackOfficeRuntime implements RuntimeExtensionInterface
 {
-    /**
-     * Configuration des options du thème.
-     *
-     * @var array<mixed>
-     */
-    private $options;
-
-    /**
-     * @param array<mixed> $olixConfigParameter : Configuration du bundle 'olix_back_office'
-     */
-    public function __construct(array $olixConfigParameter)
+    public function __construct(private readonly ParameterOlix $configuration)
     {
-        $this->options = $olixConfigParameter['options'] ?? [];
     }
 
     /**
@@ -46,39 +34,51 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
     public function getClassBody(?User $user): string
     {
         $classes = [];
-        if (isset($this->options['boxed']) && true === $this->options['boxed']) {
+        if (true === $this->configuration->getValue('options.boxed')) {
             $classes[] = 'layout-boxed';
         } else {
-            if (isset($this->options['navbar']['fixed']) && true === $this->options['navbar']['fixed']) {
+            if (true === $this->configuration->getValue('options.navbar.fixed')) {
                 $classes[] = 'layout-navbar-fixed';
             }
-
-            if (isset($this->options['sidebar']['fixed']) && true === $this->options['sidebar']['fixed']) {
+            if (true === $this->configuration->getValue('options.sidebar.fixed')) {
                 $classes[] = 'layout-fixed';
             }
         }
 
-        if (isset($this->options['footer']['fixed']) && true === $this->options['footer']['fixed']) {
+        if (true === $this->configuration->getValue('options.footer.fixed')) {
             $classes[] = 'layout-footer-fixed';
         }
 
-        if (isset($this->options['sidebar']['collapsed']) && true === $this->options['sidebar']['collapsed']) {
+        if (true === $this->configuration->getValue('options.sidebar.collapse')) {
             $classes[] = 'sidebar-collapse';
         }
 
-        if (isset($this->options['sidebar']['color']) && '' !== $this->options['sidebar']['color']) {
-            $classes[] = 'accent-'.$this->options['sidebar']['color'];
+        if ('' !== $this->configuration->getValue('options.sidebar.color')) {
+            $classes[] = 'accent-'.$this->configuration->getValue('options.sidebar.color');
         }
 
-        if ($user instanceof User) {
-            if (User::THEME_DARK === $user->getTheme()) {
-                $classes[] = 'dark-mode';
-            }
-        } elseif (isset($this->options['dark_mode']) && true === $this->options['dark_mode']) {
-            $classes[] = 'dark-mode';
+        // Si theme dark ou light
+        if (null !== $this->getClassBodyUser($user)) {
+            $classes[] = $this->getClassBodyUser($user);
         }
 
         return implode(' ', $classes);
+    }
+
+    /**
+     * Retourne si c'est le thème "dark" qui est utilisé par l'utilisateur.
+     */
+    private function getClassBodyUser(?User $user): ?string
+    {
+        if ($user instanceof User) {
+            if (User::THEME_DARK === $user->getTheme()) {
+                return 'dark-mode';
+            }
+        } elseif (true === $this->configuration->getValue('options.dark_mode')) {
+            return 'dark-mode';
+        }
+
+        return null;
     }
 
     /**
@@ -87,14 +87,10 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
     public function getClassNavbar(): string
     {
         $classes = [];
-        if (isset($this->options['navbar']['theme']) && 'dark' === $this->options['navbar']['theme']) {
-            $classes[] = 'navbar-dark';
-        } else {
-            $classes[] = 'navbar-light';
-        }
+        $classes[] = 'dark' === $this->configuration->getValue('options.navbar.theme') ? 'navbar-dark' : 'navbar-light';
 
-        if (isset($this->options['navbar']['color']) && '' !== $this->options['navbar']['color']) {
-            $classes[] = 'navbar-'.$this->options['navbar']['color'];
+        if ('' !== $this->configuration->getValue('options.navbar.color')) {
+            $classes[] = 'navbar-'.$this->configuration->getValue('options.navbar.color');
         }
 
         return implode(' ', $classes);
@@ -106,12 +102,12 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
     public function getClassSidebar(): string
     {
         $classes = [];
-        if (isset($this->options['sidebar']['theme']) && 'light' === $this->options['sidebar']['theme']) {
-            if (isset($this->options['sidebar']['color']) && '' !== $this->options['sidebar']['color']) {
-                $classes[] = 'sidebar-light-'.$this->options['sidebar']['color'];
+        if ('light' === $this->configuration->getValue('options.sidebar.theme')) {
+            if ('' !== $this->configuration->getValue('options.sidebar.color')) {
+                $classes[] = 'sidebar-light-'.$this->configuration->getValue('options.sidebar.color');
             }
-        } elseif (isset($this->options['sidebar']['color']) && '' !== $this->options['sidebar']['color']) {
-            $classes[] = 'sidebar-dark-'.$this->options['sidebar']['color'];
+        } elseif ('' !== $this->configuration->getValue('options.sidebar.color')) {
+            $classes[] = 'sidebar-dark-'.$this->configuration->getValue('options.sidebar.color');
         }
 
         return implode(' ', $classes);
@@ -123,19 +119,19 @@ class BackOfficeRuntime implements RuntimeExtensionInterface
     public function getClassMenu(): string
     {
         $classes = [];
-        if (isset($this->options['sidebar']['flat']) && true === $this->options['sidebar']['flat']) {
+        if (true === $this->configuration->getValue('options.sidebar.flat')) {
             $classes[] = 'nav-flat';
         }
 
-        if (isset($this->options['sidebar']['legacy']) && true === $this->options['sidebar']['legacy']) {
+        if (true === $this->configuration->getValue('options.sidebar.legacy')) {
             $classes[] = 'nav-legacy';
         }
 
-        if (isset($this->options['sidebar']['compact']) && true === $this->options['sidebar']['compact']) {
+        if (true === $this->configuration->getValue('options.sidebar.compact')) {
             $classes[] = 'nav-compact';
         }
 
-        if (isset($this->options['sidebar']['child_indent']) && true === $this->options['sidebar']['child_indent']) {
+        if (true === $this->configuration->getValue('options.sidebar.child_indent')) {
             $classes[] = 'nav-child-indent';
         }
 

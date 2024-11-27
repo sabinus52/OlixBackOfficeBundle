@@ -11,11 +11,11 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Controller;
 
+use Olix\BackOfficeBundle\Helper\ParameterOlix;
 use Olix\BackOfficeBundle\Security\UserDatatable;
 use Olix\BackOfficeBundle\Security\UserManager;
 use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -31,28 +31,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ManagerController extends AbstractController
 {
     /**
-     * @var array<string, mixed>
-     */
-    private $parameters = [
-        'menu_activ' => false,
-        'delay_activity' => 5,
-    ];
-
-    /**
      * Constructeur.
      */
-    public function __construct(ParameterBagInterface $parameterBag)
+    public function __construct(private readonly ParameterOlix $parameterOlix)
     {
-        // Get parameter "olix_back_office.security"
-        if (!$parameterBag->has('olix_back_office')) {
-            throw new \Exception('Parameter "olix_back_office" not defined', 1);
-        }
-
-        /** @var array<mixed> $parameters */
-        $parameters = $parameterBag->get('olix_back_office');
-        if (array_key_exists('security', $parameters)) {
-            $this->parameters = $parameters['security'];
-        }
     }
 
     /**
@@ -65,7 +47,7 @@ class ManagerController extends AbstractController
 
         $datatable = $factory->createFromType(UserDatatable::class, [
             'entity' => $manager->getClass(),
-            'delay' => $this->parameters['delay_activity'],
+            'delay' => $this->parameterOlix->getValue('security.delay_activity'),
         ], [
             'searching' => true,
         ])
@@ -214,7 +196,7 @@ class ManagerController extends AbstractController
      */
     protected function checkAccess(): bool
     {
-        if (!isset($this->parameters['menu_activ']) || true !== $this->parameters['menu_activ']) {
+        if (true !== $this->parameterOlix->getValue('security.menu_activ')) {
             throw new \Exception('Asses denied', 1); // FIXME
         }
 

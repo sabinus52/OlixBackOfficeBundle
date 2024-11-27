@@ -15,8 +15,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Olix\BackOfficeBundle\Form\UserCreateType;
 use Olix\BackOfficeBundle\Form\UserEditPassType;
 use Olix\BackOfficeBundle\Form\UserPasswordType;
+use Olix\BackOfficeBundle\Helper\ParameterOlix;
 use Olix\BackOfficeBundle\Model\User;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -31,41 +31,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class UserManager implements UserManagerInterface
 {
-    /**
-     * Configuration du bundle de la branche "security".
-     *
-     * @var array<string,string[]>
-     */
-    protected $parameters = [
-        'menu_activ' => false,
-        'class' => [
-            'user' => User::class,
-            'form_user' => \Olix\BackOfficeBundle\Form\UserEditType::class,
-            'form_profile' => \Olix\BackOfficeBundle\Form\UserProfileType::class,
-        ],
-    ];
-
     protected User $user;
 
     /**
      * Constructeur.
      */
     public function __construct(
-        protected FormFactoryInterface $formFactory,
-        protected ParameterBagInterface $parameterBag,
-        protected EntityManagerInterface $entityManager,
-        protected UserPasswordHasherInterface $passwordHasher,
+        protected readonly FormFactoryInterface $formFactory,
+        protected readonly ParameterOlix $parameterOlix,
+        protected readonly EntityManagerInterface $entityManager,
+        protected readonly UserPasswordHasherInterface $passwordHasher,
     ) {
-        // Get parameter olix_back_office.security
-        if (!$parameterBag->has('olix_back_office')) {
-            throw new \Exception('Parameter "olix_back_office" not defined', 1);
-        }
-
-        /** @var array<mixed> $parameters */
-        $parameters = $parameterBag->get('olix_back_office');
-        if (array_key_exists('security', $parameters)) {
-            $this->parameters = $parameters['security'];
-        }
     }
 
     /**
@@ -73,7 +49,7 @@ class UserManager implements UserManagerInterface
      */
     public function getClass(): string
     {
-        return $this->parameters['class']['user'];
+        return (string) $this->parameterOlix->getValue('security.class.user');
     }
 
     /**
@@ -191,7 +167,7 @@ class UserManager implements UserManagerInterface
      */
     public function createFormEditUser(array $options = []): FormInterface
     {
-        $class = $this->parameters['class']['form_user'];
+        $class = (string) $this->parameterOlix->getValue('security.class.form_user');
 
         return $this->createForm($class, $options);
     }
@@ -203,7 +179,7 @@ class UserManager implements UserManagerInterface
      */
     public function createFormProfileUser(array $options = []): FormInterface
     {
-        $class = $this->parameters['class']['form_profile'];
+        $class = (string) $this->parameterOlix->getValue('security.class.form_profile');
 
         return $this->createForm($class, $options);
     }
