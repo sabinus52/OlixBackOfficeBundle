@@ -15,7 +15,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Olix\BackOfficeBundle\Event\BreadcrumbEvent;
 use Olix\BackOfficeBundle\Event\SidebarMenuEvent;
 use Olix\BackOfficeBundle\Helper\ParameterOlix;
-use Olix\BackOfficeBundle\Model\MenuItemInterface;
 use Olix\BackOfficeBundle\Model\MenuItemModel;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -69,8 +68,8 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
     /**
      * Correspondance de la route par récursivité pour activer le menu en cours.
      *
-     * @param ?string             $match Chaîne à faire correspondre
-     * @param MenuItemInterface[] $items Les éléments du menu
+     * @param ?string         $match Chaîne à faire correspondre
+     * @param MenuItemModel[] $items Les éléments du menu
      */
     protected function activateByRoute(?string $match, ?array $items): void
     {

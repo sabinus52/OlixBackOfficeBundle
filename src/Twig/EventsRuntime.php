@@ -14,7 +14,7 @@ namespace Olix\BackOfficeBundle\Twig;
 use Olix\BackOfficeBundle\Event\BreadcrumbEvent;
 use Olix\BackOfficeBundle\Event\NotificationsEvent;
 use Olix\BackOfficeBundle\Event\SidebarMenuEvent;
-use Olix\BackOfficeBundle\Model\MenuItemInterface;
+use Olix\BackOfficeBundle\Model\MenuItemModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Extension\RuntimeExtensionInterface;
@@ -38,7 +38,7 @@ class EventsRuntime implements RuntimeExtensionInterface
     /**
      * Retourne le menu de la barre latérale.
      *
-     * @return MenuItemInterface[]
+     * @return MenuItemModel[]
      */
     public function getSidebarMenu(Request $request, string $forceMenuActiv): array
     {
@@ -55,7 +55,7 @@ class EventsRuntime implements RuntimeExtensionInterface
     /**
      * Retourne le fil d’Ariane.
      *
-     * @return MenuItemInterface[]
+     * @return MenuItemModel[]
      */
     public function getBreadcrumb(Request $request, string $forceMenuActiv): array
     {
@@ -66,7 +66,7 @@ class EventsRuntime implements RuntimeExtensionInterface
         /** @var BreadcrumbEvent $event */
         $event = $this->eventDispatcher->dispatch(new BreadcrumbEvent($request, $forceMenuActiv));
 
-        /** @var MenuItemInterface $active */
+        /** @var MenuItemModel $active */
         $active = $event->getMenuItemActive();
         $list = [];
         if (null !== $active) {

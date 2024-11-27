@@ -15,8 +15,10 @@ namespace Olix\BackOfficeBundle\Model;
  * Classe de chaque élément composant la menu de la barre latérale.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
+ *
+ * @implements \IteratorAggregate<string, MenuItemModel>
  */
-class MenuItemModel implements MenuItemInterface
+class MenuItemModel implements \Countable, \IteratorAggregate
 {
     protected ?string $label;
 
@@ -38,11 +40,11 @@ class MenuItemModel implements MenuItemInterface
     protected ?string $badgeColor;
 
     /**
-     * @var MenuItemInterface[]
+     * @var MenuItemModel[]
      */
     protected $children = [];
 
-    protected ?MenuItemInterface $parent = null;
+    protected ?MenuItemModel $parent = null;
 
     /**
      * Constructeur.
@@ -71,7 +73,7 @@ class MenuItemModel implements MenuItemInterface
         return $this->label;
     }
 
-    public function setLabel(string $label): self
+    public function setLabel(string $label): static
     {
         $this->label = $label;
 
@@ -83,7 +85,7 @@ class MenuItemModel implements MenuItemInterface
         return $this->route;
     }
 
-    public function setRoute(?string $route): self
+    public function setRoute(?string $route): static
     {
         $this->route = $route;
 
@@ -101,7 +103,7 @@ class MenuItemModel implements MenuItemInterface
     /**
      * @param array<mixed> $routeArgs
      */
-    public function setRouteArgs(array $routeArgs): self
+    public function setRouteArgs(array $routeArgs): static
     {
         $this->routeArgs = $routeArgs;
 
@@ -113,9 +115,9 @@ class MenuItemModel implements MenuItemInterface
         return $this->isActive;
     }
 
-    public function setIsActive(bool $isActive): self
+    public function setIsActive(bool $isActive): static
     {
-        if ($this->hasParent() && $this->getParent() instanceof self) {
+        if ($this->hasParent() && $this->getParent() instanceof static) {
             $this->getParent()->setIsActive($isActive);
         }
 
@@ -129,7 +131,7 @@ class MenuItemModel implements MenuItemInterface
         return $this->icon;
     }
 
-    public function setIcon(?string $icon): self
+    public function setIcon(?string $icon): static
     {
         $this->icon = $icon;
 
@@ -141,7 +143,7 @@ class MenuItemModel implements MenuItemInterface
         return $this->iconColor;
     }
 
-    public function setIconColor(?string $iconColor): self
+    public function setIconColor(?string $iconColor): static
     {
         $this->iconColor = $iconColor;
 
@@ -153,7 +155,7 @@ class MenuItemModel implements MenuItemInterface
         return $this->badge;
     }
 
-    public function setBadge(?string $badge): self
+    public function setBadge(?string $badge): static
     {
         $this->badge = $badge;
 
@@ -165,7 +167,7 @@ class MenuItemModel implements MenuItemInterface
         return $this->badgeColor;
     }
 
-    public function setBadgeColor(?string $badgeColor): self
+    public function setBadgeColor(?string $badgeColor): static
     {
         $this->badgeColor = $badgeColor;
 
@@ -178,19 +180,19 @@ class MenuItemModel implements MenuItemInterface
     }
 
     /**
-     * @return MenuItemInterface[]
+     * @return MenuItemModel[]
      */
     public function getChildren(): array
     {
         return $this->children;
     }
 
-    public function getChild(string $code): ?MenuItemInterface
+    public function getChild(string $code): ?self
     {
         return $this->children[$code] ?? null;
     }
 
-    public function addChild(MenuItemInterface $child): self
+    public function addChild(self $child): static
     {
         $child->setParent($this);
         $this->children[$child->getCode()] = $child;
@@ -199,11 +201,11 @@ class MenuItemModel implements MenuItemInterface
     }
 
     /**
-     * @param MenuItemInterface|string $child
+     * @param MenuItemModel|string $child
      */
-    public function removeChild($child): self
+    public function removeChild($child): static
     {
-        if ($child instanceof MenuItemInterface && isset($this->children[$child->getCode()])) {
+        if ($child instanceof self && isset($this->children[$child->getCode()])) {
             $this->children[$child->getCode()]->setParent(null);
             unset($this->children[$child->getCode()]);
         } elseif (is_string($child) && isset($this->children[$child])) {
@@ -214,7 +216,7 @@ class MenuItemModel implements MenuItemInterface
         return $this;
     }
 
-    public function getActiveChild(): ?MenuItemInterface
+    public function getActiveChild(): ?self
     {
         foreach ($this->children as $child) {
             if ($child->isActive()) {
@@ -227,15 +229,15 @@ class MenuItemModel implements MenuItemInterface
 
     public function hasParent(): bool
     {
-        return $this->parent instanceof MenuItemInterface;
+        return $this->parent instanceof static;
     }
 
-    public function getParent(): ?MenuItemInterface
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    public function setParent(?MenuItemInterface $parent = null): self
+    public function setParent(?self $parent = null): static
     {
         $this->parent = $parent;
 

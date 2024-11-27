@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Event;
 
-use Olix\BackOfficeBundle\Model\MenuItemInterface;
+use Olix\BackOfficeBundle\Model\MenuItemModel;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 class SidebarMenuEvent extends BackOfficeEvent
 {
     /**
-     * @var MenuItemInterface[]
+     * @var MenuItemModel[]
      */
     protected $rootItems = [];
 
@@ -47,7 +47,7 @@ class SidebarMenuEvent extends BackOfficeEvent
     /**
      * Retourne le menu de la barre latérale.
      *
-     * @return MenuItemInterface[]
+     * @return MenuItemModel[]
      */
     public function getSidebarMenu(): array
     {
@@ -57,7 +57,7 @@ class SidebarMenuEvent extends BackOfficeEvent
     /**
      * @deprecated use "addMenuItem"
      */
-    public function addItem(MenuItemInterface $item): self
+    public function addItem(MenuItemModel $item): self
     {
         return $this->addMenuItem($item);
     }
@@ -65,7 +65,7 @@ class SidebarMenuEvent extends BackOfficeEvent
     /**
      * Ajoute un nouvel élément de menu.
      */
-    public function addMenuItem(MenuItemInterface $item): self
+    public function addMenuItem(MenuItemModel $item): self
     {
         $this->rootItems[$item->getCode()] = $item;
 
@@ -75,7 +75,7 @@ class SidebarMenuEvent extends BackOfficeEvent
     /**
      * @deprecated use "removeMenuItem"
      *
-     * @param MenuItemInterface|string $item
+     * @param MenuItemModel|string $item
      */
     public function removeItem($item): self
     {
@@ -85,11 +85,11 @@ class SidebarMenuEvent extends BackOfficeEvent
     /**
      * Enlève un élément au menu.
      *
-     * @param MenuItemInterface|string $item
+     * @param MenuItemModel|string $item
      */
     public function removeMenuItem($item): self
     {
-        if ($item instanceof MenuItemInterface && isset($this->rootItems[$item->getCode()])) {
+        if ($item instanceof MenuItemModel && isset($this->rootItems[$item->getCode()])) {
             unset($this->rootItems[$item->getCode()]);
         } elseif (is_string($item) && isset($this->rootItems[$item])) {
             unset($this->rootItems[$item]);
@@ -101,7 +101,7 @@ class SidebarMenuEvent extends BackOfficeEvent
     /**
      * @deprecated use "getMenuItem"
      */
-    public function getItem(string $code): ?MenuItemInterface
+    public function getItem(string $code): ?MenuItemModel
     {
         return $this->getMenuItem($code);
     }
@@ -109,7 +109,7 @@ class SidebarMenuEvent extends BackOfficeEvent
     /**
      * Retourne l'item en fonction de son code.
      */
-    public function getMenuItem(string $code): ?MenuItemInterface
+    public function getMenuItem(string $code): ?MenuItemModel
     {
         return $this->rootItems[$code] ?? null;
     }
@@ -117,7 +117,7 @@ class SidebarMenuEvent extends BackOfficeEvent
     /**
      * @deprecated  use "getMenuItemActive"
      */
-    public function getActive(): ?MenuItemInterface
+    public function getActive(): ?MenuItemModel
     {
         return $this->getMenuItemActive();
     }
@@ -125,7 +125,7 @@ class SidebarMenuEvent extends BackOfficeEvent
     /**
      * Retourne le menu actif du niveau 1.
      */
-    public function getMenuItemActive(): ?MenuItemInterface
+    public function getMenuItemActive(): ?MenuItemModel
     {
         foreach ($this->getSidebarMenu() as $item) {
             if ($item->isActive()) {
