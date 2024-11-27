@@ -75,7 +75,7 @@ class Select2AjaxType extends Select2ModelType
         ]);
         $resolver->setAllowedTypes('class_property', ['string']);
         $resolver->setAllowedTypes('class_pkey', ['string']);
-        $resolver->setAllowedTypes('class_label', ['null', 'string']);
+        $resolver->setAllowedTypes('class_label', ['string']);
         $resolver->setAllowedTypes('page_limit', ['int']);
         $resolver->setAllowedTypes('allow_add', ['bool']);
         $resolver->setAllowedTypes('allow_add_prefix', ['string']);
@@ -126,12 +126,7 @@ class Select2AjaxType extends Select2ModelType
         $view->vars['allow_clear'] = $options['js_allow_clear'];
 
         // Génération de la route
-        $options['ajax_js_route'] = $this->router->generate((string) $options['remote_route'], array_merge(
-            $options['remote_params'], [
-                'class' => $form->getParent()->getConfig()->getType()->getInnerType()::class,
-                'widget' => $form->getName(),
-            ])
-        );
+        $options['ajax_js_route'] = $this->generateRoute($form, $options);
 
         // Options Javascript pour les sources de données distantes
         $view->vars['attr'] += ['data-ajax' => json_encode($this->getOptionsWidgetCamelized($options, 'ajax_js_'))];
@@ -141,6 +136,32 @@ class Select2AjaxType extends Select2ModelType
             $view->vars['attr'] += ['multiple' => 'multiple'];
             $view->vars['full_name'] .= '[]';
         }
+    }
+
+    /**
+     * Génération de la route qui sera appelée par le widget Select2 pour l'autocomplétion.
+     *
+     * @param array<string,mixed> $options Options du widget
+     */
+    private function generateRoute(FormInterface $form, array $options): string
+    {
+        /** @var array<string, string> $optRemoteParams Paramètres de la route */
+        $optRemoteParams = $options['remote_params'];
+
+        // Formulaire parent
+        $formParent = $form->getParent();
+        if (!$formParent instanceof FormInterface) {
+            throw new \RuntimeException(sprintf('Parent form of "%s" form is not a FormInterface', $form->getName()));
+        }
+        // Class du type de formulaire parent
+        $classFormParent = $formParent->getConfig()->getType()->getInnerType()::class;
+
+        return $this->router->generate((string) $options['remote_route'],
+            array_merge($optRemoteParams, [
+                'class' => $classFormParent,
+                'widget' => $form->getName(),
+            ])
+        );
     }
 
     #[\Override]

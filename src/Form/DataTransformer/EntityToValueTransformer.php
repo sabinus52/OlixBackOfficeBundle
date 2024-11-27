@@ -40,7 +40,7 @@ class EntityToValueTransformer implements DataTransformerInterface
         protected EntityManagerInterface $entityManager,
         protected string $entityName,
         protected string $primaryKey,
-        protected ?string $fieldLabel, // FIXME : mettre le champs non null
+        protected string $fieldLabel,
         protected string $prefixAllowAdd,
     ) {
         $this->accessor = new PropertyAccessor();
@@ -57,7 +57,7 @@ class EntityToValueTransformer implements DataTransformerInterface
             return $result;
         }
 
-        $text = (null === $this->fieldLabel) ? (string) $entity : $this->accessor->getValue($entity, $this->fieldLabel);
+        $text = $this->accessor->getValue($entity, $this->fieldLabel);
 
         if ($this->entityManager->contains($entity)) {
             $value = $this->accessor->getValue($entity, $this->primaryKey);
@@ -83,7 +83,7 @@ class EntityToValueTransformer implements DataTransformerInterface
         if ($prefix === $this->prefixAllowAdd) {
             $realValue = substr((string) $value, $prefixLength);
             $entity = new $this->entityName();
-            $this->accessor->setValue($entity, (string) $this->fieldLabel, $realValue);
+            $this->accessor->setValue($entity, $this->fieldLabel, $realValue);
         } else {
             // Valeur choisie dans la liste
             try {

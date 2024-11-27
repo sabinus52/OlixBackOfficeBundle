@@ -39,7 +39,7 @@ class EntitiesToValuesTransformer implements DataTransformerInterface
         protected EntityManagerInterface $entityManager,
         protected string $entityName,
         protected string $primaryKey,
-        protected ?string $fieldLabel, // FIXME : mettre le champs non null
+        protected string $fieldLabel,
         protected string $prefixAllowAdd,
     ) {
         $this->accessor = new PropertyAccessor();
@@ -57,7 +57,7 @@ class EntitiesToValuesTransformer implements DataTransformerInterface
         }
 
         foreach ($entities as $entity) {
-            $text = (null === $this->fieldLabel) ? (string) $entity : $this->accessor->getValue($entity, $this->fieldLabel);
+            $text = $this->accessor->getValue($entity, $this->fieldLabel);
 
             if ($this->entityManager->contains($entity)) {
                 $value = $this->accessor->getValue($entity, $this->primaryKey);
@@ -86,7 +86,7 @@ class EntitiesToValuesTransformer implements DataTransformerInterface
             $prefix = substr((string) $value, 0, $prefixLength);
             if ($prefix === $this->prefixAllowAdd) {
                 $newObject = new $this->entityName();
-                $this->accessor->setValue($newObject, (string) $this->fieldLabel, $realValue);
+                $this->accessor->setValue($newObject, $this->fieldLabel, $realValue);
                 $newEntities[] = $newObject;
                 unset($values[$key]);
             }

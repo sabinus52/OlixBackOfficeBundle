@@ -80,12 +80,11 @@ class AutoCompleteService
 
         // Mapping des résultats
         $results = [];
-        /** @var object $item */
+        /** @var object[] $items */
         foreach ($items as $item) {
-            $text = (null === $select2Options['class_label']) ? (string) $item : $accessor->getValue($item, $select2Options['class_label']);
             $results[] = [
                 'id' => $accessor->getValue($item, $select2Options['class_pkey']),
-                'text' => $text,
+                'text' => $accessor->getValue($item, $select2Options['class_label']),
             ];
         }
 
