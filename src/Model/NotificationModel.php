@@ -16,7 +16,7 @@ namespace Olix\BackOfficeBundle\Model;
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
-class NotificationModel implements NotificationInterface
+class NotificationModel
 {
     protected string $icon;
 
@@ -50,7 +50,7 @@ class NotificationModel implements NotificationInterface
         return $this->icon;
     }
 
-    public function setIcon(string $icon): self
+    public function setIcon(string $icon): static
     {
         $this->icon = $icon;
 
@@ -62,7 +62,7 @@ class NotificationModel implements NotificationInterface
         return $this->color;
     }
 
-    public function setColor(?string $color): self
+    public function setColor(?string $color): static
     {
         $this->color = $color;
 
@@ -74,7 +74,7 @@ class NotificationModel implements NotificationInterface
         return $this->message;
     }
 
-    public function setMessage(string $message): self
+    public function setMessage(string $message): static
     {
         $this->message = $message;
 
@@ -86,7 +86,7 @@ class NotificationModel implements NotificationInterface
         return $this->info;
     }
 
-    public function setInfo(?string $info): self
+    public function setInfo(?string $info): static
     {
         $this->info = $info;
 

@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Event;
 
-use Olix\BackOfficeBundle\Model\NotificationInterface;
+use Olix\BackOfficeBundle\Model\NotificationModel;
 
 /**
  * Évènements sur la liste des notifications de la barre de navigation.
@@ -23,7 +23,7 @@ class NotificationsEvent extends BackOfficeEvent
     /**
      * Liste des notifications.
      *
-     * @var NotificationInterface[]
+     * @var NotificationModel[]
      */
     protected $notifications = [];
 
@@ -105,7 +105,7 @@ class NotificationsEvent extends BackOfficeEvent
     /**
      * Retourne les N notifications.
      *
-     * @return NotificationInterface[]
+     * @return NotificationModel[]
      */
     public function getNotifications(): array
     {
@@ -115,7 +115,7 @@ class NotificationsEvent extends BackOfficeEvent
     /**
      * Ajoute un nouvelle notifications.
      */
-    public function addNotification(NotificationInterface $item): self
+    public function addNotification(NotificationModel $item): self
     {
         $this->notifications[] = $item;
 
