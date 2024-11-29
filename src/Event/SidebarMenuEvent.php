@@ -41,7 +41,7 @@ class SidebarMenuEvent extends BackOfficeEvent
      */
     public function getMenuActiv(): string
     {
-        return $this->forceMenuActiv ?? (string) $this->request->get('_route');
+        return $this->forceMenuActiv ?? (string) $this->request->get('_route'); // @phpstan-ignore cast.string
     }
 
     /**

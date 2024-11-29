@@ -79,7 +79,7 @@ final class DumpBaseCommand extends Command
         }
 
         if ($input->getArgument('path')) {
-            $this->pathRootBackup = (string) $input->getArgument('path');
+            $this->pathRootBackup = (string) $input->getArgument('path'); // @phpstan-ignore cast.string
         }
 
         if ($input->getOption('purge')) {

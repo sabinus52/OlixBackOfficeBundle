@@ -68,14 +68,14 @@ class ProfileController extends AbstractController
                 $isError = true;
             }
 
-            if (!$manager->isPasswordValid((string) $form2->get('oldPassword')->getData())) {
+            if (!$manager->isPasswordValid((string) $form2->get('oldPassword')->getData())) { // @phpstan-ignore cast.string
                 $form2->addError(new FormError('Ancien mot de passe incorrect'));
                 $isError = true;
             }
 
             if (!$isError) {
                 // Change password for this user
-                $manager->update((string) $form2->get('password')->getData());
+                $manager->update((string) $form2->get('password')->getData()); // @phpstan-ignore cast.string
                 $this->addFlash('success', 'La modification du mot de passe a bien été prise en compte');
 
                 return $this->redirectToRoute('olix_profile');

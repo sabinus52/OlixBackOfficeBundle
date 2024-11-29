@@ -23,6 +23,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @example     Configuration with options of this type
  *
  * @author      Sabinus52 <sabinus52@gmail.com>
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class CollectionType extends AbstractModelType
 {

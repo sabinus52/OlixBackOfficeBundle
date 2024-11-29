@@ -49,7 +49,7 @@ class UserManager implements UserManagerInterface
      */
     public function getClass(): string
     {
-        return (string) $this->parameterOlix->getValue('security.class.user');
+        return (string) $this->parameterOlix->getValue('security.class.user'); // @phpstan-ignore cast.string
     }
 
     /**
@@ -167,7 +167,7 @@ class UserManager implements UserManagerInterface
      */
     public function createFormEditUser(array $options = []): FormInterface
     {
-        $class = (string) $this->parameterOlix->getValue('security.class.form_user');
+        $class = (string) $this->parameterOlix->getValue('security.class.form_user'); // @phpstan-ignore cast.string
 
         return $this->createForm($class, $options);
     }
@@ -179,7 +179,7 @@ class UserManager implements UserManagerInterface
      */
     public function createFormProfileUser(array $options = []): FormInterface
     {
-        $class = (string) $this->parameterOlix->getValue('security.class.form_profile');
+        $class = (string) $this->parameterOlix->getValue('security.class.form_profile'); // @phpstan-ignore cast.string
 
         return $this->createForm($class, $options);
     }

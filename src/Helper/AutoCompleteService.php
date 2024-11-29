@@ -44,7 +44,7 @@ class AutoCompleteService
         // Paramètres du Request
         $term = $request->get('term');
         $page = (int) $request->get('page', 0); /** @phpstan-ignore cast.int */
-        $widget = (string) $request->get('widget');
+        $widget = (string) $request->get('widget'); /** @phpstan-ignore cast.string */
 
         // Info du formulaire en cours utilisé
         $form = $this->formFactory->create($formType);

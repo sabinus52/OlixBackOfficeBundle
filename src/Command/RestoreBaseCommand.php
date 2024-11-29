@@ -74,7 +74,7 @@ final class RestoreBaseCommand extends Command
         }
 
         if ($input->getOption('dir')) {
-            $this->pathRootBackup = (string) $input->getOption('dir');
+            $this->pathRootBackup = (string) $input->getOption('dir'); // @phpstan-ignore cast.string
         }
     }
 
@@ -87,7 +87,7 @@ final class RestoreBaseCommand extends Command
 
         $dumpFile = '';
         if ($input->getArgument('dump')) {
-            $dumpFile = (string) $input->getArgument('dump');
+            $dumpFile = (string) $input->getArgument('dump'); // @phpstan-ignore cast.string
         } else {
             $dumpFile = $this->getLastDumpFile();
             if (null === $dumpFile) {

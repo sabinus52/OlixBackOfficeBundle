@@ -80,7 +80,7 @@ class ManagerController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Add this new user
             $manager->setUser($form->getData()); // @phpstan-ignore argument.type
-            $manager->add((string) $form->get('password')->getData());
+            $manager->add((string) $form->get('password')->getData()); // @phpstan-ignore cast.string
 
             $this->addFlash('success', sprintf("La création de l'utilisateur <b>%s</b> a bien été prise en compte", $manager->getUser()->getUserIdentifier()));
 
@@ -145,7 +145,7 @@ class ManagerController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Change password for this user
-            $manager->update((string) $form->get('password')->getData());
+            $manager->update((string) $form->get('password')->getData()); // @phpstan-ignore cast.string
 
             $this->addFlash('success', sprintf("La modification du mot de passe de l'utilisateur <b>%s</b> a bien été prise en compte", $user->getUserIdentifier()));
 

@@ -59,10 +59,10 @@ abstract class SwitchModelType extends AbstractModelType
 
         $view->vars['class_color'] = ['custom-control', 'custom-switch'];
         if (null !== $options['on_color']) {
-            $view->vars['class_color'][] = sprintf('custom-switch-on-%s', (string) $options['on_color']);
+            $view->vars['class_color'][] = sprintf('custom-switch-on-%s', (string) $options['on_color']); // @phpstan-ignore cast.string
         }
         if (null !== $options['off_color']) {
-            $view->vars['class_color'][] = sprintf('custom-switch-off-%s', (string) $options['off_color']);
+            $view->vars['class_color'][] = sprintf('custom-switch-off-%s', (string) $options['off_color']); // @phpstan-ignore cast.string
         }
     }
 

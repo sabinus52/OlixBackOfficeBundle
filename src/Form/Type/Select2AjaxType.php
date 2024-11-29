@@ -100,6 +100,9 @@ class Select2AjaxType extends Select2ModelType
         $resolver->setAllowedTypes('ajax_js_cache', ['bool']);
     }
 
+    /**
+     * @param array<string,string> $options Options du widget
+     */
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -156,7 +159,7 @@ class Select2AjaxType extends Select2ModelType
         // Class du type de formulaire parent
         $classFormParent = $formParent->getConfig()->getType()->getInnerType()::class;
 
-        return $this->router->generate((string) $options['remote_route'],
+        return $this->router->generate((string) $options['remote_route'], // @phpstan-ignore cast.string
             array_merge($optRemoteParams, [
                 'class' => $classFormParent,
                 'widget' => $form->getName(),

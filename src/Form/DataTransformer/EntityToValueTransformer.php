@@ -70,6 +70,9 @@ class EntityToValueTransformer implements DataTransformerInterface
         return $result;
     }
 
+    /**
+     * @param string $value
+     */
     #[\Override]
     public function reverseTransform($value): mixed
     {

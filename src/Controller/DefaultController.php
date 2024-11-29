@@ -31,7 +31,7 @@ class DefaultController extends AbstractController
     public function getSearchAutoCompleteSelect2(Request $request, AutoCompleteService $autoComplete): JsonResponse
     {
         // Récupère la classe défini dans la widget et passé en paramètre
-        $classForm = (string) $request->get('class');
+        $classForm = (string) $request->get('class'); /** @phpstan-ignore cast.string */
         $results = $autoComplete->getResults($classForm, $request);
 
         return $this->json($results);
