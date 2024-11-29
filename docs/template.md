@@ -3,7 +3,7 @@
 
 ## Surcharge du layout
 
-Il faut créer *OBLIGATOIREMENT* le fichier `templates/base.html.twig` qui sert aussi pour les pages générées par le bundle
+Il faut créer *OBLIGATOIREMENT* le fichier `templates/base_bo.html.twig` qui sert aussi pour les pages générées par le bundle
 
 ~~~ html
 {% extends '@OlixBackOffice/layout.html.twig' %}
@@ -34,12 +34,12 @@ Il faut créer *OBLIGATOIREMENT* le fichier `templates/base.html.twig` qui sert 
 - **navbar_notifications** : Bloc des notifications. Créer le bloc vide pour le désactiver
 - **navbar_user** : Bloc et paramètres utilisateur
 - **fullscreen** : Créer le bloc vide pour désactiver le bouton fullscreen
-- **controlbar_link** : Lien au format icone pour afficher/masquer la barre de controle. Créer le bloc vide pour le désactiver
-- **controlbar** : Contenu de la barre de controle. Créer le bloc vide pour le désactiver
+- **controlbar_link** : Lien au format icône pour afficher/masquer la barre de contrôle. Créer le bloc vide pour le désactiver
+- **controlbar** : Contenu de la barre de contrôle. Créer le bloc vide pour le désactiver
 - **sidebar_user** : Bloc utilisateur. Créer le bloc vide pour le désactiver
 - **sidebar_search** : Bloc de formulaire de recherche. Créer le bloc vide pour le désactiver
 - **content_title** : Titre de la page
 - **content_subtitle** : Sous titre de la page
-- **content_breadcrumb** : Fil d'ariane. Créer le bloc vide pour le désactiver
+- **content_breadcrumb** : Fil d’Ariane. Créer le bloc vide pour le désactiver
 - **content** : Contenu réelle da la page en cours
 - **footer** : Pied de page. Créer le bloc vide pour le désactiver
