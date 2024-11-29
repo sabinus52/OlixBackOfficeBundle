@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Form\Model;
@@ -39,12 +39,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @author      Sabinus52 <sabinus52@gmail.com>
  *
  * @see         https://github.com/istvan-ujjmeszaros/bootstrap-duallistbox
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 abstract class DualListBoxModelType extends AbstractModelType
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         // Options du widget du formulaire
@@ -94,9 +94,7 @@ abstract class DualListBoxModelType extends AbstractModelType
         $resolver->setAllowedTypes('js_filter_on_values', ['bool']);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         // Options javascript du widget
@@ -104,9 +102,7 @@ abstract class DualListBoxModelType extends AbstractModelType
         $view->vars['attr'] += ['data-options-js' => json_encode($this->getOptionsWidgetCamelized($options))];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'olix_duallistbox';

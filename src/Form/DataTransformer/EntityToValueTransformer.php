@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Form\DataTransformer;
@@ -21,6 +21,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  * Classe de transformation entre une entité et la valeur de la liste de choix "Select2".
  *
  * @author      Sabinus52 <sabinus52@gmail.com>
+ *
+ * @phpstan-ignore missingType.generics
  */
 class EntityToValueTransformer implements DataTransformerInterface
 {
@@ -38,23 +40,24 @@ class EntityToValueTransformer implements DataTransformerInterface
         protected EntityManagerInterface $entityManager,
         protected string $entityName,
         protected string $primaryKey,
-        protected ?string $fieldLabel,
-        protected string $prefixAllowAdd)
-    {
+        protected string $fieldLabel,
+        protected string $prefixAllowAdd,
+    ) {
         $this->accessor = new PropertyAccessor();
     }
 
     /**
-     * {@inheritDoc}
+     * @param object $entity
      */
+    #[\Override]
     public function transform($entity): mixed
     {
         $result = [];
-        if (empty($entity)) {
+        if (!is_object($entity)) {
             return $result;
         }
 
-        $text = (null === $this->fieldLabel) ? (string) $entity : $this->accessor->getValue($entity, $this->fieldLabel);
+        $text = $this->accessor->getValue($entity, $this->fieldLabel);
 
         if ($this->entityManager->contains($entity)) {
             $value = $this->accessor->getValue($entity, $this->primaryKey);
@@ -68,8 +71,9 @@ class EntityToValueTransformer implements DataTransformerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param string $value
      */
+    #[\Override]
     public function reverseTransform($value): mixed
     {
         if (empty($value)) {
@@ -95,7 +99,7 @@ class EntityToValueTransformer implements DataTransformerInterface
                     ->getSingleResult()
                 ;
             } catch (UnexpectedResultException) {
-                throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', $value));
+                throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', (string) $value));
             }
         }
 

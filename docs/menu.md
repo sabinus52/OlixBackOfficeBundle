@@ -82,9 +82,9 @@ class MenuItem extends MenuItemModel
 
     /**
      * @param string $color
-     * @return MenuItemInterface
+     * @return MenuItemModel
      */
-    public function setColor(string $color): MenuItemInterface
+    public function setColor(string $color): MenuItemModel
     {
         $this->color = $color;
         return $this;

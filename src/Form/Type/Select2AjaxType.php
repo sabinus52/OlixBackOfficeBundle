@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Form\Type;
@@ -50,9 +50,7 @@ class Select2AjaxType extends Select2ModelType
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
@@ -77,7 +75,7 @@ class Select2AjaxType extends Select2ModelType
         ]);
         $resolver->setAllowedTypes('class_property', ['string']);
         $resolver->setAllowedTypes('class_pkey', ['string']);
-        $resolver->setAllowedTypes('class_label', ['null', 'string']);
+        $resolver->setAllowedTypes('class_label', ['string']);
         $resolver->setAllowedTypes('page_limit', ['int']);
         $resolver->setAllowedTypes('allow_add', ['bool']);
         $resolver->setAllowedTypes('allow_add_prefix', ['string']);
@@ -103,19 +101,18 @@ class Select2AjaxType extends Select2ModelType
     }
 
     /**
-     * {@inheritDoc}
+     * @param array<string,string> $options Options du widget
      */
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $transformer = ($options['multiple'])
-            ? new EntitiesToValuesTransformer($this->entityManager, $options['class'], $options['class_pkey'], $options['class_label'], $options['allow_add_prefix'])
-            : new EntityToValueTransformer($this->entityManager, $options['class'], $options['class_pkey'], $options['class_label'], $options['allow_add_prefix']);
+            ? new EntitiesToValuesTransformer($this->entityManager, (string) $options['class'], (string) $options['class_pkey'], (string) $options['class_label'], (string) $options['allow_add_prefix'])
+            : new EntityToValueTransformer($this->entityManager, (string) $options['class'], (string) $options['class_pkey'], (string) $options['class_label'], (string) $options['allow_add_prefix']);
         $builder->addViewTransformer($transformer, true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         // Autorisation d'ajout d'un nouvel élément
@@ -132,12 +129,7 @@ class Select2AjaxType extends Select2ModelType
         $view->vars['allow_clear'] = $options['js_allow_clear'];
 
         // Génération de la route
-        $options['ajax_js_route'] = $this->router->generate($options['remote_route'], array_merge(
-            $options['remote_params'], [
-                'class' => $form->getParent()->getConfig()->getType()->getInnerType()::class,
-                'widget' => $form->getName(),
-            ])
-        );
+        $options['ajax_js_route'] = $this->generateRoute($form, $options);
 
         // Options Javascript pour les sources de données distantes
         $view->vars['attr'] += ['data-ajax' => json_encode($this->getOptionsWidgetCamelized($options, 'ajax_js_'))];
@@ -150,8 +142,32 @@ class Select2AjaxType extends Select2ModelType
     }
 
     /**
-     * {@inheritDoc}
+     * Génération de la route qui sera appelée par le widget Select2 pour l'autocomplétion.
+     *
+     * @param array<string,mixed> $options Options du widget
      */
+    private function generateRoute(FormInterface $form, array $options): string
+    {
+        /** @var array<string, string> $optRemoteParams Paramètres de la route */
+        $optRemoteParams = $options['remote_params'];
+
+        // Formulaire parent
+        $formParent = $form->getParent();
+        if (!$formParent instanceof FormInterface) {
+            throw new \RuntimeException(sprintf('Parent form of "%s" form is not a FormInterface', $form->getName()));
+        }
+        // Class du type de formulaire parent
+        $classFormParent = $formParent->getConfig()->getType()->getInnerType()::class;
+
+        return $this->router->generate((string) $options['remote_route'], // @phpstan-ignore cast.string
+            array_merge($optRemoteParams, [
+                'class' => $classFormParent,
+                'widget' => $form->getName(),
+            ])
+        );
+    }
+
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'olix_select2_ajax';
