@@ -63,16 +63,18 @@
             "vendor/bin/phpmd tests ansi .vscode/ruleset.xml"
         ],
         "phpstan": "vendor/bin/phpstan analyse src --configuration=.vscode/phpstan.neon",
+        "psalm": "vendor/bin/psalm --config=.vscode/psalm.xml",
         "rector": "vendor/bin/rector process --dry-run --config .vscode/rector.php",
         "rector-fix": "vendor/bin/rector process --config .vscode/rector.php",
         "csniff": "phpcs src tests --colors --standard=PSR12 ",
         "csniff-fix": "phpcbf src --colors --standard=PSR12"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.64",
+        "friendsofphp/php-cs-fixer": "^3.65",
         "phpmd/phpmd": "^2.15",
         "rector/rector": "^1.2",
         "phpstan/phpstan": "^1.12",
-        "phpunit/phpunit": "^11.4"
+        "phpunit/phpunit": "^11.4",
+        "vimeo/psalm": "^0.3.14"
     }
 }
