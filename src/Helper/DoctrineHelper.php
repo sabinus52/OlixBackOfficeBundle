@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Helper;
@@ -60,7 +60,7 @@ class DoctrineHelper
     /**
      * Retourne le nom de la base de données.
      */
-    public function getDataBaseName(): string
+    public function getDataBaseName(): ?string
     {
         return $this->entityManager->getConnection()->getDatabase();
     }
@@ -88,7 +88,7 @@ class DoctrineHelper
         $port = escapeshellarg((string) $params['port']);
         $username = escapeshellarg((string) $params['user']);
         $password = escapeshellarg((string) $params['password']);
-        $database = escapeshellarg($connection->getDatabase());
+        $database = escapeshellarg((string) $connection->getDatabase());
 
         $cmd = sprintf("mysqldump -h %s -P %s -u %s -p%s %s > '%s'", $host, $port, $username, $password, $database, $dumpfile);
         passthru($cmd, $return);
@@ -113,7 +113,7 @@ class DoctrineHelper
         $port = escapeshellarg((string) $params['port']);
         $username = escapeshellarg((string) $params['user']);
         $password = escapeshellarg((string) $params['password']);
-        $database = escapeshellarg($connection->getDatabase());
+        $database = escapeshellarg((string) $connection->getDatabase());
 
         $cmd = sprintf("mysql -h %s -P %s -u %s -p%s %s < '%s'", $host, $port, $username, $password, $database, $dumpFile);
         passthru($cmd, $return);

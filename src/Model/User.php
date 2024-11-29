@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Model;
@@ -48,7 +48,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 180)]
-    protected ?string $username = null;
+    protected string $username;
 
     /**
      * Email.
@@ -68,7 +68,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      * Utilisateur activé ou pas.
      */
     #[ORM\Column]
-    protected ?bool $enabled = true;
+    protected bool $enabled = true;
 
     /**
      * Date d'expiration du compte.
@@ -86,7 +86,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      * Thème clair ou sombre.
      */
     #[ORM\Column(type: Types::SMALLINT, options: ['default' => 0])]
-    protected ?int $theme = self::THEME_LIGHT;
+    protected int $theme = self::THEME_LIGHT;
 
     /**
      * Date de la dernière connexion.
@@ -107,7 +107,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     protected array $roles = [];
 
     /**
-     * Mot de passe hashé.
+     * Mot de passe hash.
      */
     #[ORM\Column]
     protected ?string $password = null;
@@ -216,9 +216,9 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param string $prefix : pour ajouter un préfix dans l'URL comme un '/'
+     * @param string $prefix : pour ajouter un préfixe dans l'URL comme un '/'
      */
-    public function getAvatar(string $prefix = ''): ?string
+    public function getAvatar(string $prefix = ''): string
     {
         if (null === $this->avatar || '' === $this->avatar) {
             return $prefix.self::AVATAR_PATH.self::AVATAR_DEFAULT;
@@ -319,7 +319,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * Verifie si l'utilisateur est en activité.
+     * Vérifie si l'utilisateur est en activité.
      *
      * @param int $minDelay Minutes d'inactivité
      */
@@ -371,7 +371,7 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }

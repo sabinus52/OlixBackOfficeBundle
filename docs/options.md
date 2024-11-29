@@ -30,7 +30,7 @@ olix_back_office:
             color: primary
             # Menu en mode flat
             flat: false
-            # Menu en mode légacy
+            # Menu en mode legacy
             legacy: false
             # Menu compact
             compact: false
@@ -41,7 +41,7 @@ olix_back_office:
             fixed: false
 
     security:
-        # Si on active le menu de gestion des utlisateurs
+        # Si on active le menu de gestion des utilisateurs
         menu_activ: false
         class:
             # Class de l'entité utilisateur

@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\DependencyInjection;
@@ -33,7 +33,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('olix_back_office');
 
-        // @phpstan-ignore-next-line
+        // @phpstan-ignore method.notFound
         $treeBuilder->getRootNode()
             ->children()
             ->append($this->getOptionsConfig())
@@ -53,7 +53,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('options');
         $rootNode = $treeBuilder->getRootNode();
 
-        // @phpstan-ignore-next-line
+        // @phpstan-ignore method.notFound
         $rootNode
             ->children()
             ->booleanNode('dark_mode')->defaultValue(false)->end()

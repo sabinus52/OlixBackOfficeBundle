@@ -19,24 +19,17 @@ use Olix\BackOfficeBundle\Form\Type\SwitchType;
 
 $builder->add('public', SwitchType::class, [
     'label'    => 'Show this entry publicly?',
-    'js_size' => 'mini',
-    'js_on_text' => 'OUI',
-    'js_off_text' => 'NON',
+    'on_color' => 'green',
+    'off_color' => 'red',
 ]);
 ~~~
 
 ### Options
 
-| Nom SF           | Nom JS        | Type    |	Description                             | Defaut    | Valeurs 
-|------------------|---------------|---------|-----------------------------------------|-----------|----------------------------------------
-| js_size          | size          | String  | The checkbox size                       | null      | null, 'mini', 'small', 'normal', 'large'
-| js_indeterminate | indeterminate | Boolean | Indeterminate state                     | false     | true, false
-| js_inverse       | inverse       | Boolean | Inverse switch direction                | false     | true, false
-| js_on_color      | onColor       | String  | Color of the left side of the switch    | 'primary' | List of COLORS
-| js_off_color     | offColor      | String  | Color of the right side of the switch   | 'default' | List of COLORS
-| js_on_text       | onText        | String  | Text of the left side of the switch     | 'OUI'     |
-| js_off_text      | offText       | String  | Text of the right side of the switch    | 'NON'     |
-| js_label_text    | labelText     | String  | Text of the center handle of the switch | '\&nbsp;' |
+| Nom SF        | Nom JS        | Type    |	Description                             | Défaut    | Valeurs 
+|---------------|---------------|---------|-----------------------------------------|-----------|----------------------------------------
+| on_color      | onColor       | String  | Color of the left side of the switch    | 'primary' | List of COLORS
+| off_color     | offColor      | String  | Color of the right side of the switch   | 'default' | List of COLORS
 
 
 
@@ -52,7 +45,7 @@ Source : https://github.com/istvan-ujjmeszaros/bootstrap-duallistbox
 use Olix\BackOfficeBundle\Form\Type\DualListBoxChoiceType;
 // ...
 
-$builder->add('duallist', DualListBoxChoiceType::class, [
+$builder->add('dual_list', DualListBoxChoiceType::class, [
     'label' => 'DualBox multiple',
     'choices' => ['toto', 'tata', 'titi'],
     'ojs_show_filter_inputs' => false,
@@ -61,14 +54,14 @@ $builder->add('duallist', DualListBoxChoiceType::class, [
 
 ### Options
 
-| Nom SF                     | Nom JS                | Type            | Description                                                              | Defaut                   | Valeurs 
+| Nom SF                     | Nom JS                | Type            | Description                                                              | Défaut                   | Valeurs 
 |----------------------------|-----------------------|-----------------|--------------------------------------------------------------------------|--------------------------|-
 | js_filter_text_clear       | filterTextClear       | String          | The text for the "Show All" button                                       | 'voir tous'              |
 | js_filter_place_holder     | filterPlaceHolder     | String          | The placeholder for the input element for filtering elements             | 'Filtrer'                |
 | js_move_selected_label     | moveSelectedLabel     | String          | The label for the "Move Selected" button                                 | 'Déplacer la sélection'  |
 | js_move_all_label          | moveAllLabel          | String          | The label for the "Move All" button                                      | 'Déplacer tous'          |
 | js_remove_selected_label   | removeSelectedLabel   | String          | The label for the "Remove Selected" button                               | 'Supprimer la sélection' |
-| js_remove_all_label        | removeAllLabelnText   | String          | The label for the "Remove All" button                                    | 'Supprimer tous'         |
+| js_remove_all_label        | removeAllLabelText    | String          | The label for the "Remove All" button                                    | 'Supprimer tous'         |
 | js_selected_list_label     | selectedListLabel     | Boolean, String | Can be a string specifying the name of the selected list                 | false                    | true, false, string
 | js_non_selected_list_label | nonSelectedListLabel  | Boolean, String | Can be a string specifying the name of the non selected list             | false                    | true, false, string
 | js_selector_minimal_height | selectorMinimalHeight | Integer         | Represents the minimal height of the generated dual listbox              | 100                      |
@@ -104,7 +97,7 @@ $builder->add('ajax_ips', Select2ChoiceType::class, [
 
 ### Options
 
-| Nom SF                  | Nom JS             | Type    |	Description                                                                                   | Defaut    | Valeurs 
+| Nom SF                  | Nom JS             | Type    |	Description                                                                                   | Défaut    | Valeurs 
 |-------------------------|--------------------|---------|------------------------------------------------------------------------------------------------|-----------|-------
 | color                   |                    | String  | Color of widget                                                                                | 'default' | 
 | js_allow_clear          | allowClear         | Boolean | Causes a clear button ("x" icon) to appear on the select box when a value is selected          | false     | true, false
@@ -156,7 +149,7 @@ use Olix\BackOfficeBundle\Helper\AutoCompleteService;
 use App\Form\MyFormType;
 
 /**
- * @Route("/addressip/ajax", name="form_test_ajax")
+ * @Route("/address-ip/ajax", name="form_test_ajax")
  */
 public function getSearchIPs(Request $request, AutoCompleteService $autoComplete): JsonResponse
 {
@@ -203,7 +196,7 @@ $builder->add('ajax_ips', Select2AjaxType::class, [
 
 ### Options
 
-| Nom SF               | Nom JS             | Type    |	Description                                                                                    | Defaut    | Valeurs 
+| Nom SF               | Nom JS             | Type    |	Description                                                                                    | Défaut    | Valeurs 
 |----------------------|--------------------|---------|------------------------------------------------------------------------------------------------|-----------|-------
 | multiple             |                    | Boolean | True for multiple select and false for single select.                                          | false     | true, false
 | class                |                    | String  | The class of your entity                                                                       | null      |
@@ -217,7 +210,7 @@ $builder->add('ajax_ips', Select2AjaxType::class, [
 | ajax_js_delay        | ajax / delay       | Integer | The number of milliseconds to wait for the user to stop typing before issuing the ajax request | 250       | 
 | ajax_js_cache        | ajax / cache       | Boolean |                                                                                                | true      | true, false
 | allow_add            | tags               | Boolean | Option for the add tags or value of Select2. 'class_label' is required                         | false     | true, false
-| callback             |                    | Funct   | Callback you get the QueryBuilder to modify the result query                                   | null      | 
+| callback             |                    | Function| Callback you get the QueryBuilder to modify the result query                                   | null      | 
 
 
 
@@ -252,14 +245,14 @@ $builder
 
 ### Options
 
-| Nom SF          | Nom JS       | Type    | Description                                                                                  | Defaut | Valeurs 
+| Nom SF          | Nom JS       | Type    | Description                                                                                  | Défaut | Valeurs 
 |-----------------|--------------|---------|----------------------------------------------------------------------------------------------|--------|---------
 | button_icon     |              | String  | Icon from right input                                                                        |        | 
 | locale          |              | String  | Locale                                                                                       | 'fr'   |
 | js_stepping     | stepping     | Integer | Number of minutes the up/down arrow's will move the minutes value in the time picker         | 1      |
 | js_use_current  | useCurrent   | Boolean | Determines if the current date should be used as the default value when the picker is opened | true   | true, false
 | js_stepping     | stepping     | Integer | Controls how much the minutes are changed by                                                 | 5      | 
-| js_display      | diplay       | Array   | Display options allow you to control much of the picker's look and feel                      |        |
+| js_display      | display      | Array   | Display options allow you to control much of the picker's look and feel                      |        |
 | js_restrictions | restrictions | Array   | Restrictions allow you to prevent users from selected dates or times based on a set of rules |        |
 
 See options in https://getdatepicker.com/6/options/
@@ -281,7 +274,7 @@ $builder->add('text', TextType::class, [
 
 ### Options
 
-| Nom SF       | Type    |	Description                | Defaut    | Valeurs 
+| Nom SF       | Type    |	Description                | Défaut    | Valeurs 
 |--------------|---------|-----------------------------|-----------|----------------------------------------
 | left_symbol  | String  | Left symbol of widget       | null      | 
 | right_symbol | String  | Right symbol of widget      | null      | 
@@ -298,7 +291,7 @@ use Olix\BackOfficeBundle\Form\Type\CollectionType;
 // ...
 
 $builder->add('steps', CollectionType::class, [
-    'label' => 'Etapes de la préparation',
+    'label' => 'Étapes de la préparation',
     'button_label_add' => 'Nouvelle étape',
     'entry_type' => StepType::class,
     'entry_options' => ['label' => false],
@@ -337,11 +330,11 @@ A rajouter dans le template de la page du formulaire :
     </div>
 {%- endblock %}
 ~~~
-La classe `collection-btn-delete`est necessaire pour l'activation du bouton de suppression.
+La classe `collection-btn-delete`est nécessaire pour l'activation du bouton de suppression.
 
 ### Options
 
-| Nom SF           | Type    | Description                 | Defaut    | Valeurs 
+| Nom SF           | Type    | Description                 | Défaut    | Valeurs 
 |------------------|---------|-----------------------------|-----------|----------------------------------------
 | button_label_add | String  | Label of add button         | 'Add'     | 
 

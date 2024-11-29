@@ -152,7 +152,7 @@ Pour l'activer, il faut positionner ce paramètre à *true* dans le fichier de c
 ~~~
 
 
-## Controle d'accès
+## Contrôle d'accès
 
 Pour interdire entièrement l'accès à l'application, il faut configurer de la manière suivante dans la configuration *config/security.yaml*
 
@@ -164,14 +164,14 @@ access_control:
 
 ## Création d'un utilisateur
 
-A mettre dans un controleur
+A mettre dans un contrôleur
 ~~~ php
 use App\Entity\User;
 use Olix\BackOfficeBundle\Security\UserManager;
 
 class DefaultController extends AbstractController
 {
-    #[Route('/adduser', name: 'adduser')]
+    #[Route('/add-user', name: 'add_user')]
     public function index(UserManager $manager): Response
     {
 

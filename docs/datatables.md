@@ -55,9 +55,9 @@ class MyTableType implements DataTableTypeInterface
                 'label' => 'Hostname',
                 'searchable' => true,
             ])
-            ->add('addrip', TextColumn::class, [
+            ->add('addr_ip', TextColumn::class, [
                 'label' => 'Adresse IP',
-                'field' => 'addrip.ip',
+                'field' => 'addr_ip.ip',
                 'searchable' => true,
             ])
             ->add('virtual', BoolColumn::class, [
@@ -109,7 +109,7 @@ use Omines\DataTablesBundle\DataTableFactory;
 class MyController extends AbstractController
 {
     /**
-     * @Route("/route/tables", name="myroute")
+     * @Route("/route/tables", name="my_route")
      */
     public function index(Request $request, DataTableFactory $factory): Response
     {
@@ -123,7 +123,7 @@ class MyController extends AbstractController
             return $datatable->getResponse();
         }
 
-        return $this->renderForm('mytemplate.html.twig', [
+        return $this->renderForm('my_template.html.twig', [
             'datatable' => $datatable,
         ]);
     }
@@ -134,7 +134,7 @@ class MyController extends AbstractController
 ## Template
 
 ~~~ twig
-{% extends 'base.html.twig' %}
+{% extends 'base_bo.html.twig' %}
 
 {% block content %}
     <div class="container-fluid">

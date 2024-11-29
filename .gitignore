@@ -17,7 +17,7 @@
 ###< php-cs-fixer ###
 
 /.env
-/DEVELOP*.md
+/.vscode
 /*.code-workspace
 /*.conf
 /assets/tmp

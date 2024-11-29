@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Form\Type;
@@ -24,9 +24,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class DateTimePickerType extends DateTimePickerModelType
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
@@ -36,9 +34,7 @@ class DateTimePickerType extends DateTimePickerModelType
         ]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getParent(): string
     {
         return DateTimeType::class;

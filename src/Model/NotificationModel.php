@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Model;
@@ -16,7 +16,7 @@ namespace Olix\BackOfficeBundle\Model;
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
  */
-class NotificationModel implements NotificationInterface
+class NotificationModel
 {
     protected string $icon;
 
@@ -29,8 +29,8 @@ class NotificationModel implements NotificationInterface
     /**
      * Constructeur.
      *
-     * @param ?string      $code    : Code identifiant de la notif
-     * @param array<mixed> $options : Options de la notif
+     * @param ?string      $code    : Code identifiant de la notification
+     * @param array<mixed> $options : Options de la notification
      */
     public function __construct(protected ?string $code = null, array $options = [])
     {
@@ -50,7 +50,7 @@ class NotificationModel implements NotificationInterface
         return $this->icon;
     }
 
-    public function setIcon(string $icon): self
+    public function setIcon(string $icon): static
     {
         $this->icon = $icon;
 
@@ -62,7 +62,7 @@ class NotificationModel implements NotificationInterface
         return $this->color;
     }
 
-    public function setColor(?string $color): self
+    public function setColor(?string $color): static
     {
         $this->color = $color;
 
@@ -74,7 +74,7 @@ class NotificationModel implements NotificationInterface
         return $this->message;
     }
 
-    public function setMessage(string $message): self
+    public function setMessage(string $message): static
     {
         $this->message = $message;
 
@@ -86,7 +86,7 @@ class NotificationModel implements NotificationInterface
         return $this->info;
     }
 
-    public function setInfo(?string $info): self
+    public function setInfo(?string $info): static
     {
         $this->info = $info;
 

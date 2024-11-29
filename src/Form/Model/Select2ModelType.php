@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Form\Model;
@@ -31,12 +31,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @author      Sabinus52 <sabinus52@gmail.com>
  *
  * @see         https://github.com/select2/select2
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 abstract class Select2ModelType extends AbstractModelType
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         // Options du widget du formulaire
@@ -66,9 +66,7 @@ abstract class Select2ModelType extends AbstractModelType
         $resolver->setAllowedTypes('js_placeholder', ['string']);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         // pass the form type option directly to the template
@@ -79,9 +77,7 @@ abstract class Select2ModelType extends AbstractModelType
         $view->vars['attr'] += ['data-options-js' => json_encode($this->getOptionsWidgetCamelized($options))];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'olix_select2';

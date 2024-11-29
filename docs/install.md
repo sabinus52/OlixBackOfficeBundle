@@ -22,7 +22,7 @@ composer require olix/backoffice-bundle
 
 If you are using Symfony Flex a recipe is included in the contrib repository, providing automatic installation and configuration.
 
-if not using Flex, you should register the bundle ant configrue it :
+if not using Flex, you should register the bundle ant configure it :
 
 
 ## Initialisation

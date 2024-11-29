@@ -3,15 +3,14 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Tests\Model;
 
-use Olix\BackOfficeBundle\Model\MenuItemInterface;
 use Olix\BackOfficeBundle\Model\MenuItemModel;
 use PHPUnit\Framework\TestCase;
 
@@ -27,35 +26,35 @@ use PHPUnit\Framework\TestCase;
 final class MenuItemTest extends TestCase
 {
     /**
-     * @var MenuItemInterface
+     * @var MenuItemModel
      */
     protected $root;
     /**
-     * @var MenuItemInterface
+     * @var MenuItemModel
      */
     protected $child1;
     /**
-     * @var MenuItemInterface
+     * @var MenuItemModel
      */
     protected $child2;
     /**
-     * @var MenuItemInterface
+     * @var MenuItemModel
      */
     protected $child3;
     /**
-     * @var MenuItemInterface
+     * @var MenuItemModel
      */
     protected $c21;
     /**
-     * @var MenuItemInterface
+     * @var MenuItemModel
      */
     protected $c31;
     /**
-     * @var MenuItemInterface
+     * @var MenuItemModel
      */
     protected $c32;
     /**
-     * @var MenuItemInterface
+     * @var MenuItemModel
      */
     protected $c33;
 

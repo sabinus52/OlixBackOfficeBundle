@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Form\Type;
@@ -23,9 +23,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
  */
 class Select2EntityType extends Select2ModelType
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getParent(): string
     {
         return EntityType::class;

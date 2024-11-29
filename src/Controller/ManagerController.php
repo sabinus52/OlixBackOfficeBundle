@@ -3,22 +3,22 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Controller;
 
+use Olix\BackOfficeBundle\Helper\ParameterOlix;
 use Olix\BackOfficeBundle\Security\UserDatatable;
 use Olix\BackOfficeBundle\Security\UserManager;
 use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -31,32 +31,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ManagerController extends AbstractController
 {
     /**
-     * @var array<mixed>
-     */
-    private $parameters = [
-        'menu_activ' => false,
-        'delay_activity' => 5,
-    ];
-
-    /**
      * Constructeur.
      */
-    public function __construct(ParameterBagInterface $parameterBag)
+    public function __construct(private readonly ParameterOlix $parameterOlix)
     {
-        // Get parameter "olix_back_office.security"
-        if (!$parameterBag->has('olix_back_office')) {
-            throw new \Exception('Parameter "olix_back_office" not defined', 1);
-        }
-
-        /** @var array<mixed> $parameters */
-        $parameters = $parameterBag->get('olix_back_office');
-        if (array_key_exists('security', $parameters)) {
-            $this->parameters = $parameters['security'];
-        }
     }
 
     /**
-     * Affichage de la liste des utiliseurs.
+     * Affichage de la liste des utilisateurs.
      */
     #[Route(path: '/security/users', name: 'olix_users__list')]
     public function listUsers(UserManager $manager, Request $request, DataTableFactory $factory): Response
@@ -65,7 +47,7 @@ class ManagerController extends AbstractController
 
         $datatable = $factory->createFromType(UserDatatable::class, [
             'entity' => $manager->getClass(),
-            'delay' => $this->parameters['delay_activity'],
+            'delay' => $this->parameterOlix->getValue('security.delay_activity'),
         ], [
             'searching' => true,
         ])
@@ -97,8 +79,8 @@ class ManagerController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Add this new user
-            $manager->setUser($form->getData());
-            $manager->add($form->get('password')->getData());
+            $manager->setUser($form->getData()); // @phpstan-ignore argument.type
+            $manager->add((string) $form->get('password')->getData()); // @phpstan-ignore cast.string
 
             $this->addFlash('success', sprintf("La création de l'utilisateur <b>%s</b> a bien été prise en compte", $manager->getUser()->getUserIdentifier()));
 
@@ -117,12 +99,12 @@ class ManagerController extends AbstractController
     public function editUser(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
-        $idUser = (int) $request->get('id');
+        $idUser = (int) $request->get('id'); /** @phpstan-ignore cast.int */
 
         // Get user from request
         $user = $manager->setUserById($idUser);
         if (!$user instanceof UserInterface) {
-            $this->redirectToRoute('olix_users__list');
+            return $this->redirectToRoute('olix_users__list');
         }
 
         // Create form and upgrade on validation form
@@ -130,7 +112,7 @@ class ManagerController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Update datas of this user
-            $manager->setUser($form->getData())->update();
+            $manager->setUser($form->getData())->update(); // @phpstan-ignore argument.type
 
             $this->addFlash('success', sprintf("La modification de l'utilisateur <b>%s</b> a bien été prise en compte", $user->getUserIdentifier()));
 
@@ -150,12 +132,12 @@ class ManagerController extends AbstractController
     public function changePassword(UserManager $manager, Request $request): Response
     {
         $this->checkAccess();
-        $idUser = (int) $request->get('id');
+        $idUser = (int) $request->get('id'); /** @phpstan-ignore cast.int */
 
         // Get user from request
         $user = $manager->setUserById($idUser);
         if (!$user instanceof UserInterface) {
-            $this->redirectToRoute('olix_users__list');
+            return $this->redirectToRoute('olix_users__list');
         }
 
         // Create form and upgrade on validation form
@@ -163,7 +145,7 @@ class ManagerController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Change password for this user
-            $manager->update($form->get('password')->getData());
+            $manager->update((string) $form->get('password')->getData()); // @phpstan-ignore cast.string
 
             $this->addFlash('success', sprintf("La modification du mot de passe de l'utilisateur <b>%s</b> a bien été prise en compte", $user->getUserIdentifier()));
 
@@ -185,10 +167,10 @@ class ManagerController extends AbstractController
         $this->checkAccess();
 
         // Get user from request
-        $idUser = (int) $request->get('id');
+        $idUser = (int) $request->get('id'); /** @phpstan-ignore cast.int */
         $user = $manager->setUserById($idUser);
         if (!$user instanceof UserInterface) {
-            $this->redirectToRoute('olix_users__list');
+            return $this->redirectToRoute('olix_users__list');
         }
 
         $form = $this->createFormBuilder()->getForm();
@@ -214,7 +196,7 @@ class ManagerController extends AbstractController
      */
     protected function checkAccess(): bool
     {
-        if (!isset($this->parameters['menu_activ']) || true !== $this->parameters['menu_activ']) {
+        if (true !== $this->parameterOlix->getValue('security.menu_activ')) {
             throw new \Exception('Asses denied', 1); // FIXME
         }
 

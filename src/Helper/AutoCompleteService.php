@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Helper;
@@ -33,7 +33,7 @@ class AutoCompleteService
     }
 
     /**
-     * Retourne les resultats trouvés depuis un recherche "Select2".
+     * Retourne les résultats trouvés depuis un recherche "Select2".
      *
      * @return array<mixed>
      */
@@ -43,13 +43,14 @@ class AutoCompleteService
 
         // Paramètres du Request
         $term = $request->get('term');
-        $page = (int) $request->get('page', 0);
-        $widget = $request->get('widget');
+        $page = (int) $request->get('page', 0); /** @phpstan-ignore cast.int */
+        $widget = (string) $request->get('widget'); /** @phpstan-ignore cast.string */
 
         // Info du formulaire en cours utilisé
         $form = $this->formFactory->create($formType);
+        /** @var string[] $select2Options */
         $select2Options = $form->get($widget)->getConfig()->getOptions();
-        $count = $select2Options['page_limit'];
+        $count = (int) $select2Options['page_limit'];
 
         // Recherche des items
         $query = $this->entityManager->createQueryBuilder()
@@ -77,17 +78,17 @@ class AutoCompleteService
             $items = new Paginator($query, true);
         }
 
-        // Mapping des resultats
+        // Mapping des résultats
         $results = [];
+        /** @var object[] $items */
         foreach ($items as $item) {
-            $text = (null === $select2Options['class_label']) ? (string) $item : $accessor->getValue($item, $select2Options['class_label']);
             $results[] = [
                 'id' => $accessor->getValue($item, $select2Options['class_pkey']),
-                'text' => $text,
+                'text' => $accessor->getValue($item, $select2Options['class_label']),
             ];
         }
 
-        // Retourne les resultats pagninés
+        // Retourne les résultats paginés
         if (0 !== $page) {
             return [
                 'results' => $results,

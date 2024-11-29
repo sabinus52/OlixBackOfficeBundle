@@ -34,7 +34,7 @@ Choose a alias as exemple `server`
 ## Template
 
 ~~~ twig
-<!-- base.html.twig -->
+<!-- base_bo.html.twig -->
 {% block sidebar_search %}
     {% include '@OlixBackOffice/Sidebar/search.html.twig' with { alias: 'server' } %}
 {% endblock %}

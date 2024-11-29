@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- *  This file is part of OlixBackOfficeBundle.
- *  (c) Sabinus52 <sabinus52@gmail.com>
- *  For the full copyright and license information, please view the LICENSE
- *  file that was distributed with this source code.
+ * This file is part of OlixBackOfficeBundle.
+ * (c) Sabinus52 <sabinus52@gmail.com>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Olix\BackOfficeBundle\Form;
@@ -56,9 +56,8 @@ class UserEditType extends AbstractType
             ])
             ->add('roles', ChoiceType::class, [
                 'choices' => [
-                    'User' => 'ROLE_USER',  // TODO prendre en compte les rôles
+                    'User' => 'ROLE_USER', /** Surcharger par une nouvelle classe formulaire pour y indiquer la liste des rôles */
                     'Admin' => 'ROLE_ADMIN',
-                    'Reader' => 'ROLE_READER',
                 ],
                 'multiple' => true,
                 'expanded' => true,

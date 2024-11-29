@@ -1,6 +1,14 @@
 # CHANGELOG
 
-### Version 1.0.5
+### Version 1.1.0
+
+- Paramètre `class_label`obligatoire dans les formulaires de type `Select2Ajax`
+- Ajout de la classe `ParameterOlix` pour le retour des paramètres de configuration du bundle
+- Refactoring de la classe `MenuItemModel`
+- Refactoring de la classe `NotificationModel`
+- Corrections autographiques
+
+### Version 1.0.6
 
 - Fix sur la classe User et ses évènements
 

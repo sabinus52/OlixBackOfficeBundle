@@ -1,7 +1,7 @@
 # CRUD
 
 
-## Prerequis
+## Prérequis
 
 For breadcrumb, positioning the route with two `__`
 
@@ -141,7 +141,7 @@ class MyTableType implements DataTableTypeInterface
             ->add('state', TextColumn::class, [
                 'label' => 'Statut',
                 'raw' => true,
-                'operator' => '=', // To forc filter '=', not 'LIKE'
+                'operator' => '=', // To force filter '=', not 'LIKE'
                 'data' => fn ($row) => sprintf('<b>%s</b>', $row->getStateLabel()),
             ])
             ->add('buttons', TwigColumn::class, [
@@ -206,7 +206,7 @@ class MyTableFilterType extends AbstractType
                 'label' => 'Statut',
                 'required' => false,
                 'choices' => MyEntity::getChoiceStates(),
-                'attr' => [ 'tabindex' => 1 ], // Important : Number of columms to search
+                'attr' => [ 'tabindex' => 1 ], // Important : Number of columns to search
             ])
         ;
     }

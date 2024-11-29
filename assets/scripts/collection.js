@@ -63,7 +63,7 @@ class OlixCollection {
     /**
      * Suppression d'un élément de la collection
      *
-     * @param {Element} $elt Elément du bouton 'delete' selectionné
+     * @param {Element} $elt Élément du bouton 'delete' sélectionné
      */
     deleteItem($elt) {
         if (confirm("Veux tu enlever cet élément ?")) {
@@ -85,7 +85,7 @@ class OlixCollection {
         this._nextId = this._element.children("div").length;
         console.log("NextID = " + this._nextId);
 
-        // Evènement du bouton 'ADD'
+        // Évènement du bouton 'ADD'
         if (this._settings.allow_add) {
             this._element
                 .parent()
@@ -95,7 +95,7 @@ class OlixCollection {
                 });
         }
 
-        // Evènement sur les boutons 'DELETE'
+        // Évènement sur les boutons 'DELETE'
         if (this._settings.allow_delete) {
             this._element.on(
                 "click",

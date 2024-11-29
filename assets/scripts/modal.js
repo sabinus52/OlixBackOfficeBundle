@@ -74,7 +74,7 @@ class OlixModal {
         if (this._settings.urlLoad != "") {
             this._content.load(this._settings.urlLoad, () => {
                 Olix.initForms();
-                // Evenement sur la validation du formulaire
+                // Événement sur la validation du formulaire
                 this._modal.on("submit", "form", () => {
                     this.valid();
                     return false;
@@ -132,7 +132,7 @@ class OlixModal {
 
     _init() {
         console.log("init", this);
-        // On doit détruire les évenements pour éviter la multiplication
+        // On doit détruire les événements pour éviter la multiplication
         this._modal.on("hide.bs.modal", () => {
             this._modal.off("submit");
         });
