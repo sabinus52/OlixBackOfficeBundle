@@ -33,7 +33,7 @@ final class ParameterOlix
         $this->parameterBag = new ParameterBag($olixConfigParameter);
     }
 
-    public function getValue(string $keySeparatorDot): mixed
+    public function getValue(string $keySeparatorDot): bool|int|string
     {
         /** @var array<mixed> $options */
         $options = $this->parameterBag->all();
@@ -48,6 +48,15 @@ final class ParameterOlix
             // Passe au sous tableau
             /** @var array<mixed> $options */
             $options = $options[$key];
+        }
+
+        /** @var array<mixed>|bool|int|string|null $options */
+        if (is_array($options)) {
+            throw new \Exception(sprintf('La clé "%s" des paramètres olix_back_office doit être une valeur', $keySeparatorDot));
+        }
+        // Si la valeur est null ou vide, retourne une chaîne vide au lieu de null
+        if (null === $options) {
+            return '';
         }
 
         return $options;

@@ -139,6 +139,10 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
+        if (empty($this->username)) {
+            throw new \RuntimeException('Le champ "username" est obligatoire.');
+        }
+
         return $this->username;
     }
 
