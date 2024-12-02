@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### Version 1.1.1
+
+- Simplification de la classe `Values` avec typage de la clé entier ou chaîne de caractère
+- Typage des paramètres du bundle
+
 ### Version 1.1.0
 
 - Paramètre `class_label`obligatoire dans les formulaires de type `Select2Ajax`
