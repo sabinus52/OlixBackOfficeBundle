@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### Version 1.1.2
+
+- Fix de la classe `Values` avec l'ajout d'une interface
+- Nommage des boutons "submit" dans les formulaires pour les tests
+  
 ### Version 1.1.1
 
 - Simplification de la classe `Values` avec typage de la clé entier ou chaîne de caractère

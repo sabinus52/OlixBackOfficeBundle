@@ -18,7 +18,7 @@ namespace Olix\BackOfficeBundle\Values;
  *
  * template T of array<int,array<string,string>>|array<string,array<string,string>>
  */
-abstract class ValuesAbstract implements \Stringable
+abstract class ValuesAbstract implements \Stringable, ValuesInterface
 {
     /**
      * Liste des valeurs.

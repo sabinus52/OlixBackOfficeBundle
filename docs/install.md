@@ -77,6 +77,8 @@ import "olix-backoffice/olixbo.min.css";
 import "olix-backoffice";
 ~~~
 
+*INFO* : Désactiver `turbo-core` et  `mercure-turbo-stream` dans `assets/controllers.json` pour désactiver les fonctionnalités de streaming
+
 
 ## Template
 
