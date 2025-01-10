@@ -1,0 +1,10 @@
+composer: false
+includes:
+    - "src"
+report:
+    html: "var/metrics"
+    json: "var/metrics/report.json"
+    violations: "var/metrics/violations.xml"
+plugins:
+    git:
+        binary: git

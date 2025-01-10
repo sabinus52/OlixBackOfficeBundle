@@ -74,7 +74,6 @@
         "phpmd/phpmd": "^2.15",
         "rector/rector": "^1.2",
         "phpstan/phpstan": "^1.12",
-        "phpunit/phpunit": "^11.4",
-        "vimeo/psalm": "^0.3.14"
+        "phpunit/phpunit": "^11.4"
     }
 }
