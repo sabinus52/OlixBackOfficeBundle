@@ -9,20 +9,25 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Olix\BackOfficeBundle\Values;
+namespace Olix\BackOfficeBundle\ValuesList;
 
 /**
- * Interface des listes de valeurs.
+ * Interface ValuesListInterface.
  *
  * @author Sabinus52 <sabinus52@gmail.com>
  */
-interface ValuesInterface
+interface ValuesListInterface
 {
-    public function setValue(int|string $value): void;
+    public function setKey(int $key): void;
 
-    public function getValue(): int|string;
+    public function getKey(): int;
 
     public function getLabel(): string;
 
-    public function getColor(): string;
+    public function getField(string $fieldName): string;
+
+    /**
+     * @return array<string,string>
+     */
+    public function getValue(): array;
 }

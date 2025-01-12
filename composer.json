@@ -55,19 +55,15 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit --configuration .vscode/phpunit.xml",
-        "codestyle": "vendor/bin/php-cs-fixer fix --config=.vscode/.php-cs-fixer.php --dry-run --verbose --diff",
-        "codestyle-fix": "vendor/bin/php-cs-fixer fix --config=.vscode/.php-cs-fixer.php",
+        "codestyle": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --verbose --diff",
+        "codestyle-fix": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
         "phpmd": [
-            "vendor/bin/phpmd src ansi .vscode/ruleset.xml",
-            "vendor/bin/phpmd tests ansi .vscode/ruleset.xml"
+            "vendor/bin/phpmd src ansi ruleset.xml",
+            "vendor/bin/phpmd tests ansi ruleset.xml"
         ],
-        "phpstan": "vendor/bin/phpstan analyse src --configuration=.vscode/phpstan.neon",
-        "psalm": "vendor/bin/psalm --config=.vscode/psalm.xml",
-        "rector": "vendor/bin/rector process --dry-run --config .vscode/rector.php",
-        "rector-fix": "vendor/bin/rector process --config .vscode/rector.php",
-        "csniff": "phpcs src tests --colors --standard=PSR12 ",
-        "csniff-fix": "phpcbf src --colors --standard=PSR12"
+        "phpstan": "vendor/bin/phpstan analyse src tests --configuration=phpstan.neon",
+        "rector": "vendor/bin/rector process --dry-run --config rector.php",
+        "rector-fix": "vendor/bin/rector process --config rector.php"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.65",
