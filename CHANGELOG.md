@@ -1,5 +1,13 @@
 # CHANGELOG
 
+### Version 1.1.4
+
+- Amélioration de la classe `Values` avec l'ajout de méthodes supplémentaires 
+
+### Version 1.1.3
+
+- Fix Notifications
+
 ### Version 1.1.2
 
 - Fix de la classe `Values` avec l'ajout d'une interface
