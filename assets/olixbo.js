@@ -27,6 +27,7 @@ import "datatables.net-responsive-bs4";
 /**
  * Import des modules perso
  */
+import DualListBox from "./plugins/duallistbox.js";
 import "./scripts/modal.js";
 import "./scripts/toastr.js";
 import "./scripts/select2.js";
@@ -37,5 +38,6 @@ import Olix from "./scripts/functions.js";
 /**
  * Initialisation
  */
+DualListBox.initialize();
 Olix.initForms();
 Olix.finalize();

@@ -7,8 +7,6 @@
 import $ from "jquery";
 
 // Import des modules pour les widgets des formulaires
-import BootstrapDualListbox from "bootstrap4-duallistbox";
-BootstrapDualListbox($);
 import "bootstrap-switch";
 import * as Popper from "@popperjs/core";
 window.Popper = Popper;
@@ -50,11 +48,6 @@ export default {
             $.extend(true, opts, { display: { icons: displayDatePicker } });
             console.log(opts);
             new TempusDominus(element, opts);
-        });
-
-        // Initialisation des widgets DualListBox
-        $.each($("[data-toggle='duallistbox']"), function (i, element) {
-            $(element).bootstrapDualListbox($(element).data("options-js"));
         });
     },
 
