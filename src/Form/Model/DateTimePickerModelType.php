@@ -28,21 +28,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author      Sabinus52 <sabinus52@gmail.com>
  *
- * @see         https://github.com/Eonasdan/tempus-dominus
- * @see         https://getdatepicker.com/
+ * @see         https://www.npmjs.com/package/@eonasdan/tempus-dominus
+ *
+ * @version     6.9.*
  *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 abstract class DateTimePickerModelType extends AbstractModelType
 {
     private string $locale = 'fr'; // TODO
-
-    /**
-     * Constructeur.
-     */
-    public function __construct()
-    {
-    }
 
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
@@ -53,114 +48,73 @@ abstract class DateTimePickerModelType extends AbstractModelType
             'html5' => false,
             'button_icon' => 'fas fa-calendar',
             'locale' => $this->locale,
+            self::KEY_OPTS_JS => [],
         ]);
 
         $resolver->setAllowedValues('widget', ['single_text']);
         $resolver->setAllowedValues('html5', [false]);
         $resolver->setAllowedTypes('button_icon', ['string']);
-
-        // Options JavaScript supplémentaires du widget
-        $resolver->setDefaults([
-            'js_allow_input_toggle' => false,
-            'js_default_date' => null,
-            'js_use_current' => false,
-            'js_stepping' => 5,
-            'js_display' => [],
-            'js_restrictions' => [],
-        ]);
-
-        $resolver->setAllowedTypes('js_allow_input_toggle', 'bool');
-        $resolver->setAllowedTypes('js_default_date', ['null', 'string', \DateTimeInterface::class]);
-        $resolver->setAllowedTypes('js_use_current', 'bool');
-        $resolver->setAllowedTypes('js_stepping', 'int');
-        $resolver->setAllowedTypes('js_display', 'array');
-        $resolver->setAllowedTypes('js_restrictions', 'array');
+        // Options supplémentaires JavaScript du widget
+        $resolver->setAllowedTypes(self::KEY_OPTS_JS, ['array']);
     }
 
     /**
-     * @param array<string,string>|mixed[][]|mixed[][][] $options
+     * @param array<string,array<string,mixed>> $options
      */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         /** @var string $format */
         $format = $options['format'];
-        // pass the form type option directly to the template
+        // Options javascript du widget
+        /** @var array<string,array<string,mixed>> $optionsJavaScript */
+        $optionsJavaScript = $options[self::KEY_OPTS_JS];
+
+        // Ajoute les options javascript supplémentaires sur la locale et le format "moment.js"
+        $optionsJavaScript['localization']['locale'] = $options['locale'];
+        $optionsJavaScript['localization']['format'] = $options['format'];
+
+        // Parcours les options JavaScript de types DateTime pour les convertir en format "moment.js"
+        $this->convertAllOptionsIsDateInFormat($optionsJavaScript, $format);
+
+        // Icône à droite cu widget et qui sert de bouton pour afficher le widget
         $view->vars['button_icon'] = $options['button_icon'];
 
-        // Convert les options de types DateTime
-        if (isset($options['js_restrictions']['minDate'])) {
-            $options['js_restrictions']['minDate'] = $this->formatIsDate($options['js_restrictions']['minDate'], $format); // @phpstan-ignore argument.type
-        }
-        if (isset($options['js_restrictions']['maxDate'])) {
-            $options['js_restrictions']['maxDate'] = $this->formatIsDate($options['js_restrictions']['maxDate'], $format);
-        }
-        $options['js_default_date'] = $this->formatIsDate($options['js_default_date'], $format); // @phpstan-ignore argument.type
-        if (null === $options['js_default_date']) {
-            unset($options['js_default_date']);
-        }
-        if (isset($options['js_restrictions']['disabledDates'])) {
-            foreach ($options['js_restrictions']['disabledDates'] as $key => $value) {
-                $options['js_restrictions']['disabledDates'][$key] = $this->formatIsDate($value, $format);
-            }
-        }
-        if (isset($options['js_restrictions']['enabledDates'])) {
-            foreach ($options['js_restrictions']['enabledDates'] as $key => $value) {
-                $options['js_restrictions']['enabledDates'][$key] = $this->formatIsDate($value, $format);
-            }
-        }
-
-        // Options javascript du widget
-        $view->vars['js_options'] = $this->getOptionsWidget($options);
+        // Sélecteur du widget déjà définit dans le template : data-toggle='datetimepicker2'
+        // Options javascript définit dans le template : data-options-js="{{ js_options|json_encode }}"
+        $view->vars['js_options'] = $this->getOptionsWidgetCamelized($optionsJavaScript);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'olix_datetimepicker';
     }
 
     /**
-     * Retourne toutes les options javascript du widget datetimepicker.
+     * Parcours et convertit les options JavaScript de types DateTime pour les convertir en format "moment.js".
+     * Modifie directement les valeurs dans le tableau.
      *
-     * @param mixed[] $options
-     *
-     * @return mixed[]
+     * @param array<string,mixed> $optionsJavaScript Options JavaScript du widget
+     * @param string              $format            Format date du widget JS
      */
-    private function getOptionsWidget(array $options): array
+    private function convertAllOptionsIsDateInFormat(array &$optionsJavaScript, string $format): void
     {
-        // Camelize options for javascript
-        $result = $this->getOptionsWidgetCamelized($options);
-
-        $result['localization']['locale'] = $options['locale']; // @phpstan-ignore offsetAccess.nonOffsetAccessible
-        // Conversion format date PHP to format moment.js
-        $result['localization']['format'] = $options['format']; // @phpstan-ignore offsetAccess.nonOffsetAccessible
-
-        if ([] === $result['restrictions']) {
-            unset($result['restrictions']);
+        foreach ($optionsJavaScript as &$option) {
+            if (is_array($option)) {
+                // Si c'est un tableau, on continue son parcours récursivement
+                $this->convertAllOptionsIsDateInFormat($option, $format);
+            } elseif ($option instanceof \DateTimeInterface) {
+                // Si c'est un DateTime, on le formate
+                $option = $this->formatDateTime($option, $format);
+            }
         }
-
-        return $result;
     }
 
     /**
-     * @param bool|string|\DateTimeInterface|null $option
+     * Formate une date de type DateTime dans le format "moment.js" spécifié du widget.
      */
-    private function formatIsDate($option, string $format): bool|string|null
-    {
-        if ($option instanceof \DateTimeInterface) {
-            return $this->formatObject($option, $format);
-        }
-
-        return $option;
-    }
-
-    /**
-     * Formate une date de type DateTime dans le format spécifié du widget.
-     */
-    private function formatObject(\DateTimeInterface $dateTime, string $format): string
+    private function formatDateTime(\DateTimeInterface $dateTime, string $format): string
     {
         $formatter = new \IntlDateFormatter($this->locale, \IntlDateFormatter::NONE, \IntlDateFormatter::NONE);
         $formatter->setPattern($format);

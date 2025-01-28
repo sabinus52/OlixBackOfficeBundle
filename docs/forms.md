@@ -33,45 +33,6 @@ $builder->add('public', SwitchType::class, [
 
 
 
-## Bootstrap Dual Listbox
-
-Bootstrap Dual Listbox est un widget d'une double liste responsive 
-
-Source : https://github.com/istvan-ujjmeszaros/bootstrap-duallistbox
-
-### Exemple
-
-~~~ php
-use Olix\BackOfficeBundle\Form\Type\DualListBoxChoiceType;
-// ...
-
-$builder->add('dual_list', DualListBoxChoiceType::class, [
-    'label' => 'DualBox multiple',
-    'choices' => ['toto', 'tata', 'titi'],
-    'ojs_show_filter_inputs' => false,
-]);
-~~~
-
-### Options
-
-| Nom SF                     | Nom JS                | Type            | Description                                                              | Défaut                   | Valeurs 
-|----------------------------|-----------------------|-----------------|--------------------------------------------------------------------------|--------------------------|-
-| js_filter_text_clear       | filterTextClear       | String          | The text for the "Show All" button                                       | 'voir tous'              |
-| js_filter_place_holder     | filterPlaceHolder     | String          | The placeholder for the input element for filtering elements             | 'Filtrer'                |
-| js_move_selected_label     | moveSelectedLabel     | String          | The label for the "Move Selected" button                                 | 'Déplacer la sélection'  |
-| js_move_all_label          | moveAllLabel          | String          | The label for the "Move All" button                                      | 'Déplacer tous'          |
-| js_remove_selected_label   | removeSelectedLabel   | String          | The label for the "Remove Selected" button                               | 'Supprimer la sélection' |
-| js_remove_all_label        | removeAllLabelText    | String          | The label for the "Remove All" button                                    | 'Supprimer tous'         |
-| js_selected_list_label     | selectedListLabel     | Boolean, String | Can be a string specifying the name of the selected list                 | false                    | true, false, string
-| js_non_selected_list_label | nonSelectedListLabel  | Boolean, String | Can be a string specifying the name of the non selected list             | false                    | true, false, string
-| js_selector_minimal_height | selectorMinimalHeight | Integer         | Represents the minimal height of the generated dual listbox              | 100                      |
-| js_show_filter_inputs      | showFilterInputs      | Boolean         | Whether to show filter input                                             | true                     | true, false
-| js_non_selected_filter     | nonSelectedFilter     | String          | Initializes the dual listbox with a filter for the non selected elements | ''                       |
-| js_selected_filter         | selectedFilter        | String          | Initializes the dual listbox with a filter for the selected elements     | ''                       |
-| js_info_text               | infoText              | String, Boolean | Set this to false to hide this information                               | 'Voir tous {0}'          | false, string
-| js_info_text_filtered      | infoTextFiltered      | String          | Determines which element format to use when some element is filtered     | '<span class="badge badge-warning">Filtré</span> {0} sur {1}' |
-| js_info_text_empty         | infoTextEmpty         | String          | Determines the string to use when there are no options in the list       | 'Liste vide'             |
-| js_filter_on_values        | filterOnValues        | Boolean         | Set this to true to filter the options according to their values         | false                    | true, false
 
 
 
@@ -214,48 +175,7 @@ $builder->add('ajax_ips', Select2AjaxType::class, [
 
 
 
-## DateTime picker
 
-Date and time picker designed to integrate into your Bootstrap
-
-### Exemple
-
-~~~ php
-use Olix\BackOfficeBundle\Form\Type\DatePickerType;
-use Olix\BackOfficeBundle\Form\Type\DateTimePickerType;
-use Olix\BackOfficeBundle\Form\Type\TimePickerType;
-
-$builder
-    ->add('datetime', DateTimePickerType::class, [
-        'label' => 'Date et heure',
-        'ojs_default_date' => new DateTime('2022-05-10'),
-        'ojs_disabled_dates' => [new DateTime('2022-05-13'), new DateTime('2022-05-15')],
-        'ojs_side_by_side' => true,
-        'ojs_days_of_week_disabled' => [0, 6],
-    ])
-    ->add('date', DatePickerType::class, [
-        'label' => 'Date',
-        'ojs_min_date' => new DateTime('05/05/2022'),
-        'ojs_calendar_weeks' => true,
-    ])
-    ->add('time', TimePickerType::class, [
-        'label' => 'Heure',
-    ]);
-~~~
-
-### Options
-
-| Nom SF          | Nom JS       | Type    | Description                                                                                  | Défaut | Valeurs 
-|-----------------|--------------|---------|----------------------------------------------------------------------------------------------|--------|---------
-| button_icon     |              | String  | Icon from right input                                                                        |        | 
-| locale          |              | String  | Locale                                                                                       | 'fr'   |
-| js_stepping     | stepping     | Integer | Number of minutes the up/down arrow's will move the minutes value in the time picker         | 1      |
-| js_use_current  | useCurrent   | Boolean | Determines if the current date should be used as the default value when the picker is opened | true   | true, false
-| js_stepping     | stepping     | Integer | Controls how much the minutes are changed by                                                 | 5      | 
-| js_display      | display      | Array   | Display options allow you to control much of the picker's look and feel                      |        |
-| js_restrictions | restrictions | Array   | Restrictions allow you to prevent users from selected dates or times based on a set of rules |        |
-
-See options in https://getdatepicker.com/6/options/
 
 ## Input text with icon
 

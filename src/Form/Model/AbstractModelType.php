@@ -11,12 +11,15 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Form\Model;
 
+use Olix\BackOfficeBundle\Helper\Helper;
 use Symfony\Component\Form\AbstractType;
 
 /**
  * Abstract class for custom type.
  *
  * @author      Sabinus52 <sabinus52@gmail.com>
+ *
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 abstract class AbstractModelType extends AbstractType
 {
@@ -61,37 +64,14 @@ abstract class AbstractModelType extends AbstractType
     }
 
     /**
-     * Retourne toutes les options d'un widget.
+     * Retourne toutes les options d'un widget camelisée.
      *
-     * @param array<mixed> $options
+     * @param array<string,mixed> $options
      *
-     * @return array<mixed>
+     * @return array<string,mixed>
      */
     protected function getOptionsWidgetCamelized(array $options, string $prefix = ''): array
     {
-        $result = [];
-
-        foreach ($options as $key => $value) {
-            if (str_starts_with($key, $prefix)) {
-                // Remove 'js_' and camelize the options names
-                $nameOption = substr($key, strlen($prefix));
-                $nameOption = $this->camelize($nameOption);
-                $result[$nameOption] = $value;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Camelize a option name "days_of_week_disabled" -> "daysOfWeekDisabled".
-     */
-    public function camelize(string $name): string
-    {
-        return (string) preg_replace_callback(
-            '/_([a-z])/',
-            static fn (array $char): string => strtoupper($char[1]),
-            $name
-        );
+        return Helper::getCamelizedKeys($options, $prefix);
     }
 }

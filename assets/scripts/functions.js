@@ -10,20 +10,6 @@ import $ from "jquery";
 import "bootstrap-switch";
 import * as Popper from "@popperjs/core";
 window.Popper = Popper;
-import { TempusDominus } from "@eonasdan/tempus-dominus";
-
-const displayDatePicker = {
-    type: "icons",
-    time: "fas fa-clock",
-    date: "fas fa-calendar",
-    up: "fas fa-arrow-up",
-    down: "fas fa-arrow-down",
-    previous: "fas fa-chevron-left",
-    next: "fas fa-chevron-right",
-    today: "fas fa-calendar-check",
-    clear: "fas fa-trash",
-    close: "fas fa-xmark",
-};
 
 export default {
     initForms() {
@@ -40,14 +26,6 @@ export default {
                     ".select2-container--open .select2-search__field"
                 )
                 .focus();
-        });
-
-        // Initialisation des widgets DateTimePicker
-        $.each($("[data-toggle='datetimepicker2']"), function (i, element) {
-            let opts = $(element).data("options-js");
-            $.extend(true, opts, { display: { icons: displayDatePicker } });
-            console.log(opts);
-            new TempusDominus(element, opts);
         });
     },
 

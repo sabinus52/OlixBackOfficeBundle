@@ -30,7 +30,7 @@ class DateTimePickerType extends DateTimePickerModelType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'format' => 'yyyy-MM-dd hh:mm',
+            'format' => 'yyyy-MM-dd HH:mm',
         ]);
     }
 

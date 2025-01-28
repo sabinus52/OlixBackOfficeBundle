@@ -20,8 +20,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Widget de formulaire de type DatePicker.
  *
- * @example     Configuration with surcharge javascript
- *
  * @author      Sabinus52 <sabinus52@gmail.com>
  *
  * @see         DualListBoxModelType::class
@@ -54,10 +52,17 @@ class DatePickerType extends DateTimePickerModelType
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
+        if (array_key_exists('display', $options[self::KEY_OPTS_JS])) {
+            $options[self::KEY_OPTS_JS]['display'] += [
+                'components' => self::COMPONENTS,
+            ];
+        } else {
+            $options[self::KEY_OPTS_JS]['display'] = [
+                'components' => self::COMPONENTS,
+            ];
+        }
+
         parent::buildView($view, $form, $options);
-        $view->vars['js_options']['display'] += [
-            'components' => self::COMPONENTS,
-        ];
     }
 
     #[\Override]
