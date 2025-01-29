@@ -19,18 +19,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Widget de formulaire de type switch équivalent à une case à cocher.
  *
  * @example     Configuration with options of this type
- * @example     @param bool   js_inverse       : Inverse switch direction
- * @example     @param string js_on_color      : Color of the left side of the switch
- * @example     @param string js_off_color     : Color of the right side of the switch
- * @example     @param string js_on_text       : Text of the left side of the switch
- * @example     @param string js_on_text       : Text of the right side of the switch
- * @example     @param string js_size          : The checkbox size
- * @example     @param bool   js_indeterminate : Indeterminate state
- * @example     @param string js_label_text    : Text of the center handle of the switch
+ * @example     @param string on_color      : Couleur du widget switch dans l'état checked
+ * @example     @param string off_color     : Couleur du widget switch dans l'état non checked
+ * @example     @param string size          : Dimension du widget switch
+ * @example     @param string chk_label     : Label du switch à droite du widget
+ *
+ * @see         https://codepen.io/claviska/pen/KyWmjY
  *
  * @author      Sabinus52 <sabinus52@gmail.com>
- *
- * @see         https://github.com/Bttstrp/bootstrap-switch
  *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
@@ -43,12 +39,17 @@ abstract class SwitchModelType extends AbstractModelType
         $resolver->setDefaults([
             'on_color' => null,
             'off_color' => null,
+            'size' => null,
             'chk_label' => '',
         ]);
 
         $resolver->setAllowedTypes('on_color', ['null', 'string']);
         $resolver->setAllowedTypes('off_color', ['null', 'string']);
+        $resolver->setAllowedTypes('size', ['null', 'string']);
         $resolver->setAllowedTypes('chk_label', ['string']);
+        $resolver->setAllowedValues('on_color', [null] + self::COLORS_SIMPLIFY);
+        $resolver->setAllowedValues('off_color', [null] + self::COLORS_SIMPLIFY);
+        $resolver->setAllowedValues('size', [null, 'small', 'large']);
     }
 
     #[\Override]
@@ -57,12 +58,15 @@ abstract class SwitchModelType extends AbstractModelType
         // Options attributes du widget
         $view->vars['chk_label'] = $options['chk_label'];
 
-        $view->vars['class_color'] = ['custom-control', 'custom-switch'];
+        $view->vars['class_switch'] = ['switch'];
         if (null !== $options['on_color']) {
-            $view->vars['class_color'][] = sprintf('custom-switch-on-%s', (string) $options['on_color']); // @phpstan-ignore cast.string
+            $view->vars['class_switch'][] = sprintf('switch-on-%s', (string) $options['on_color']); // @phpstan-ignore cast.string
         }
         if (null !== $options['off_color']) {
-            $view->vars['class_color'][] = sprintf('custom-switch-off-%s', (string) $options['off_color']); // @phpstan-ignore cast.string
+            $view->vars['class_switch'][] = sprintf('switch-off-%s', (string) $options['off_color']); // @phpstan-ignore cast.string
+        }
+        if (null !== $options['size']) {
+            $view->vars['class_switch'][] = sprintf('switch-%s', (string) $options['size']); // @phpstan-ignore cast.string
         }
     }
 

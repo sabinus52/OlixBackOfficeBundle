@@ -5,33 +5,6 @@ Pour les options avec couleurs, la liste est la suivante :
 'primary', 'blue', 'secondary', 'success', 'green', 'info', 'cyan', 'warning', 'yellow', 'danger', 'red', 'black', 'gray-dark', 'gray', 'light', 'default', 'indigo', 'navy', 'purple', 'fuchsia', 'pink', 'maroon', 'orange', 'lime', 'teal', 'olive'
 ~~~
 
-## BootstrapSwitch
-
-Transforme une checkbox en "toggle switch"
-
-Source : https://github.com/Bttstrp/bootstrap-switch
-
-### Exemple
-
-~~~ php
-use Olix\BackOfficeBundle\Form\Type\SwitchType;
-// ...
-
-$builder->add('public', SwitchType::class, [
-    'label'    => 'Show this entry publicly?',
-    'on_color' => 'green',
-    'off_color' => 'red',
-]);
-~~~
-
-### Options
-
-| Nom SF        | Nom JS        | Type    |	Description                             | Défaut    | Valeurs 
-|---------------|---------------|---------|-----------------------------------------|-----------|----------------------------------------
-| on_color      | onColor       | String  | Color of the left side of the switch    | 'primary' | List of COLORS
-| off_color     | offColor      | String  | Color of the right side of the switch   | 'default' | List of COLORS
-
-
 
 
 

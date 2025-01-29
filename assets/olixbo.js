@@ -10,6 +10,7 @@ import "bootstrap4-duallistbox/dist/bootstrap-duallistbox.min.css";
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
 import "datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css";
 import "admin-lte/dist/css/adminlte.min.css";
+import "./styles/switch.css";
 
 /**
  * Import des modules

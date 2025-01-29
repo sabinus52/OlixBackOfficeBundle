@@ -48,6 +48,9 @@ abstract class AbstractModelType extends AbstractType
         'black', 'gray-dark', 'gray', 'light', 'default',
         'indigo', 'navy', 'purple', 'fuchsia', 'pink', 'maroon', 'orange', 'lime', 'teal', 'olive',
     ];
+    protected const COLORS_SIMPLIFY = [
+        'primary',  'secondary', 'success',  'info',  'warning',  'danger', 'light', 'dark', 'indigo',
+    ];
 
     /**
      * Retourne toutes les options javascript d'un widget.

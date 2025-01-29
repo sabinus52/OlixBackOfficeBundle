@@ -52,15 +52,15 @@
 
 
 {% block olix_switch_label -%}
-    {{- block('form_label') -}}
+    
 {%- endblock olix_switch_label %}
 
 {% block olix_switch_widget -%}
-    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' custom-control-input')|trim}) -%}
-    <div class="{{ class_color|join(' ') }}">
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' switch')|trim}) -%}
+    <span class="{{ class_switch|join(' ') }}">
         <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
-        <label class="switch-custom custom-control-label" for="{{ id }}">{{ chk_label }}</label>
-    </div>
+        {{- block('form_label') -}}
+    </span>
 {%- endblock olix_switch_widget %}
 
 
