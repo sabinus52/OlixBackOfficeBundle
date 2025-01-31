@@ -73,8 +73,8 @@ abstract class AbstractModelType extends AbstractType
      *
      * @return array<string,mixed>
      */
-    protected function getOptionsWidgetCamelized(array $options, string $prefix = ''): array
+    protected function getOptionsWidgetCamelized(array $options, string $prefix = '', bool $allKeys = true): array
     {
-        return Helper::getCamelizedKeys($options, $prefix);
+        return Helper::getCamelizedKeys($options, $allKeys, $prefix);
     }
 }

@@ -81,23 +81,22 @@ class Select2AjaxType extends Select2ModelType
         $resolver->setAllowedTypes('allow_add_prefix', ['string']);
         $resolver->setAllowedTypes('callback', ['null', 'callable']);
 
-        // Options supplémentaires pour l'appel url en Ajax
-        $resolver->setDefaults([
-            'remote_route' => 'olix_autocomplete_select2', // Route par défaut
-            'remote_params' => [],
-        ]);
-        $resolver->setAllowedTypes('remote_route', ['null', 'string']);
-        $resolver->setAllowedTypes('remote_params', ['array']);
-
-        // Options javascript pour la fonction Ajax
-        $resolver->setDefaults([
-            'ajax_js_scroll' => true,
-            'ajax_js_delay' => 250,
-            'ajax_js_cache' => true,
-        ]);
-        $resolver->setAllowedTypes('ajax_js_scroll', ['bool']);
-        $resolver->setAllowedTypes('ajax_js_delay', ['int']);
-        $resolver->setAllowedTypes('ajax_js_cache', ['bool']);
+        // Options javascript supplémentaires pour l'appel url en Ajax
+        $resolver->setDefault('ajax', static function (OptionsResolver $ajaxResolver): void {
+            $ajaxResolver->setDefaults([
+                'url' => null,
+                'route' => 'olix_autocomplete_select2', // Route par défaut
+                'params' => [],
+                'scroll' => true,
+                'delay' => 250,
+                'cache' => true,
+            ]);
+            $ajaxResolver->setAllowedTypes('route', ['null', 'string']);
+            $ajaxResolver->setAllowedTypes('params', ['array']);
+            $ajaxResolver->setAllowedTypes('scroll', ['bool']);
+            $ajaxResolver->setAllowedTypes('delay', ['int']);
+            $ajaxResolver->setAllowedTypes('cache', ['bool']);
+        });
     }
 
     /**
@@ -116,51 +115,55 @@ class Select2AjaxType extends Select2ModelType
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         // Autorisation d'ajout d'un nouvel élément
-        if (true === $options['allow_add']) {
+        if (true === (bool) $options['allow_add']) {
             // Pour autoriser Select2 à ajouter un élément
-            $options['js_tags'] = true;
+            $options[self::KEY_OPTS_JS]['tags'] = true;
             // Pour déterminer que l'id est bien une nouvelle valeur <option value='onew:toto'>
             $view->vars['attr'] += ['data-prefix-new' => $options['allow_add_prefix']];
         }
 
-        parent::buildView($view, $form, $options);
+        // Options spécifique pour savoir s'il faut ajouter un élément vide dans la liste
+        $view->vars['allow_clear'] = (array_key_exists('allow_clear', $options[self::KEY_OPTS_JS])) ? $options[self::KEY_OPTS_JS]['allow_clear'] : false;
 
-        // Options pour la création du widget
-        $view->vars['allow_clear'] = $options['js_allow_clear'];
-
-        // Génération de la route
-        $options['ajax_js_route'] = $this->generateRoute($form, $options);
-
-        // Options Javascript pour les sources de données distantes
-        $view->vars['attr'] += ['data-ajax' => json_encode($this->getOptionsWidgetCamelized($options, 'ajax_js_'))];
+        // Options Javascript pour les sources de données distantes en mode Ajax
+        $options['ajax']['url'] = $this->generateRoute($form, $options['ajax']);
+        $view->vars['attr'] += ['data-ajax' => json_encode($options['ajax'])];
 
         // Pour les données multiples, le nom doit être un tableau
         if ($options['multiple']) {
             $view->vars['attr'] += ['multiple' => 'multiple'];
             $view->vars['full_name'] .= '[]';
         }
+
+        parent::buildView($view, $form, $options);
     }
 
     /**
      * Génération de la route qui sera appelée par le widget Select2 pour l'autocomplétion.
+     * Récupère le formulaire parent et la classe du formulaire parent utilisé par le service AutoComplete.
      *
-     * @param array<string,mixed> $options Options du widget
+     * @param array<string,mixed> $optionsAjax Options des paramètres `ajax`
      */
-    private function generateRoute(FormInterface $form, array $options): string
+    private function generateRoute(FormInterface $form, array &$optionsAjax): string
     {
-        /** @var array<string, string> $optRemoteParams Paramètres de la route */
-        $optRemoteParams = $options['remote_params'];
+        /** @var string $optAjaxRoute Route */
+        $optAjaxRoute = $optionsAjax['route'];
+        /** @var array<string, string> $optAjaxParams Paramètres de la route */
+        $optAjaxParams = $optionsAjax['params'];
 
-        // Formulaire parent
+        // Récupère le formulaire parent
         $formParent = $form->getParent();
         if (!$formParent instanceof FormInterface) {
             throw new \RuntimeException(sprintf('Parent form of "%s" form is not a FormInterface', $form->getName()));
         }
-        // Class du type de formulaire parent
+        // Récupère la classe du type de formulaire parent
         $classFormParent = $formParent->getConfig()->getType()->getInnerType()::class;
 
-        return $this->router->generate((string) $options['remote_route'], // @phpstan-ignore cast.string
-            array_merge($optRemoteParams, [
+        // Supprime ces 2 paramètres qui ne sont plus utiles une fois la route générée
+        unset($optionsAjax['route'], $optionsAjax['params']);
+
+        return $this->router->generate($optAjaxRoute,
+            array_merge($optAjaxParams, [
                 'class' => $classFormParent,
                 'widget' => $form->getName(),
             ])

@@ -17,16 +17,6 @@ export default {
         $.each($("[data-toggle='switch']"), function (i, element) {
             $(element).bootstrapSwitch($(element).data("options-js"));
         });
-
-        // Initialisation des widgets Select2
-        $("[data-toggle='select2']").OlixSelect2();
-        $(document).on("select2:open", () => {
-            document
-                .querySelector(
-                    ".select2-container--open .select2-search__field"
-                )
-                .focus();
-        });
     },
 
     finalize() {

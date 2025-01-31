@@ -43,38 +43,32 @@ abstract class Select2ModelType extends AbstractModelType
         $resolver->setDefaults([
             'expanded' => false,
             'color' => 'default',
+            self::KEY_OPTS_JS => [],
         ]);
 
         $resolver->setAllowedValues('expanded', [false]);
         $resolver->setAllowedTypes('color', ['string']);
         $resolver->setAllowedValues('color', self::COLORS);
-
-        // Options JavaScript supplémentaires du widget
-        $resolver->setDefaults([
-            'js_allow_clear' => false,
-            'js_close_on_select' => true,
-            'js_language' => 'fr',
-            'js_minimum_input_length' => 0,
-            'js_placeholder' => '',
-            'js_width' => '100%',
-        ]);
-
-        $resolver->setAllowedTypes('js_allow_clear', ['bool']);
-        $resolver->setAllowedTypes('js_close_on_select', ['bool']);
-        $resolver->setAllowedTypes('js_language', ['string']);
-        $resolver->setAllowedTypes('js_minimum_input_length', ['int']);
-        $resolver->setAllowedTypes('js_placeholder', ['string']);
+        // Options supplémentaires JavaScript du widget
+        $resolver->setAllowedTypes(self::KEY_OPTS_JS, ['array']);
     }
 
+    /**
+     * @param array<string,array<string,mixed>> $options
+     */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        // pass the form type option directly to the template
+        // Couleur du widget
         $view->vars['color'] = $options['color'];
 
-        // Options attributes du widget
-        $view->vars['attr'] += ['data-toggle' => 'select2'];
-        $view->vars['attr'] += ['data-options-js' => json_encode($this->getOptionsWidgetCamelized($options))];
+        // Sélecteur du widget
+        $view->vars['attr'] += [self::ATTR_DATA_SELECTOR => 'select2'];
+
+        // Options javascript du widget
+        /** @var array<string, mixed> $optionsJavaScript */
+        $optionsJavaScript = $options[self::KEY_OPTS_JS];
+        $view->vars['attr'] += [self::ATTR_DATA_OPTIONS => json_encode($this->getOptionsWidgetCamelized($optionsJavaScript))];
     }
 
     #[\Override]
