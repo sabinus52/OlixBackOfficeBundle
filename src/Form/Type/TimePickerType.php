@@ -52,12 +52,12 @@ class TimePickerType extends DateTimePickerModelType
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        if (array_key_exists('display', $options[self::KEY_OPTS_JS])) {
-            $options[self::KEY_OPTS_JS]['display'] += [
+        if (array_key_exists('display', $options['options_js'])) {
+            $options['options_js']['display'] += [
                 'components' => self::COMPONENTS,
             ];
         } else {
-            $options[self::KEY_OPTS_JS]['display'] = [
+            $options['options_js']['display'] = [
                 'components' => self::COMPONENTS,
             ];
         }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Olix\BackOfficeBundle\Form\Model;
 
 use Locale;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
@@ -20,24 +21,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Widget de formulaire de type DateTime Picker.
  *
- * @example     Configuration with options of this type
- * @example     @param string button_icon : Icon from right input
- * @example     @param string locale
- * @example     Config widget JS parameter :
- * @example     @see https://getdatepicker.com/6/options/ Liste des différentes options
- *
  * @author      Sabinus52 <sabinus52@gmail.com>
  *
  * @see         https://www.npmjs.com/package/@eonasdan/tempus-dominus
+ * @see         Liste des différentes options : https://getdatepicker.com/6/options/
  *
  * @version     6.9.*
  *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
-abstract class DateTimePickerModelType extends AbstractModelType
+abstract class DateTimePickerModelType extends AbstractType
 {
-    private string $locale = 'fr'; // TODO
+    private string $locale = 'fr';
 
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
@@ -46,16 +42,16 @@ abstract class DateTimePickerModelType extends AbstractModelType
         $resolver->setDefaults([
             'widget' => 'single_text',
             'html5' => false,
-            'button_icon' => 'fas fa-calendar',
-            'locale' => $this->locale,
-            self::KEY_OPTS_JS => [],
+            'button_icon' => 'fas fa-calendar',    // Icône du bouton du input
+            'locale' => $this->locale,             // Langue du widget
+            'options_js' => [],
         ]);
 
         $resolver->setAllowedValues('widget', ['single_text']);
         $resolver->setAllowedValues('html5', [false]);
         $resolver->setAllowedTypes('button_icon', ['string']);
         // Options supplémentaires JavaScript du widget
-        $resolver->setAllowedTypes(self::KEY_OPTS_JS, ['array']);
+        $resolver->setAllowedTypes('options_js', ['array']);
     }
 
     /**
@@ -68,7 +64,7 @@ abstract class DateTimePickerModelType extends AbstractModelType
         $format = $options['format'];
         // Options javascript du widget
         /** @var array<string,array<string,mixed>> $optionsJavaScript */
-        $optionsJavaScript = $options[self::KEY_OPTS_JS];
+        $optionsJavaScript = $options['options_js'];
 
         // Ajoute les options javascript supplémentaires sur la locale et le format "moment.js"
         $optionsJavaScript['localization']['locale'] = $options['locale'];
@@ -81,8 +77,8 @@ abstract class DateTimePickerModelType extends AbstractModelType
         $view->vars['button_icon'] = $options['button_icon'];
 
         // Sélecteur du widget déjà définit dans le template : data-toggle='datetimepicker2'
-        // Options javascript définit dans le template : data-options-js="{{ js_options|json_encode }}"
-        $view->vars['js_options'] = $this->getOptionsWidgetCamelized($optionsJavaScript);
+        // Options javascript définit dans le template : data-options-js="{{ js_options }}"
+        $view->vars['js_options'] = json_encode($optionsJavaScript);
     }
 
     #[\Override]

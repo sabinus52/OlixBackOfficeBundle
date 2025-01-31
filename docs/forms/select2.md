@@ -15,28 +15,27 @@ $builder->add('ajax_ips', Select2ChoiceType::class, [
     'label' => 'Sélection IPs',
     'color' => 'red',
     'options_js' => [
-        'minimum_input_length' => 2,
-        'allow_clear' => true,
+        'minimumInputLength' => 2,
+        'allowClear' => true,
     ]
 ]);
 ~~~
 
 ### Options Symfony
 
-| Nom Symfony     | Type    | Description                                                                                  | Défaut    | Valeurs 
-|-----------------|---------|----------------------------------------------------------------------------------------------|-----------|---------
-| color           | String  | Couleur du widget                                                                            | 'default' |
+| Nom Symfony     | Type    | Description           | Défaut    | Valeurs 
+|-----------------|---------|-----------------------|-----------|---------
+| color           | String  | Couleur du widget     | 'default' | List `Enum\ColorCSS`
 
-Liste des couleurs disponibles : `primary`, `blue`, `secondary`, `success`, `green`, `info`, `cyan`, `warning`, `yellow`, `danger`, `red`,
-`black`, `gray-dark`, `gray`, `light`, `default`, `indigo`, `navy`, `purple`, `fuchsia`, `pink`, `maroon`, `orange`, `lime`, `teal`, `olive`
+Liste des couleurs disponibles :  `blue`, `green`, `cyan`, `yellow`, `red`, `black`, `gray-dark`, `gray`, `indigo`, `navy`, `purple`, `fuchsia`, `pink`, `maroon`, `orange`, `lime`, `teal`, `olive`
 
 
 ### Options JavaScript
 
 Ces options sont utilisées pour le widget JavaScript et sont passées en JSON.
-Ces options sont à renseigner dans le paramètre `options_js` du formulaire au format *camelize*.
+Ces options sont à renseigner dans le paramètre `options_js` du formulaire.
 
-La liste des options disponibles est disponible dans la documentation du widget : https://select2.org/configuration/options-api
+La liste des options est disponible dans la documentation du widget : https://select2.org/configuration/options-api
 
 Remarque :SF
 - Pour le paramètre `allow_clear` activé il faut renseigner aussi le paramètre `placeholder`.
@@ -103,7 +102,7 @@ $builder->add('ajax_ips', Select2AjaxType::class, [
     'class_label' => 'ip',
     'required' => false,
     'options_js' => [
-        'allow_clear' => true,
+        'allowClear' => true,
         'placeholder' => 'Sélectionnez une IP',
     ],
     'ajax' => [
@@ -146,7 +145,7 @@ $builder->add('ajax_ips', Select2AjaxType::class, [
     'class_label' => 'ip', // !!! REQUIRED
     'allow_add' => true,
     'options_js' => [
-        'allow_clear' => true,
+        'allowClear' => true,
         'placeholder' => 'Sélectionnez une IP',
     ],
 ]);
@@ -171,8 +170,3 @@ $builder->add('ajax_ips', Select2AjaxType::class, [
     'callback' => static fn (QueryBuilder $qb) => $qb->andWhere("entity.ip LIKE '10.%'"),
 ]);
 ~~~
-
-
-
-
-

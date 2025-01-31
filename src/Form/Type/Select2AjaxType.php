@@ -24,24 +24,10 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * Widget de formulaire de type select amélioré.
  *
- * @example     Configuration with options of this type
- * @example     @param bool   multiple              : True for multiple select and false for single select.
- * @example     @param string class                 : The class of your entity
- * @example     @param string class_property        : The name of the property used to search the query
- * @example     @param string class_pkey            : The name of the property used to uniquely identify entities
- * @example     @param string class_label           : The name of the property used to retrieve the text for existing data
- * @example     @param int    page_limit            : Number items by page for the scroll
- * @example     Config for ajax remote datas
- * @example     @param string remote_route          : Route of ajax remote datas
- * @example     @param array  remote_params         : Parameters of route
- * @example     @param bool   ajax_js_scroll        : True will enable infinite scrolling
- * @example     @param int    ajax_js_delay         : The number of milliseconds to wait for the user to stop typing before issuing the ajax request
- * @example     @param bool   ajax_js_cache         :
- * @example     @see https://select2.org/configuration/options-api Liste des différentes options
- *
  * @author      Sabinus52 <sabinus52@gmail.com>
  *
  * @see         https://github.com/select2/select2
+ * @see         Liste des différentes options : https://select2.org/configuration/options-api
  * @see         https://github.com/tetranz/select2entity-bundle (inspiration)
  */
 class Select2AjaxType extends Select2ModelType
@@ -59,19 +45,19 @@ class Select2AjaxType extends Select2ModelType
         $resolver->setDefaults([
             'compound' => false,
             'multiple' => false,
-            'class' => null,
+            'class' => null,                // La classe de l'entité
         ]);
         $resolver->setAllowedValues('compound', [false]);
 
         // Options supplémentaires pour l'entité
         $resolver->setDefaults([
-            'class_property' => null,
-            'class_pkey' => 'id',
-            'class_label' => null,
-            'page_limit' => 25,
-            'allow_add' => false,
-            'allow_add_prefix' => 'onew:',
-            'callback' => null,
+            'class_property' => null,       // Le nom de la propriété utilisée pour rechercher le query
+            'class_pkey' => 'id',           // Le nom de la propriété utilisée pour identifier chaque élément de l'entité
+            'class_label' => null,          // La nom de la propriété de l'entité utilisée pour récupérer le texte à afficher
+            'page_limit' => 25,             // Nombre d'éléments affichés par page pour le défilement
+            'allow_add' => false,           // Option pour l'ajout d'un élément. `class_label` est requis
+            'allow_add_prefix' => 'onew:',  // Préfixe de l'option "Ajouter" pour l'entité
+            'callback' => null,             // Callback via le QueryBuilder pour la récupération des résultats
         ]);
         $resolver->setAllowedTypes('class_property', ['string']);
         $resolver->setAllowedTypes('class_pkey', ['string']);
@@ -84,12 +70,12 @@ class Select2AjaxType extends Select2ModelType
         // Options javascript supplémentaires pour l'appel url en Ajax
         $resolver->setDefault('ajax', static function (OptionsResolver $ajaxResolver): void {
             $ajaxResolver->setDefaults([
-                'url' => null,
+                'url' => null,                          // Url générée avec `route`et `params` et utilisée par le service AutoComplete
                 'route' => 'olix_autocomplete_select2', // Route par défaut
-                'params' => [],
-                'scroll' => true,
-                'delay' => 250,
-                'cache' => true,
+                'params' => [],                         // Paramètres de la route
+                'scroll' => true,                       // True pour activer le défilement par page
+                'delay' => 250,                         // Le nombre de millisecondes à attendre avant d'émettre la requête ajax
+                'cache' => true,                        // True pour activer le cache
             ]);
             $ajaxResolver->setAllowedTypes('route', ['null', 'string']);
             $ajaxResolver->setAllowedTypes('params', ['array']);
@@ -111,19 +97,22 @@ class Select2AjaxType extends Select2ModelType
         $builder->addViewTransformer($transformer, true);
     }
 
+    /**
+     * @param array<string,array<string,mixed>> $options
+     */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         // Autorisation d'ajout d'un nouvel élément
         if (true === (bool) $options['allow_add']) {
             // Pour autoriser Select2 à ajouter un élément
-            $options[self::KEY_OPTS_JS]['tags'] = true;
+            $options['options_js']['tags'] = true;
             // Pour déterminer que l'id est bien une nouvelle valeur <option value='onew:toto'>
             $view->vars['attr'] += ['data-prefix-new' => $options['allow_add_prefix']];
         }
 
         // Options spécifique pour savoir s'il faut ajouter un élément vide dans la liste
-        $view->vars['allow_clear'] = (array_key_exists('allow_clear', $options[self::KEY_OPTS_JS])) ? $options[self::KEY_OPTS_JS]['allow_clear'] : false;
+        $view->vars['allow_clear'] = (array_key_exists('allow_clear', $options['options_js'])) ? $options['options_js']['allow_clear'] : false;
 
         // Options Javascript pour les sources de données distantes en mode Ajax
         $options['ajax']['url'] = $this->generateRoute($form, $options['ajax']);

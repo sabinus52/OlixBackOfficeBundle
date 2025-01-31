@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Form\Model;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,7 +27,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
-abstract class DualListBoxModelType extends AbstractModelType
+abstract class DualListBoxModelType extends AbstractType
 {
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
@@ -35,25 +36,23 @@ abstract class DualListBoxModelType extends AbstractModelType
         $resolver->setDefaults([
             'multiple' => true,
             'expanded' => false,
-            self::KEY_OPTS_JS => [],
+            'options_js' => [],
         ]);
 
         $resolver->setAllowedValues('multiple', [true]);
         $resolver->setAllowedValues('expanded', [false]);
         // Options supplémentaires JavaScript du widget
-        $resolver->setAllowedTypes(self::KEY_OPTS_JS, ['array']);
+        $resolver->setAllowedTypes('options_js', ['array']);
     }
 
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         // Sélecteur du widget
-        $view->vars['attr'] += [self::ATTR_DATA_SELECTOR => 'duallistbox'];
+        $view->vars['attr'] += ['data-toggle' => 'duallistbox'];
 
         // Options javascript du widget
-        /** @var array<string, mixed> $optionsJavaScript */
-        $optionsJavaScript = $options[self::KEY_OPTS_JS];
-        $view->vars['attr'] += [self::ATTR_DATA_OPTIONS => json_encode($this->getOptionsWidgetCamelized($optionsJavaScript))];
+        $view->vars['attr'] += ['data-options-js' => json_encode($options['options_js'])];
     }
 
     #[\Override]

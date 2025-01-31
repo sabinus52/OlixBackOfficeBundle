@@ -48,6 +48,7 @@ $.fn.OlixDualListbox = function (options) {
 
         // Options de base + surcharge des options
         optionsResult = $.extend(
+            {},
             DefaultOptions,
             $elt.data(DATA_OPTS_KEY),
             options || {}

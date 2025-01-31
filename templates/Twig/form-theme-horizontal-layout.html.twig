@@ -106,7 +106,7 @@
 
 
 {% block olix_datetimepicker_widget -%}
-    <div class="input-group" id="dp_{{ id }}" data-target-input="nearest" data-toggle="datetimepicker2" data-options-js="{{ js_options|json_encode }}">
+    <div class="input-group" id="dp_{{ id }}" data-target-input="nearest" data-toggle="datetimepicker2" data-options-js="{{ js_options }}">
         {%- set attr = attr|merge({
             'class': (attr.class|default('') ~ ' datetimepicker-input')|trim,
             'data-target': '#dp_' ~ id,

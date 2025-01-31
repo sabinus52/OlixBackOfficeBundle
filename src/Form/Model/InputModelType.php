@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Form\Model;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,23 +19,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Widget de formulaire de type input.
  *
- * @example     Configuration with options of this type
- * @example     @param string   left_symbol     : Symbole à gauche du widget
- * @example     @param string   right_symbol    : Symbole à droite du widget
- *
  * @author      Sabinus52 <sabinus52@gmail.com>
  *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
-abstract class InputModelType extends AbstractModelType
+abstract class InputModelType extends AbstractType
 {
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         // Options du widget du formulaire
         $resolver->setDefaults([
-            'left_symbol' => null,
-            'right_symbol' => null,
+            'left_symbol' => null,      // Symbole à gauche du widget
+            'right_symbol' => null,     // Symbole à droite du widget
         ]);
 
         $resolver->setAllowedTypes('left_symbol', ['null', 'string']);

@@ -17,14 +17,14 @@ $builder
     ->add('datetime', DateTimePickerType::class, [
         'label' => 'Date et heure',
         'options_js' => [
-            'default_date' => new \DateTime('2022-05-10'),
+            'defaultDate' => new \DateTime('2022-05-10'),
             'restrictions' => [
-                'min_date' => new \DateTime('2022-05-05'),
-                'disabled_dates' => [new \DateTime('2022-05-13'), new \DateTime('2022-05-15')],
-                'days_of_week_disabled' => [0, 6],
+                'minDate' => new \DateTime('2022-05-05'),
+                'disabledDates' => [new \DateTime('2022-05-13'), new \DateTime('2022-05-15')],
+                'daysOfWeekDisabled' => [0, 6],
             ],
             'display' => [
-                'side_by_side' => true,
+                'sideBySide' => true,
             ],
         ],
     ])
@@ -32,7 +32,7 @@ $builder
         'label' => 'Date',
         'options_js' => [
             'display' => [
-                'calendar_weeks' => true,
+                'calendarWeeks' => true,
             ],
         ],
     ])
@@ -43,7 +43,7 @@ $builder
 
 ### Options Symfony
 
-| Nom SF          | Type    | Description                                                                                  | Défaut | Valeurs 
+| Nom Symfony     | Type    | Description                                                                                  | Défaut | Valeurs 
 |-----------------|---------|----------------------------------------------------------------------------------------------|--------|---------
 | button_icon     | String  | Icon from right input                                                                        |        | 
 | locale          | String  | Locale                                                                                       | 'fr'   |
@@ -52,10 +52,9 @@ $builder
 ### Options JavaScript
 
 Ces options sont utilisées pour le widget JavaScript et sont passées en JSON.
-Ces options sont à renseigner dans le paramètre `options_js` du formulaire au format *camelize*.
+Ces options sont à renseigner dans le paramètre `options_js` du formulaire.
 
-La liste des options disponibles est disponible dans la documentation du widget : https://getdatepicker.com/6/options/
+La liste des options est disponible dans la documentation du widget : https://getdatepicker.com/6/options/
 
 Remarque :
 - Les options de type `date` et `time` doivent être renseignées **obligatoirement** en format DateTime : `new \DateTime('2022-05-10')`
-- Le nom des options est à renseigner **en underscore** : `'default_date' => new \DateTime('2022-05-10')`

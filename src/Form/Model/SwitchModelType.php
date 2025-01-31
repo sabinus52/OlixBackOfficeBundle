@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Form\Model;
 
+use Olix\BackOfficeBundle\Enum\ColorBS;
+use Olix\BackOfficeBundle\Enum\ColorCSS;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,37 +21,32 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Widget de formulaire de type switch équivalent à une case à cocher.
  *
- * @example     Configuration with options of this type
- * @example     @param string on_color      : Couleur du widget switch dans l'état checked
- * @example     @param string off_color     : Couleur du widget switch dans l'état non checked
- * @example     @param string size          : Dimension du widget switch
- * @example     @param string chk_label     : Label du switch à droite du widget
- *
  * @see         https://codepen.io/claviska/pen/KyWmjY
  *
  * @author      Sabinus52 <sabinus52@gmail.com>
  *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
-abstract class SwitchModelType extends AbstractModelType
+abstract class SwitchModelType extends AbstractType
 {
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
-        // Options JavaScript supplémentaires du widget
+        // Options CSS supplémentaires du widget
         $resolver->setDefaults([
-            'on_color' => null,
-            'off_color' => null,
-            'size' => null,
-            'chk_label' => '',
+            'on_color' => null,     // Couleur du widget switch dans l'état checked
+            'off_color' => null,    // Couleur du widget switch dans l'état non checked
+            'size' => null,         // Dimension du widget switch
+            'chk_label' => '',      // Label du switch à droite du widget
         ]);
 
         $resolver->setAllowedTypes('on_color', ['null', 'string']);
         $resolver->setAllowedTypes('off_color', ['null', 'string']);
         $resolver->setAllowedTypes('size', ['null', 'string']);
         $resolver->setAllowedTypes('chk_label', ['string']);
-        $resolver->setAllowedValues('on_color', [null] + self::COLORS_SIMPLIFY);
-        $resolver->setAllowedValues('off_color', [null] + self::COLORS_SIMPLIFY);
+        $resolver->setAllowedValues('on_color', [null, ColorCSS::INDIGO->value] + ColorBS::values());
+        $resolver->setAllowedValues('off_color', [null, ColorCSS::INDIGO->value] + ColorBS::values());
         $resolver->setAllowedValues('size', [null, 'small', 'large']);
     }
 

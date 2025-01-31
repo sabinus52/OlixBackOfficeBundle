@@ -7,12 +7,13 @@ Transforme une checkbox en **toggle switch**
 
 ~~~ php
 use Olix\BackOfficeBundle\Form\Type\SwitchType;
+use Olix\BackOfficeBundle\Enum\ColorBS;
 // ...
 
 $builder->add('public', SwitchType::class, [
     'label'    => 'Show this entry publicly?',
     'on_color' => 'success',
-    'off_color' => 'danger',
+    'off_color' => ColorBS::DANGER->value,
     'size' => 'small',
 ]);
 ~~~
@@ -21,8 +22,8 @@ $builder->add('public', SwitchType::class, [
 
 | Nom Symfony   | Type    |	Description                                      | Défaut | Valeurs 
 |---------------|---------|--------------------------------------------------|--------|----------------------------------------
-| on_color      | String  | Couleur du widget switch dans l'état checked     | null   | Liste de COLORS_SIMPLIFY
-| off_color     | String  | Couleur du widget switch dans l'état non checked | null   | Liste de COLORS_SIMPLIFY
+| on_color      | String  | Couleur du widget switch dans l'état checked     | null   | Liste de `Enum\ColorBS`
+| off_color     | String  | Couleur du widget switch dans l'état non checked | null   | Liste de `Enum\ColorBS`
 | size          | String  | Dimension du widget                              | null   | `small`, `large`
 | chk_label     | String  | Label à droite du widget                         | ''     |
 

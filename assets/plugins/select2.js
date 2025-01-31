@@ -15,6 +15,10 @@ Select2($);
 const DATA_OPTS_KEY = "options-js";
 const SELECTOR_TRIGGER = "[data-toggle='select2']";
 
+const DefaultOptions = {
+    minimumInputLength: 2,
+};
+
 /**
  * Surcharge de la fonction Select2 pour ajouter des options
  *
@@ -27,7 +31,13 @@ $.fn.OlixSelect2 = function (options) {
         let optionsResult;
 
         // Options de base
-        optionsResult = $.extend(true, $elt.data(DATA_OPTS_KEY), options || {});
+        optionsResult = $.extend(
+            true,
+            {},
+            DefaultOptions,
+            $elt.data(DATA_OPTS_KEY),
+            options || {}
+        );
 
         // Options pour l'auto completion en AJAX
         let optionsAjax = {};
