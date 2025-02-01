@@ -7,18 +7,10 @@
 import $ from "jquery";
 
 // Import des modules pour les widgets des formulaires
-import "bootstrap-switch";
 import * as Popper from "@popperjs/core";
 window.Popper = Popper;
 
 export default {
-    initForms() {
-        // Initialisation des widgets Bootstrap-Switch
-        $.each($("[data-toggle='switch']"), function (i, element) {
-            $(element).bootstrapSwitch($(element).data("options-js"));
-        });
-    },
-
     finalize() {
         // JavaScript to be fired on the home page, after the init JS
         if (typeof olixDataTables !== "undefined") {

@@ -15,9 +15,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Olix\BackOfficeBundle\Form\DataTransformer\EntitiesToValuesTransformer;
 use Olix\BackOfficeBundle\Form\DataTransformer\EntityToValueTransformer;
 use Olix\BackOfficeBundle\Form\Model\Select2ModelType;
+use Olix\BackOfficeBundle\Helper\Helper;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -29,6 +31,9 @@ use Symfony\Component\Routing\RouterInterface;
  * @see         https://github.com/select2/select2
  * @see         Liste des différentes options : https://select2.org/configuration/options-api
  * @see         https://github.com/tetranz/select2entity-bundle (inspiration)
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class Select2AjaxType extends Select2ModelType
 {
@@ -51,13 +56,15 @@ class Select2AjaxType extends Select2ModelType
 
         // Options supplémentaires pour l'entité
         $resolver->setDefaults([
-            'class_property' => null,       // Le nom de la propriété utilisée pour rechercher le query
             'class_pkey' => 'id',           // Le nom de la propriété utilisée pour identifier chaque élément de l'entité
-            'class_label' => null,          // La nom de la propriété de l'entité utilisée pour récupérer le texte à afficher
             'page_limit' => 25,             // Nombre d'éléments affichés par page pour le défilement
             'allow_add' => false,           // Option pour l'ajout d'un élément. `class_label` est requis
             'allow_add_prefix' => 'onew:',  // Préfixe de l'option "Ajouter" pour l'entité
             'callback' => null,             // Callback via le QueryBuilder pour la récupération des résultats
+        ]);
+        $resolver->setDefined([
+            'class_property',               // Le nom de la propriété utilisée pour rechercher le query
+            'class_label',                  // La nom de la propriété de l'entité utilisée pour récupérer le texte à afficher
         ]);
         $resolver->setAllowedTypes('class_property', ['string']);
         $resolver->setAllowedTypes('class_pkey', ['string']);
@@ -66,6 +73,13 @@ class Select2AjaxType extends Select2ModelType
         $resolver->setAllowedTypes('allow_add', ['bool']);
         $resolver->setAllowedTypes('allow_add_prefix', ['string']);
         $resolver->setAllowedTypes('callback', ['null', 'callable']);
+        $resolver->setNormalizer('allow_add', static function (Options $options, bool $value) use ($resolver): bool {
+            if (true === $value) {
+                $resolver->setRequired('class_label');
+            }
+
+            return $value;
+        });
 
         // Options javascript supplémentaires pour l'appel url en Ajax
         $resolver->setDefault('ajax', static function (OptionsResolver $ajaxResolver): void {
@@ -83,6 +97,28 @@ class Select2AjaxType extends Select2ModelType
             $ajaxResolver->setAllowedTypes('delay', ['int']);
             $ajaxResolver->setAllowedTypes('cache', ['bool']);
         });
+
+        /**
+         * @deprecated 1.2 : Options JavaScript pour la fonction Ajax
+         */
+        $resolver->setDefined([
+            'remote_route',
+            'remote_params',
+            'ajax_js_scroll',
+            'ajax_js_delay',
+            'ajax_js_cache',
+        ]);
+        $resolver->setAllowedTypes('remote_route', ['null', 'string']);
+        $resolver->setAllowedTypes('remote_params', ['null', 'array']);
+        $resolver->setAllowedTypes('ajax_js_scroll', ['bool']);
+        $resolver->setAllowedTypes('ajax_js_delay', ['int']);
+        $resolver->setAllowedTypes('ajax_js_cache', ['bool']);
+
+        $resolver->setDeprecated('remote_route', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "route" option of the "ajax" option instead.');
+        $resolver->setDeprecated('remote_params', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "params" option of the "ajax" option instead.');
+        $resolver->setDeprecated('ajax_js_scroll', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "scroll" option of the "ajax" option instead.');
+        $resolver->setDeprecated('ajax_js_delay', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "delay" option of the "ajax" option instead.');
+        $resolver->setDeprecated('ajax_js_cache', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "cache" option of the "ajax" option instead.');
     }
 
     /**
@@ -115,8 +151,9 @@ class Select2AjaxType extends Select2ModelType
         $view->vars['allow_clear'] = (array_key_exists('allow_clear', $options['options_js'])) ? $options['options_js']['allow_clear'] : false;
 
         // Options Javascript pour les sources de données distantes en mode Ajax
+        $optionsAjaxDeprecated = Helper::getCamelizedKeys($options, 'ajax_js_'); /** @deprecated 1.2 */
         $options['ajax']['url'] = $this->generateRoute($form, $options['ajax']);
-        $view->vars['attr'] += ['data-ajax' => json_encode($options['ajax'])];
+        $view->vars['attr'] += ['data-ajax' => json_encode($options['ajax'] + $optionsAjaxDeprecated)];
 
         // Pour les données multiples, le nom doit être un tableau
         if ($options['multiple']) {

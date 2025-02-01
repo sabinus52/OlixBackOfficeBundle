@@ -134,6 +134,8 @@ public function getSearchIPs(Request $request, AutoCompleteService $autoComplete
 
 ### Example 3 où l'on peut autoriser l'ajout et la création d'un élément
 
+Uniquement valable pour les formulaires de type `Select2AjaxType`.
+
 ~~~ php
 use Olix\BackOfficeBundle\Form\Type\Select2AjaxType;
 // ...

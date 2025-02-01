@@ -31,11 +31,10 @@ import "datatables.net-responsive-bs4";
 import DualListBox from "./plugins/duallistbox.js";
 import DateTimePicker from "./plugins/datetimepicker.js";
 import Select2 from "./plugins/select2.js";
+import "./plugins/collection.js";
 import "./scripts/modal.js";
 import "./scripts/toastr.js";
-import "./scripts/select2.js";
-import "./scripts/collection.js";
-import "./scripts/datatables.js";
+import "./plugins/datatables.js";
 import Olix from "./scripts/functions.js";
 
 /**
@@ -44,5 +43,4 @@ import Olix from "./scripts/functions.js";
 DualListBox.initialize();
 DateTimePicker.initialize();
 Select2.initialize();
-Olix.initForms();
 Olix.finalize();

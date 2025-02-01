@@ -26,7 +26,7 @@ final class Helper
      *
      * @return array<mixed>
      */
-    public static function getCamelizedKeys(array $array, bool $allKeys, string $prefix = ''): array
+    public static function getCamelizedKeys(array $array, string $prefix = ''): array
     {
         $result = [];
 
@@ -43,17 +43,13 @@ final class Helper
                 $camelizedKey = substr($key, strlen($prefix));
                 $camelizedKey = self::camelize($camelizedKey);
             } else {
-                if ($allKeys) {
-                    $camelizedKey = $key;
-                } else {
-                    continue;
-                }
+                continue;
             }
 
             // Appliquer récursivement pour les tableaux imbriqués
-            if (is_array($value)) {
-                $value = self::getCamelizedKeys($value, $allKeys, $prefix);
-            }
+            /*if (is_array($value)) {
+                $value = self::getCamelizedKeys($value, $prefix);
+            }*/
 
             // Ajouter l'élément avec la clé camelisée
             $result[$camelizedKey] = $value;

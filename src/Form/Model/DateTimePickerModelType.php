@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Olix\BackOfficeBundle\Form\Model;
 
 use Locale;
+use Olix\BackOfficeBundle\Helper\Helper;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -52,6 +53,31 @@ abstract class DateTimePickerModelType extends AbstractType
         $resolver->setAllowedTypes('button_icon', ['string']);
         // Options supplémentaires JavaScript du widget
         $resolver->setAllowedTypes('options_js', ['array']);
+
+        /**
+         * @deprecated 1.2 : Options JavaScript du widget
+         */
+        $resolver->setDefined([
+            'js_allow_input_toggle',
+            'js_default_date',
+            'js_use_current',
+            'js_stepping',
+            'js_display',
+            'js_restrictions',
+        ]);
+
+        $resolver->setAllowedTypes('js_allow_input_toggle', 'bool');
+        $resolver->setAllowedTypes('js_default_date', ['null', 'string', \DateTimeInterface::class]);
+        $resolver->setAllowedTypes('js_use_current', 'bool');
+        $resolver->setAllowedTypes('js_stepping', 'int');
+        $resolver->setAllowedTypes('js_display', 'array');
+        $resolver->setAllowedTypes('js_restrictions', 'array');
+
+        $resolver->setDeprecated('js_allow_input_toggle', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "allowInputToggle" option of the "options_js" option instead.');
+        $resolver->setDeprecated('js_default_date', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "defaultDate" option of the "options_js" option instead.');
+        $resolver->setDeprecated('js_use_current', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "useCurrent" option of the "options_js" option instead.');
+        $resolver->setDeprecated('js_stepping', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "stepping" option of the "options_js" option instead.');
+        $resolver->setDeprecated('js_display', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "display" option of the "options_js" option instead.');
     }
 
     /**
@@ -71,14 +97,15 @@ abstract class DateTimePickerModelType extends AbstractType
         $optionsJavaScript['localization']['format'] = $options['format'];
 
         // Parcours les options JavaScript de types DateTime pour les convertir en format "moment.js"
-        $this->convertAllOptionsIsDateInFormat($optionsJavaScript, $format);
+        $this->convertAllOptionsIsDateInFormat($options, $format);
 
         // Icône à droite cu widget et qui sert de bouton pour afficher le widget
         $view->vars['button_icon'] = $options['button_icon'];
 
         // Sélecteur du widget déjà définit dans le template : data-toggle='datetimepicker2'
         // Options javascript définit dans le template : data-options-js="{{ js_options }}"
-        $view->vars['js_options'] = json_encode($optionsJavaScript);
+        $optionsJavaScriptDeprecated = Helper::getCamelizedKeys($options, 'js_'); /** @deprecated 1.2 */
+        $view->vars['js_options'] = json_encode(array_merge_recursive($optionsJavaScriptDeprecated, $optionsJavaScript));
     }
 
     #[\Override]
