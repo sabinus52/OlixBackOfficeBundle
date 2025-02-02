@@ -9,5 +9,8 @@
 - [Extended Forms](forms.md)
 - [Autocomplete](autocomplete.md)
 - [Datatables](datatables.md)
-- [Implements CRUD](crud.md)
+- Implements CRUD
+  - [Mode edit not modal ](crud/crud.md)
+  - [Mode full modal](crud/modal.md)
+- [Modals alert and confirm](modal.md)
 - [Charts](charts.md)

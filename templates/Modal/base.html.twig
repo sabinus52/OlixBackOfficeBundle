@@ -1,8 +1,8 @@
-<div class="modal fade" id="modalOlix" data-backdrop="{{ modal.backdrop|default('static') }}" aria-labelledby="modalOlixLabel" aria-hidden="true">
-    <div class="modal-dialog {{ modal.class|default('') }}">
+<div class="modal fade" id="modalOlix" data-backdrop="{{ backdrop|default('static') }}" aria-labelledby="modalOlixLabel" aria-hidden="true">
+    <div class="modal-dialog {{ class|default('') }}">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalOlixLabel">{{ modal.title|default('Chargement ...') }}</h4>
+                <h4 class="modal-title" id="modalOlixLabel">{{ title|default('Chargement ...') }}</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">

@@ -1,9 +1,10 @@
-# CRUD
+Implémentation de la gestion des données *CRUD*
+================================================================================
 
 
 ## Prérequis
 
-For breadcrumb, positioning the route with two `__`
+Pour le fil d'ariane, positionner la route avec deux `__`
 
 ***Facultatif***, dans l'entity, il faut ajouter la fonction `__toString` pour déterminer si l'objet est vide ou pas :
 ~~~ php
@@ -12,6 +13,7 @@ public function __toString(): string
     return ($this->label) ?: ''; // or return "{$this->label}";
 }
 ~~~
+
 
 ## Controller
 
@@ -58,10 +60,10 @@ class TablesController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', sprintf('La création de <strong>%s</strong> a bien été prise en compte', $entity));
 
-            return $this->redirectToRoute('table_server_list'); // return new Response('OK');
+            return $this->redirectToRoute('table_server_list');
         }
 
-        return $this->renderForm('edit.html.twig', [ // @OlixBackOffice/Include/modal-form-(vertical|horizontal).html.twig
+        return $this->renderForm('edit.html.twig', [
             'form' => $form,
             'modal' => [
                 'title' => 'Créer un nouveau objet',
@@ -79,10 +81,10 @@ class TablesController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', sprintf('La modification de <strong>%s</strong> a bien été prise en compte', $entity));
 
-            return $this->redirectToRoute('table_server_list'); // return new Response('OK');
+            return $this->redirectToRoute('table_server_list');
         }
 
-        return $this->renderForm('edit.html.twig', [ // @OlixBackOffice/Include/modal-form-(vertical|horizontal).html.twig
+        return $this->renderForm('edit.html.twig', [ 
             'form' => $form,
             'modal' => [
                 'title' => 'Formulaire d\'édition d\'un objet',
@@ -105,7 +107,7 @@ class TablesController extends AbstractController
             return new Response('OK');
         }
 
-        return $this->renderForm('@OlixBackOffice/Include/modal-content-delete.html.twig', [
+        return $this->renderForm('@OlixBackOffice/Modal/form-delete.html.twig', [
             'form' => $form,
             'element' => sprintf('<strong>%s</strong>', $entity),
         ]);
@@ -114,7 +116,7 @@ class TablesController extends AbstractController
 ~~~
 
 
-## Datatable
+## Table des données (Datatable)
 
 ~~~ php
 // src/Datatable/MyTableType.php
@@ -138,11 +140,18 @@ class MyTableType implements DataTableTypeInterface
                 'label' => 'Hostname',
                 'searchable' => true,
             ])
-            ->add('state', TextColumn::class, [
+            ->add('state', NumberColumn::class, [
                 'label' => 'Statut',
                 'raw' => true,
-                'operator' => '=', // To force filter '=', not 'LIKE'
                 'data' => fn ($row) => sprintf('<b>%s</b>', $row->getStateLabel()),
+            ])
+            ->add('os', TextColumn::class, [
+                'label' => 'OS',
+                'field' => 'os.id',
+                'operator' => '=',
+                'searchable' => true,
+                'data' => static fn (Server $row): string => /** @psalm-suppress PossiblyNullReference */
+                    ($row->getOpSystemVersion() instanceof OpSystemVersion) ? $row->getOpSystemVersion()->getShortName() : '',
             ])
             ->add('buttons', TwigColumn::class, [
                 'label' => '',
@@ -158,7 +167,7 @@ class MyTableType implements DataTableTypeInterface
 ~~~
 
 
-## Form of item
+## Formulaire d'une entité
 
 ~~~ php
 // src/Form//MyFormType.php
@@ -177,6 +186,22 @@ class MyFormType extends AbstractType
                 'label' => 'Statut',
                 'choices' => MyEntity::getChoiceStates(),
             ])
+            ->add('opSystemVersion', Select2EntityType::class, [
+                'label' => 'Système d\'exploitation',
+                'required' => false,
+                'multiple' => false,
+                'class' => OpSystemVersion::class,
+                'query_builder' => static fn (EntityRepository $er) => $er->createQueryBuilder('ver')
+                    ->addSelect('os')
+                    ->innerJoin('ver.opSystem', 'os')
+                    ->orderBy('os.name', 'ASC')
+                    ->addOrderBy('ver.version', 'ASC'),
+                'choice_label' => 'fullName',
+                'options_js' => [
+                    'placeholder' => 'Rechercher un système d\'exploitation',
+                    'allowClear' => true,
+                ],
+            ])
         ;
     }
 
@@ -190,7 +215,7 @@ class MyFormType extends AbstractType
 ~~~
 
 
-## Form of filter
+## Formulaire du filtre de recherche
 
 ~~~ php
 // src/Form//MyFormType.php
@@ -213,9 +238,14 @@ class MyTableFilterType extends AbstractType
 }
 ~~~
 
-## Template list of items
+Remarque :
+- il faut ajouter l'option `attr: ['tabindex' => 1]` pour forcer le champ de recherche à la deuxième colonne de la Datatable
 
-Pour afficher dans une fenêtre modale, il faut rajouter `data-toggle="olix-modal" data-target="#modalOlix"` dans la balise `href`.
+
+
+## Template de la liste des données
+
+Pour afficher le formulaire dans une fenêtre modale, suivre cette documentation : [Utilisation des formulaires modales](modal.md)
 
 ~~~ twig
 {# templates/crud-index.html.twig #}
@@ -261,7 +291,7 @@ Pour afficher dans une fenêtre modale, il faut rajouter `data-toggle="olix-moda
 
     </div>
 
-    {% include '@OlixBackOffice/Include/modal.html.twig' with { title: "Chargement du formulaire" } %}
+    {% include '@OlixBackOffice/Modal/base.html.twig' with { title: "Chargement du formulaire" } %}
 
 {% endblock %}
 ~~~
@@ -273,20 +303,10 @@ Pour afficher dans une fenêtre modale, il faut rajouter `data-toggle="olix-moda
 <a href="{{ path('table__delete', {'id': row.id}) }}" class="btn btn-sm btn-danger" data-toggle="olix-modal" data-target="#modalOlix"><i class="fas fa-trash"></i><span class="d-none d-md-inline">&nbsp;Supprimer<span></a>
 ~~~
 
-
-## Template form of a item
-
-### Dans une fenêtre modale (exemple ci-dessus) :
-
-Ajouter sur les boutons `data-toggle="olix-modal" data-target="#modalOlix"`
-
-Et dans la page du listing
-
-~~~ twig
-{% include '@OlixBackOffice/Include/modal.html.twig' with { title: "Chargement du formulaire" } %}~~~
-~~~
-
 ### Dans une nouvelle page :
+
+## Template pour l'édition d'une entité
+
 ~~~ twig
 {# templates/crud-edit.html.twig #}
 
