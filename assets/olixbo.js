@@ -33,8 +33,8 @@ import DualListBox from "./plugins/duallistbox.js";
 import DateTimePicker from "./plugins/datetimepicker.js";
 import Select2 from "./plugins/select2.js";
 import "./plugins/collection.js";
-import "./scripts/toastr.js";
 import "./plugins/datatables.js";
+import "./plugins/toastr.js";
 import Olix from "./scripts/functions.js";
 
 /**
