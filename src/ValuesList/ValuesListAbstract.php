@@ -16,6 +16,8 @@ namespace Olix\BackOfficeBundle\ValuesList;
  *
  * @author Sabinus52 <sabinus52@gmail.com>
  *
+ * @deprecated 1.2 Utiliser les valeurs de la classe Enum
+ *
  * template T of array<int,array<string,string>>
  */
 abstract class ValuesListAbstract implements \Stringable, ValuesListInterface
@@ -41,6 +43,8 @@ abstract class ValuesListAbstract implements \Stringable, ValuesListInterface
 
     /**
      * Retourne la valeur associée à la clé de la valeur donné.
+     *
+     * @deprecated 1.2 Utiliser les valeurs de la classe Enum
      */
     public function getKey(): int
     {
@@ -49,6 +53,8 @@ abstract class ValuesListAbstract implements \Stringable, ValuesListInterface
 
     /**
      * Affecte la valeur associée à la clé donné.
+     *
+     * @deprecated 1.2 Utiliser les valeurs de la classe Enum
      */
     public function setKey(int $key): void
     {
@@ -60,6 +66,8 @@ abstract class ValuesListAbstract implements \Stringable, ValuesListInterface
 
     /**
      * Vérifie si la clé existe dans la liste des valeurs.
+     *
+     * @deprecated 1.2 Utiliser les valeurs de la classe Enum
      */
     public static function isExists(int $key): bool
     {
@@ -68,6 +76,8 @@ abstract class ValuesListAbstract implements \Stringable, ValuesListInterface
 
     /**
      * Retourne le label associé à la valeur courante.
+     *
+     * @deprecated 1.2 Utiliser les valeurs de la classe Enum
      */
     public function getLabel(): string
     {
@@ -80,6 +90,8 @@ abstract class ValuesListAbstract implements \Stringable, ValuesListInterface
 
     /**
      * Retrouve la valeur d'un champ "$fieldName" de la valeur courante.
+     *
+     * @deprecated 1.2 Utiliser les valeurs de la classe Enum
      */
     public function getField(string $fieldName): string
     {
@@ -93,6 +105,8 @@ abstract class ValuesListAbstract implements \Stringable, ValuesListInterface
     /**
      * Retourne la valeur associée à la valeur courante.
      *
+     * @deprecated 1.2 Utiliser les valeurs de la classe Enum
+     *
      * @return array<string,string>
      */
     public function getValue(): array
@@ -102,6 +116,8 @@ abstract class ValuesListAbstract implements \Stringable, ValuesListInterface
 
     /**
      * Retourne la liste des valeurs.
+     *
+     * @deprecated 1.2 Utiliser les valeurs de la classe Enum
      *
      * @return array<int,array<string,string>>
      */
@@ -113,6 +129,8 @@ abstract class ValuesListAbstract implements \Stringable, ValuesListInterface
     /**
      * Retourne la liste pour le ChoiceType des formulaires.
      *
+     * @deprecated 1.2 Utiliser les valeurs de la classe Enum
+     *
      * @return static[]
      */
     public static function getChoices(): array
@@ -122,6 +140,8 @@ abstract class ValuesListAbstract implements \Stringable, ValuesListInterface
 
     /**
      * Retourne la liste pour le ChoiceType des formulaires.
+     *
+     * @deprecated 1.2 Utiliser les valeurs de la classe Enum
      *
      * @param array<int>|null $list Liste des valeurs à retourner
      *
@@ -144,6 +164,8 @@ abstract class ValuesListAbstract implements \Stringable, ValuesListInterface
     /**
      * Retourne la liste pour le filtre dans les Datatable.
      *
+     * @deprecated 1.2 Utiliser les valeurs de la classe Enum
+     *
      * @return array<int|string,string>
      */
     public static function getFilters(string $field = 'label'): array
@@ -161,6 +183,8 @@ abstract class ValuesListAbstract implements \Stringable, ValuesListInterface
 
     /**
      * Retourne l'objet en recherchant la valeur en fonction du champ donné.
+     *
+     * @deprecated 1.2 Utiliser les valeurs de la classe Enum
      *
      * @param array<string,string> $field Champs à rechercher et sa valeur [ $fieldName => $value ]
      */

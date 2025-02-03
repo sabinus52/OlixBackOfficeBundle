@@ -9,7 +9,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Olix\BackOfficeBundle\Helper;
+namespace Olix\BackOfficeBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -22,8 +22,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  * Permet de retourner les items en AJAX.
  *
  * @author Sabinus52 <sabinus52@gmail.com>
- *
- * @deprecated 1.2 Utiliser le service "Olix\BackOfficeBundle\Service\AutoCompleteService" à la place
  */
 class AutoCompleteService
 {
@@ -36,8 +34,6 @@ class AutoCompleteService
 
     /**
      * Retourne les résultats trouvés depuis un recherche "Select2".
-     *
-     * @deprecated 1.2 Utiliser le service "Olix\BackOfficeBundle\Service\AutoCompleteService" à la place
      *
      * @return array<mixed>
      */

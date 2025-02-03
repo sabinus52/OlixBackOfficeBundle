@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Controller;
 
-use Olix\BackOfficeBundle\Helper\AutoCompleteService;
+use Olix\BackOfficeBundle\Service\AutoCompleteService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class DefaultController extends AbstractController
 {
     /**
-     * Autocompletion des Select2.
+     * Autocompletion des Select2 en mode AJAX.
      */
     #[Route(path: '/olix/autocomplete/select2', name: 'olix_autocomplete_select2')]
     public function getSearchAutoCompleteSelect2(Request $request, AutoCompleteService $autoComplete): JsonResponse
