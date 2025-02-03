@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Controller;
 
+use Olix\BackOfficeBundle\Enum\ColorBS;
 use Olix\BackOfficeBundle\Helper\ParameterOlix;
 use Olix\BackOfficeBundle\Security\UserDatatable;
 use Olix\BackOfficeBundle\Security\UserManager;
@@ -82,7 +83,7 @@ class ManagerController extends AbstractController
             $manager->setUser($form->getData()); // @phpstan-ignore argument.type
             $manager->add((string) $form->get('password')->getData()); // @phpstan-ignore cast.string
 
-            $this->addFlash('success', sprintf("La création de l'utilisateur <b>%s</b> a bien été prise en compte", $manager->getUser()->getUserIdentifier()));
+            $this->addFlash(ColorBS::SUCCESS->value, sprintf("La création de l'utilisateur <b>%s</b> a bien été prise en compte", $manager->getUser()->getUserIdentifier()));
 
             return $this->redirectToRoute('olix_users__edit', ['id' => $manager->getUser()->getId()]);
         }
@@ -114,7 +115,7 @@ class ManagerController extends AbstractController
             // Update datas of this user
             $manager->setUser($form->getData())->update(); // @phpstan-ignore argument.type
 
-            $this->addFlash('success', sprintf("La modification de l'utilisateur <b>%s</b> a bien été prise en compte", $user->getUserIdentifier()));
+            $this->addFlash(ColorBS::SUCCESS->value, sprintf("La modification de l'utilisateur <b>%s</b> a bien été prise en compte", $user->getUserIdentifier()));
 
             return $this->redirectToRoute('olix_users__list');
         }
@@ -147,7 +148,7 @@ class ManagerController extends AbstractController
             // Change password for this user
             $manager->update((string) $form->get('password')->getData()); // @phpstan-ignore cast.string
 
-            $this->addFlash('success', sprintf("La modification du mot de passe de l'utilisateur <b>%s</b> a bien été prise en compte", $user->getUserIdentifier()));
+            $this->addFlash(ColorBS::SUCCESS->value, sprintf("La modification du mot de passe de l'utilisateur <b>%s</b> a bien été prise en compte", $user->getUserIdentifier()));
 
             return $this->redirectToRoute('olix_users__list');
         }
@@ -180,7 +181,7 @@ class ManagerController extends AbstractController
             // Remove this user
             $manager->remove();
 
-            $this->addFlash('success', sprintf("La suppression de l'utilisateur <b>%s</b> a bien été prise en compte", $user->getUserIdentifier()));
+            $this->addFlash(ColorBS::SUCCESS->value, sprintf("La suppression de l'utilisateur <b>%s</b> a bien été prise en compte", $user->getUserIdentifier()));
 
             return new Response('OK');
         }

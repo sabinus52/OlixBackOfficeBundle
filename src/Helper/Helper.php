@@ -19,6 +19,35 @@ namespace Olix\BackOfficeBundle\Helper;
 final class Helper
 {
     /**
+     * Retourne la valeur d'un tableau à partir d'une chaîne de clés.
+     * Exemple: getNestedValueFromArray(['foo' => ['bar' => 'baz']], 'foo.bar') retourne 'baz'.
+     *
+     * Retourne la valeur par défaut si la clé n'existe pas.
+     *
+     * @param array<string,mixed> $array
+     * @param string              $keyPath
+     * @param mixed               $default
+     */
+    public static function getNestedValueFromArray(array $array, string $keyPath, mixed $default = null): mixed
+    {
+        $keys = explode('.', $keyPath);
+        $result = $array;
+
+        foreach ($keys as $key) {
+            if (!is_array($result)) {
+                return $default; // Retourne la valeur par défaut
+            }
+            if (!array_key_exists($key, $result)) {
+                return $default; // Retourne la valeur par défaut
+            }
+            /** @var array<string,mixed> $result */
+            $result = $result[$key];
+        }
+
+        return $result;
+    }
+
+    /**
      * Camelize les clés d'un tableau uniquement pour les clés qui commencent par le préfixe.
      *
      * @param array<mixed> $array

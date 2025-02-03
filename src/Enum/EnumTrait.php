@@ -13,16 +13,31 @@ namespace Olix\BackOfficeBundle\Enum;
 
 trait EnumTrait
 {
+    /**
+     * Retourne la liste des noms de l'énumération.
+     *
+     * @return array<string|int>
+     */
     public static function names(): array
     {
         return array_column(self::cases(), 'name');
     }
 
+    /**
+     * Retourne la liste des valeurs de l'énumération.
+     *
+     * @return array<string|int>
+     */
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
     }
 
+    /**
+     * Retourne un tableau associatif [value] => [name].
+     *
+     * @return array<string|int,string|int>
+     */
     public static function asArray(): array
     {
         if (empty(self::values())) {
@@ -34,10 +49,5 @@ trait EnumTrait
         }
 
         return array_column(self::cases(), 'value', 'name');
-    }
-
-    public static function choices(): array
-    {
-        return array_flip(self::asArray());
     }
 }
