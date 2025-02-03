@@ -8,9 +8,10 @@
 - [Integration of the security](security.md)
 - [Extended Forms](forms.md)
 - [Autocomplete](autocomplete.md)
-- [Datatables](datatables.md)
 - Implements CRUD
-  - [Mode edit not modal ](crud/crud.md)
+  - [Mode edition not modal ](crud/crud.md)
   - [Mode full modal](crud/modal.md)
+  - [Datatables](crud/datatables.md)
+  - [Filtre d'une table](crud/filters.md)
 - [Modals alert and confirm](modal.md)
 - [Charts](charts.md)

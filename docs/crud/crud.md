@@ -4,7 +4,7 @@ Implémentation de la gestion des données *CRUD*
 
 ## Prérequis
 
-Pour le fil d'ariane, positionner la route avec deux `__`
+Pour le fil d’Ariane, positionner la route avec deux `__`
 
 ***Facultatif***, dans l'entity, il faut ajouter la fonction `__toString` pour déterminer si l'objet est vide ou pas :
 ~~~ php
@@ -118,53 +118,7 @@ class TablesController extends AbstractController
 
 ## Table des données (Datatable)
 
-~~~ php
-// src/Datatable/MyTableType.php
-use App\Entity\MyEntity;
-use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
-use Omines\DataTablesBundle\Column\TextColumn;
-use Omines\DataTablesBundle\Column\TwigColumn;
-use Omines\DataTablesBundle\DataTable;
-use Omines\DataTablesBundle\DataTableTypeInterface;
-//...
-
-class MyTableType implements DataTableTypeInterface
-{
-    public function configure(DataTable $dataTable, array $options): void
-    {
-        $dataTable
-            ->add('id', TextColumn::class, [
-                'label' => 'Id',
-            ])
-            ->add('hostname', TextColumn::class, [
-                'label' => 'Hostname',
-                'searchable' => true,
-            ])
-            ->add('state', NumberColumn::class, [
-                'label' => 'Statut',
-                'raw' => true,
-                'data' => fn ($row) => sprintf('<b>%s</b>', $row->getStateLabel()),
-            ])
-            ->add('os', TextColumn::class, [
-                'label' => 'OS',
-                'field' => 'os.id',
-                'operator' => '=',
-                'searchable' => true,
-                'data' => static fn (Server $row): string => /** @psalm-suppress PossiblyNullReference */
-                    ($row->getOpSystemVersion() instanceof OpSystemVersion) ? $row->getOpSystemVersion()->getShortName() : '',
-            ])
-            ->add('buttons', TwigColumn::class, [
-                'label' => '',
-                'className' => 'text-right align-middle',
-                'template' => 'buttonbar.html.twig',
-            ])
-            ->createAdapter(ORMAdapter::class, [
-                'entity' => MyEntity::class,
-            ])
-        ;
-    }
-}
-~~~
+Suivre la documentation : [Mise en place d'un DataTable avec le bundle DataTablesBundle (table de données)](datatables.md)
 
 
 ## Formulaire d'une entité
@@ -215,94 +169,6 @@ class MyFormType extends AbstractType
 ~~~
 
 
-## Formulaire du filtre de recherche
-
-~~~ php
-// src/Form//MyFormType.php
-use Symfony\Component\Form\AbstractType;
-// ...
-
-class MyTableFilterType extends AbstractType
-{
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        $builder
-            ->add('state', ChoiceType::class, [
-                'label' => 'Statut',
-                'required' => false,
-                'choices' => MyEntity::getChoiceStates(),
-                'attr' => [ 'tabindex' => 1 ], // Important : Number of columns to search
-            ])
-        ;
-    }
-}
-~~~
-
-Remarque :
-- il faut ajouter l'option `attr: ['tabindex' => 1]` pour forcer le champ de recherche à la deuxième colonne de la Datatable
-
-
-
-## Template de la liste des données
-
-Pour afficher le formulaire dans une fenêtre modale, suivre cette documentation : [Utilisation des formulaires modales](modal.md)
-
-~~~ twig
-{# templates/crud-index.html.twig #}
-
-{% extends 'base_bo.html.twig' %}
-
-{% form_theme filter '@OlixBackOffice/Twig/form-theme-horizontal-layout.html.twig' %}
-
-{# ... #}
-
-{% block content %}
-    <div class="container-fluid">
-
-        <div class="row">
-            <div class="col-md-12">
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Liste</h3>
-                        <a class="btn btn-sm btn-info" data-toggle="collapse" href="#collapseFilter" role="button" aria-expanded="false" aria-controls="collapseFilter"><i class="fas fa-filter"></i> Filter</a>
-                        <div class="card-tools"><a href="{{ path('table__create') }}" class="btn btn-sm btn-success" data-toggle="olix-modal" data-target="#modalOlix"><i class="fas fa-plus"></i> Ajouter</a></div>
-                    </div>
-                    <div class="card-filter collapse" id="collapseFilter">
-                        <div class="row">
-                            <div class="col-6">
-                                {{ form_row(filter.field1) }}
-                            </div>
-                            <div class="col-6">
-                                {{ form_row(filter.field2) }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div id="olixDataTables">Loading...</div>
-                        <script>
-                            var olixDataTables = {{ datatable_settings(datatable) }};
-                        </script>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-
-    {% include '@OlixBackOffice/Modal/base.html.twig' with { title: "Chargement du formulaire" } %}
-
-{% endblock %}
-~~~
-
-~~~ twig
-{# templates/buttonbar.html.twig #}
-
-<a href="{{ path('table__edit', {'id': row.id}) }}" class="btn btn-sm btn-info" data-toggle="olix-modal" data-target="#modalOlix"><i class="fas fa-edit"></i><span class="d-none d-md-inline">&nbsp;Modifier<span></a>
-<a href="{{ path('table__delete', {'id': row.id}) }}" class="btn btn-sm btn-danger" data-toggle="olix-modal" data-target="#modalOlix"><i class="fas fa-trash"></i><span class="d-none d-md-inline">&nbsp;Supprimer<span></a>
-~~~
-
 ### Dans une nouvelle page :
 
 ## Template pour l'édition d'une entité
@@ -335,3 +201,8 @@ Pour afficher le formulaire dans une fenêtre modale, suivre cette documentation
     </div>
 {% endblock %}
 ~~~
+
+
+## Filtre des éléments de la table
+
+Suivre la documentation : [Formulaire du filtre de recherche](filters.md)

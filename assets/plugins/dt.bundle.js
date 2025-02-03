@@ -29,14 +29,14 @@ import jQuery from "jquery";
         switch (config.state) {
             case "fragment":
                 state = window.location.hash;
-                state = state.length > 1 ? deparam(state.substr(1)) : {};
+                state = state.length > 1 ? deparam(state.substring(1)) : {};
                 break;
             case "query":
                 state = window.location.search;
-                state = state.length > 1 ? deparam(state.substr(1)) : {};
+                state = state.length > 1 ? deparam(state.substring(1)) : {};
                 break;
             case "local":
-                stateDuration = 3600;
+                stateDuration = 0;
                 if (
                     localStorage.getItem(
                         "DataTables_" +
@@ -83,6 +83,10 @@ import jQuery from "jquery";
                 : {
                       stateDuration: stateDuration,
                       stateSave: true,
+                      stateLoadCallback: function (s, cb) {
+                          // Only need stateSave to expose state() function as loading lazily is not possible otherwise
+                          return null;
+                      },
                   };
 
         return new Promise((fulfill, reject) => {
@@ -160,7 +164,7 @@ import jQuery from "jquery";
                     }
 
                     root.html(data.template);
-                    let dt = $("table", root).DataTable(dtOpts);
+                    var dt = $("table", root).DataTable(dtOpts);
                     if (config.state !== "none") {
                         dt.on("draw.dt", function (e) {
                             var data = $.param(dt.state()).split("&");
@@ -194,7 +198,9 @@ import jQuery from "jquery";
                                         );
                                         if (window.location.search !== null) {
                                             windowLocationSearch = deparam(
-                                                window.location.search.substr(1)
+                                                window.location.search.substring(
+                                                    1
+                                                )
                                             );
                                             Object.assign(
                                                 windowLocationSearch,
@@ -237,7 +243,7 @@ import jQuery from "jquery";
      */
     $.fn.initDataTables.defaults = {
         method: "POST",
-        state: "local",
+        state: "fragment",
         url: window.location.origin + window.location.pathname,
     };
 
@@ -300,33 +306,28 @@ import jQuery from "jquery";
                         blob = new Blob([this.response], { type: type });
                     }
 
-                    if (typeof window.navigator.msSaveBlob !== "undefined") {
-                        // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
-                        window.navigator.msSaveBlob(blob, filename);
-                    } else {
-                        const URL = window.URL || window.webkitURL;
-                        const downloadUrl = URL.createObjectURL(blob);
+                    const URL = window.URL || window.webkitURL;
+                    const downloadUrl = URL.createObjectURL(blob);
 
-                        if (filename) {
-                            // use HTML5 a[download] attribute to specify filename
-                            const a = document.createElement("a");
-                            // safari doesn't support this yet
-                            if (typeof a.download === "undefined") {
-                                window.location = downloadUrl;
-                            } else {
-                                a.href = downloadUrl;
-                                a.download = filename;
-                                document.body.appendChild(a);
-                                a.click();
-                            }
-                        } else {
+                    if (filename) {
+                        // use HTML5 a[download] attribute to specify filename
+                        const a = document.createElement("a");
+                        // safari doesn't support this yet
+                        if (typeof a.download === "undefined") {
                             window.location = downloadUrl;
+                        } else {
+                            a.href = downloadUrl;
+                            a.download = filename;
+                            document.body.appendChild(a);
+                            a.click();
                         }
-
-                        setTimeout(function () {
-                            URL.revokeObjectURL(downloadUrl);
-                        }, 100); // cleanup
+                    } else {
+                        window.location = downloadUrl;
                     }
+
+                    setTimeout(function () {
+                        URL.revokeObjectURL(downloadUrl);
+                    }, 100); // cleanup
                 }
             };
 
@@ -353,8 +354,8 @@ import jQuery from "jquery";
                 keys = key.split("]["),
                 keys_last = keys.length - 1;
 
-            if (/\[/.test(keys[0]) && /\]$/.test(keys[keys_last])) {
-                keys[keys_last] = keys[keys_last].replace(/\]$/, "");
+            if (/\[/.test(keys[0]) && /]$/.test(keys[keys_last])) {
+                keys[keys_last] = keys[keys_last].replace(/]$/, "");
                 keys = keys.shift().split("[").concat(keys);
                 keys_last = keys.length - 1;
             } else {

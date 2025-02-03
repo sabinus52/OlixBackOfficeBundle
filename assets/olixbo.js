@@ -35,7 +35,6 @@ import Select2 from "./plugins/select2.js";
 import "./plugins/collection.js";
 import "./plugins/datatables.js";
 import "./plugins/toastr.js";
-import Olix from "./scripts/functions.js";
 
 /**
  * Initialisation
@@ -51,5 +50,3 @@ OlixModal.initialize({
         Select2.initialize();
     },
 });
-
-Olix.finalize();
