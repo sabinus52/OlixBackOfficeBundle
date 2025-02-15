@@ -24,13 +24,19 @@
 
 {# Contenu de l'item, on a besoin du level pour afficher le badge que pour le niveau 1 #}
 {% macro menu_item_content(item, level) %}
-    {% set route = item.hasChildren ? '#': '/' in item.route ? item.route : path(item.route, item.routeArgs) %}
+    {% set route = item.hasChildren ? '#': '/' in item.route ? item.route : path(item.route, item.route_args) %}
     <a href="{{ route }}" class="nav-link {% if item.isActive %}active{% endif %}">
-        <i class="nav-icon {{ item.icon|default('far fa-circle') }} text-{{ item.iconColor|default('') }}"></i>
+        {% if item.image %}
+            <img src="{{ asset(item.image) }}" class="nav-icon" height="24" width="24">
+        {% elseif item.icon %}
+            <i class="nav-icon {{ item.icon }} text-{{ item.icon_color|default('') }}"></i>
+        {% else %}
+            <i class="nav-icon far fa-circle text-{{ item.icon_color|default('') }}"> </i>
+        {% endif %}
         <p class="text">
             {{ item.label|raw }}
             {% if item.hasChildren %}<i class="right fas fa-angle-left"></i>{% endif %}
-            {% if level == 1 and item.badge %}<span class="right badge badge-{{ item.badgeColor|default('light') }}">{{ item.badge }}</span>{% endif %}
+            {% if level == 1 and item.badge %}<span class="right badge badge-{{ item.badge_color|default('light') }}">{{ item.badge }}</span>{% endif %}
         </p>
     </a>
 {% endmacro %}

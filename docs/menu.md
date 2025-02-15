@@ -23,21 +23,18 @@ class MenuBuilderSubscriber extends MenuFactorySubscriber
         $child1 = new MenuItemModel('home', [
             'label'         => 'Tableau de bord',
             'route'         => 'home',
-            'routeArgs'     => array('param1' => 1, 'param2' => 'toto'),
+            'route_args'     => array('param1' => 1, 'param2' => 'toto'),
             'icon'          => 'ico1.png',
-            'badge'         => 'badge1',
-            'color'         => 'red',
         ]);
         $child2 = new MenuItemModel('child2', [
             'label'         => 'Child two',
-            'icon'          => 'ico2.png',
             'badge'         => 'badge2',
+            'badge_color'   => 'indigo',
         ]);
         $c21 = new MenuItemModel('c21', [
             'label'         => 'Child C21',
             'route'         => 'toto',
-            'icon'          => 'ico1.png',
-            'badge'         => 'badge1',
+            'image'         => 'ico1.png',
         ]);
         $child2->addChild($c21);
 
@@ -48,49 +45,14 @@ class MenuBuilderSubscriber extends MenuFactorySubscriber
 }
 ~~~
 
-
-## Customisation du menu
-
-Il est possible de surcharger le modèle du menu pour ajouter des membres
-
-~~~ php
-<?php
-namespace App\Model;
-
-use Olix\BackOfficeBundle\Model\MenuItemModel;
-
-class MenuItem extends MenuItemModel
-{
-    /**
-     * @var string
-     */
-    protected $color = null;
-
-    public function __construct(string $code, array $options = [])
-    {
-        parent::__construct($code, $options);
-        $this->color = (isset($options['color'])) ? $options['color'] : null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getColor(): string
-    {
-        return $this->color;
-    }
-
-    /**
-     * @param string $color
-     * @return MenuItemModel
-     */
-    public function setColor(string $color): MenuItemModel
-    {
-        $this->color = $color;
-        return $this;
-    }
-}
-~~~
-
+Options disponibles pour le constructeur de `MenuItemModel` :
+- `label` : Label du menu
+- `route` : Route du menu
+- `route_args` : Arguments de la route
+- `icon` : Icône du menu
+- `icon_color` : Couleur de l'icône
+- `image` : Image du menu *(à la place de l'icône)*
+- `badge` : Badge du menu
+- `badge_color` : Couleur du badge
 
 Pour construire son menu avec des éléments issus de la BDD, le gestionnaire d'entité est disponible `$this->entityManager`

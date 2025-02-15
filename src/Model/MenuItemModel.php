@@ -11,33 +11,27 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Model;
 
+use Olix\BackOfficeBundle\Enum\ColorBS;
+use Olix\BackOfficeBundle\Enum\ColorCSS;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 /**
  * Classe de chaque élément composant la menu de la barre latérale.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
  *
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ *
  * @implements \IteratorAggregate<string, MenuItemModel>
  */
 class MenuItemModel implements \Countable, \IteratorAggregate
 {
-    protected ?string $label;
-
-    protected ?string $route;
-
-    /**
-     * @var array<mixed>
-     */
-    protected $routeArgs = [];
-
     protected bool $isActive = false;
 
-    protected ?string $icon;
-
-    protected ?string $iconColor;
-
-    protected ?string $badge;
-
-    protected ?string $badgeColor;
+    /**
+     * @var array<string,string|null>
+     */
+    protected array $options = [];
 
     /**
      * @var MenuItemModel[]
@@ -54,13 +48,59 @@ class MenuItemModel implements \Countable, \IteratorAggregate
      */
     public function __construct(protected string $code, array $options = [])
     {
-        $this->label = $options['label'] ?? null;
-        $this->route = $options['route'] ?? null;
-        $this->routeArgs = $options['routeArgs'] ?? [];
-        $this->icon = $options['icon'] ?? null;
-        $this->iconColor = $options['iconColor'] ?? null;
-        $this->badge = $options['badge'] ?? null;
-        $this->badgeColor = $options['badgeColor'] ?? null;
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
+
+        $this->options = $resolver->resolve($options);
+
+        // @deprecated 1.2
+        if (array_key_exists('routeArgs', $this->options)) {
+            $this->options['route_args'] = $this->options['routeArgs'];
+            unset($this->options['routeArgs']);
+        }
+        if (array_key_exists('iconColor', $this->options)) {
+            $this->options['icon_color'] = $this->options['iconColor'];
+            unset($this->options['iconColor']);
+        }
+        if (array_key_exists('badgeColor', $this->options)) {
+            $this->options['badge_color'] = $this->options['badgeColor'];
+            unset($this->options['badgeColor']);
+        }
+    }
+
+    protected function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefault('label', null);
+        $resolver->setDefault('route', null);
+        $resolver->setDefault('route_args', []);
+        $resolver->setDefault('icon', null);
+        $resolver->setDefault('icon_color', null);
+        $resolver->setDefault('image', null);
+        $resolver->setDefault('badge', null);
+        $resolver->setDefault('badge_color', null);
+
+        $resolver->setRequired('label');
+        $resolver->setAllowedTypes('label', 'string');
+        $resolver->setAllowedTypes('route', ['string', 'null']);
+        $resolver->setAllowedTypes('route_args', 'array');
+        $resolver->setAllowedTypes('icon', ['string', 'null']);
+        $resolver->setAllowedTypes('icon_color', ['string', 'null']);
+        $resolver->setAllowedTypes('image', ['string', 'null']);
+        $resolver->setAllowedTypes('badge', ['string', 'null']);
+        $resolver->setAllowedTypes('badge_color', ['string', 'null']);
+
+        $resolver->setAllowedValues('icon_color', [null] + array_merge(ColorCSS::values(), ColorBS::values()));
+        $resolver->setAllowedValues('badge_color', [null] + array_merge(ColorCSS::values(), ColorBS::values()));
+
+        // @deprecated 1.2
+        $resolver->setDefined([
+            'routeArgs',
+            'iconColor',
+            'badgeColor',
+        ]);
+        $resolver->setDeprecated('routeArgs', 'olix/backoffice-bundle', '1.2', 'The "routeArgs" option is deprecated. Use "route_args" instead.');
+        $resolver->setDeprecated('iconColor', 'olix/backoffice-bundle', '1.2', 'The "iconColor" option is deprecated. Use "icon_color" instead.');
+        $resolver->setDeprecated('badgeColor', 'olix/backoffice-bundle', '1.2', 'The "badgeColor" option is deprecated. Use "badge_color" instead.');
     }
 
     public function getCode(): string
@@ -68,46 +108,18 @@ class MenuItemModel implements \Countable, \IteratorAggregate
         return $this->code;
     }
 
-    public function getLabel(): ?string
-    {
-        return $this->label;
-    }
-
-    public function setLabel(string $label): static
-    {
-        $this->label = $label;
-
-        return $this;
-    }
-
     public function getRoute(): ?string
     {
-        return $this->route;
+        return $this->options['route'];
     }
 
-    public function setRoute(?string $route): static
+    public function __call(string $name, mixed $arguments): mixed
     {
-        $this->route = $route;
+        if (!array_key_exists($name, $this->options)) {
+            throw new \InvalidArgumentException(sprintf('The "%s" option does not exist.', $name));
+        }
 
-        return $this;
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function getRouteArgs(): array
-    {
-        return $this->routeArgs;
-    }
-
-    /**
-     * @param array<mixed> $routeArgs
-     */
-    public function setRouteArgs(array $routeArgs): static
-    {
-        $this->routeArgs = $routeArgs;
-
-        return $this;
+        return $this->options[$name] ?? null;
     }
 
     public function isActive(): bool
@@ -122,54 +134,6 @@ class MenuItemModel implements \Countable, \IteratorAggregate
         }
 
         $this->isActive = $isActive;
-
-        return $this;
-    }
-
-    public function getIcon(): ?string
-    {
-        return $this->icon;
-    }
-
-    public function setIcon(?string $icon): static
-    {
-        $this->icon = $icon;
-
-        return $this;
-    }
-
-    public function getIconColor(): ?string
-    {
-        return $this->iconColor;
-    }
-
-    public function setIconColor(?string $iconColor): static
-    {
-        $this->iconColor = $iconColor;
-
-        return $this;
-    }
-
-    public function getBadge(): ?string
-    {
-        return $this->badge;
-    }
-
-    public function setBadge(?string $badge): static
-    {
-        $this->badge = $badge;
-
-        return $this;
-    }
-
-    public function getBadgeColor(): ?string
-    {
-        return $this->badgeColor;
-    }
-
-    public function setBadgeColor(?string $badgeColor): static
-    {
-        $this->badgeColor = $badgeColor;
 
         return $this;
     }
