@@ -11,85 +11,69 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Model;
 
+use Olix\BackOfficeBundle\Enum\ColorBS;
+use Olix\BackOfficeBundle\Enum\ColorCSS;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 /**
  * Classe d'une notification dans la barre de navigation.
  *
  * @author     Sabinus52 <sabinus52@gmail.com>
+ *
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class NotificationModel
 {
-    protected string $icon;
-
-    protected ?string $color;
-
-    protected string $message;
-
-    protected ?string $info;
+    /**
+     * Liste des options de la notification.
+     *
+     * @var array<string,string|null>
+     */
+    protected array $options = [];
 
     /**
-     * Constructeur.
-     *
-     * @param ?string      $code    : Code identifiant de la notification
      * @param array<mixed> $options : Options de la notification
      */
-    public function __construct(protected ?string $code = null, array $options = [])
+    public function __construct(array $options = [])
     {
-        $this->icon = $options['icon'] ?? 'fas fa-exclamation-triangle';
-        $this->color = $options['color'] ?? null;
-        $this->message = $options['message'] ?? '';
-        $this->info = $options['info'] ?? null;
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
+
+        $this->options = $resolver->resolve($options);
     }
 
-    public function getCode(): ?string
+    protected function configureOptions(OptionsResolver $resolver): void
     {
-        return $this->code;
+        // Icône de la notification
+        $resolver->setDefault('icon', 'fas fa-exclamation-triangle');
+        $resolver->setAllowedTypes('icon', ['string']);
+
+        // Couleur de l'icône de la notification
+        $resolver->setDefault('color', null);
+        $resolver->setAllowedTypes('color', ['string', 'null']);
+        $resolver->setAllowedValues('color', [null] + array_merge(ColorBS::values(), ColorCSS::values()));
+
+        // Message de la notification
+        $resolver->setDefault('message', '');
+        $resolver->setAllowedTypes('message', ['string']);
+
+        // Info complémentaire de la notification
+        $resolver->setDefault('info', null);
+        $resolver->setAllowedTypes('info', ['string', 'null']);
+
+        // Route vers une notification.
+        $resolver->setDefault('route', null);
+        $resolver->setAllowedTypes('route', ['string', 'null']);
+        $resolver->setDefault('route_args', []);
+        $resolver->setAllowedTypes('route_args', 'array');
     }
 
-    public function getIcon(): string
+    public function __call(string $name, mixed $arguments): mixed
     {
-        return $this->icon;
-    }
+        if (!array_key_exists($name, $this->options)) {
+            throw new \InvalidArgumentException(sprintf('The "%s" option does not exist.', $name));
+        }
 
-    public function setIcon(string $icon): static
-    {
-        $this->icon = $icon;
-
-        return $this;
-    }
-
-    public function getColor(): ?string
-    {
-        return $this->color;
-    }
-
-    public function setColor(?string $color): static
-    {
-        $this->color = $color;
-
-        return $this;
-    }
-
-    public function getMessage(): string
-    {
-        return $this->message;
-    }
-
-    public function setMessage(string $message): static
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
-    public function getInfo(): ?string
-    {
-        return $this->info;
-    }
-
-    public function setInfo(?string $info): static
-    {
-        $this->info = $info;
-
-        return $this;
+        return $this->options[$name] ?? null;
     }
 }

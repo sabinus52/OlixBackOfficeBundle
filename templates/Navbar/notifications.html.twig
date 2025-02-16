@@ -3,17 +3,21 @@
 
     <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#"><i class="far fa-bell"></i> <span class="badge badge-warning navbar-badge">{{ notifications.total }}</span></a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="{{ style|default('') }}">
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right {{ notifications.class }}">
             <span class="dropdown-item dropdown-header">{{ notifications.total }} Notification(s)</span>
 
             {% for notice in notifications.notifications %}
                 <div class="dropdown-divider"></div>
-                <a href="{{ not notice.code ? '#' : path(notifications.route, { id: notice.code }) }}" class="dropdown-item"><i class="{{ notice.icon }} mr-2"{% if notice.color %} style="color: {{ notice.color }}"{% endif %}></i> {{ notice.message }} <span class="float-right text-muted text-sm">{{ notice.info }}</span></a>
+                <a href="{{ not notice.route ? '#' : path(notice.route, notice.route_args) }}" class="dropdown-item">
+                    <i class="{{ notice.icon }} mr-2{% if notice.color %} text-{{ notice.color }}"{% endif %}"></i>
+                    {{ notice.message }}
+                    <span class="float-right text-muted text-sm">{{ notice.info }}</span>
+                </a>
             {% endfor %}
 
-            {% if notifications.routeAll is not defined %}
+            {% if notifications.route %}
                 <div class="dropdown-divider"></div>
-                <a href="{{ path(notifications.routeAll) }}" class="dropdown-item dropdown-footer">Voir toutes les notifications</a>
+                <a href="{{ path(notifications.route, notifications.route_args) }}" class="dropdown-item dropdown-footer">Voir toutes les notifications</a>
             {% endif %}
         </div>
     </li>
