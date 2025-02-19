@@ -74,7 +74,7 @@ class Select2AjaxType extends Select2ModelType
         $resolver->setAllowedTypes('allow_add_prefix', ['string']);
         $resolver->setAllowedTypes('callback', ['null', 'callable']);
         $resolver->setNormalizer('allow_add', static function (Options $options, bool $value) use ($resolver): bool {
-            if (true === $value) {
+            if ($value) {
                 $resolver->setRequired('class_label');
             }
 
@@ -140,7 +140,7 @@ class Select2AjaxType extends Select2ModelType
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         // Autorisation d'ajout d'un nouvel élément
-        if (true === (bool) $options['allow_add']) {
+        if ((bool) $options['allow_add']) {
             // Pour autoriser Select2 à ajouter un élément
             $options['options_js']['tags'] = true;
             // Pour déterminer que l'id est bien une nouvelle valeur <option value='onew:toto'>

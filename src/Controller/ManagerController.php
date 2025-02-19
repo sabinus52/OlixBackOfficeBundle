@@ -186,7 +186,7 @@ class ManagerController extends AbstractController
             return new Response('OK');
         }
 
-        return $this->render('@OlixBackOffice/Include/modal-content-delete.html.twig', [
+        return $this->render('@OlixBackOffice/Modal/form-delete.html.twig', [
             'form' => $form,
             'element' => sprintf("l'utilisateur <strong>%s</strong>", $user->getUserIdentifier()),
         ]);

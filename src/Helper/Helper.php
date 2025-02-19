@@ -25,8 +25,6 @@ final class Helper
      * Retourne la valeur par défaut si la clé n'existe pas.
      *
      * @param array<string,mixed> $array
-     * @param string              $keyPath
-     * @param mixed               $default
      */
     public static function getNestedValueFromArray(array $array, string $keyPath, mixed $default = null): mixed
     {
@@ -48,10 +46,29 @@ final class Helper
     }
 
     /**
+     * Fusionne une valeur dans un tableau à partir d'une clé de chemin.
+     *
+     * @param array<string,mixed> $baseArray
+     */
+    public static function mergeNestedValueInArray(array &$baseArray, string $keyPath, mixed $value): void
+    {
+        $keys = explode('.', $keyPath);
+        $result = &$baseArray;
+
+        foreach ($keys as $key) {
+            if (!isset($result[$key]) || !is_array($result[$key])) {
+                $result[$key] = [];
+            }
+            $result = &$result[$key];
+        }
+
+        $result = $value; // Assigner la valeur finale
+    }
+
+    /**
      * Camelize les clés d'un tableau uniquement pour les clés qui commencent par le préfixe.
      *
      * @param array<mixed> $array
-     * @param string       $prefix
      *
      * @return array<mixed>
      */

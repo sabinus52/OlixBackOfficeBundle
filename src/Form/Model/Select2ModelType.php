@@ -102,7 +102,7 @@ abstract class Select2ModelType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         // Couleur du widget
-        $view->vars['color'] = (null !== $options['color']) ? $options['color'] : 'default';
+        $view->vars['color'] = $options['color'] ?? 'default';
 
         // Sélecteur du widget
         $view->vars['attr'] += ['data-toggle' => 'select2'];

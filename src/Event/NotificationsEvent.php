@@ -61,7 +61,7 @@ class NotificationsEvent extends BackOfficeEvent
         // Nombre max d'affichage de notifications dans la barre.
         $resolver->setDefault('max', 3);
         $resolver->setAllowedTypes('max', 'int');
-        $resolver->setAllowedValues('max', static fn ($value) => $value > 1);
+        $resolver->setAllowedValues('max', static fn ($value): bool => $value > 1);
 
         // Route vers toutes les notifications.
         $resolver->setDefault('route', null);

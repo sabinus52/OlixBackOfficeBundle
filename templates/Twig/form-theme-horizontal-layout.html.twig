@@ -69,6 +69,7 @@
 
 
 {% block olix_select2_widget -%}
+    {%- set attr = attr|merge({ 'style': 'width: 100%' }) -%}
     {% if color != 'default' %}
         {%- set attr = attr|merge({class: (attr.class|default('') ~ ' select2-' ~ color)|trim, 'data-dropdown-css-class': 'select2-' ~ color}) -%}
     {% endif %}
@@ -80,7 +81,7 @@
 {%- endblock olix_select2_widget %}
 
 {% block olix_select2_ajax_widget -%}
-    {%- set attr = attr|merge({ 'class': (attr.class|default('') ~ ' form-control')|trim }) -%}
+    {%- set attr = attr|merge({ 'class': (attr.class|default('') ~ ' form-control')|trim, 'style': 'width: 100%' }) -%}
     {% if color != 'default' %}
         {%- set attr = attr|merge({class: (attr.class|default('') ~ ' select2-' ~ color)|trim, 'data-dropdown-css-class': 'select2-' ~ color}) -%}
     {% endif %}

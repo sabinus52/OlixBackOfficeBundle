@@ -91,20 +91,21 @@ abstract class DateTimePickerModelType extends AbstractType
         // Options javascript du widget
         /** @var array<string,array<string,mixed>> $optionsJavaScript */
         $optionsJavaScript = $options['options_js'];
+        $optionsJavaScriptDeprecated = Helper::getCamelizedKeys($options, 'js_'); /** @deprecated 1.2 */
 
         // Ajoute les options javascript supplémentaires sur la locale et le format "moment.js"
         $optionsJavaScript['localization']['locale'] = $options['locale'];
         $optionsJavaScript['localization']['format'] = $options['format'];
 
         // Parcours les options JavaScript de types DateTime pour les convertir en format "moment.js"
-        $this->convertAllOptionsIsDateInFormat($options, $format);
+        $this->convertAllOptionsIsDateInFormat($optionsJavaScript, $format);
+        $this->convertAllOptionsIsDateInFormat($optionsJavaScriptDeprecated, $format);
 
         // Icône à droite cu widget et qui sert de bouton pour afficher le widget
         $view->vars['button_icon'] = $options['button_icon'];
 
         // Sélecteur du widget déjà définit dans le template : data-toggle='datetimepicker2'
         // Options javascript définit dans le template : data-options-js="{{ js_options }}"
-        $optionsJavaScriptDeprecated = Helper::getCamelizedKeys($options, 'js_'); /** @deprecated 1.2 */
         $view->vars['js_options'] = json_encode(array_merge_recursive($optionsJavaScriptDeprecated, $optionsJavaScript));
     }
 
