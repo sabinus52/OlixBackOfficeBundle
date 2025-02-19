@@ -86,3 +86,75 @@ legend.col-form-label {
     display: block;
     border-bottom: 1px solid #000;
 }
+
+/**
+ * Couleurs des badges
+ */
+.badge-green {
+    color: #fff;
+    background-color: #28a745;
+}
+.badge-blue {
+    color: #fff;
+    background-color: #007bff;
+}
+.badge-yellow {
+    color: #fff;
+    background-color: #ffc107;
+}
+.badge-red {
+    color: #fff;
+    background-color: #dc3545;
+}
+.badge-black {
+    color: #fff;
+    background-color: #000;
+}
+.badge-gray {
+    color: #fff;
+    background-color: #adb5bd;
+}
+.badge-indigo {
+    color: #fff;
+    background-color: #6610f2;
+}
+.badge-lightblue {
+    color: #fff;
+    background-color: #3c8dbc;
+}
+.badge-navy {
+    color: #fff;
+    background-color: #001f3f;
+}
+.badge-purple {
+    color: #fff;
+    background-color: #605ca8;
+}
+.badge-fuchsia {
+    color: #fff;
+    background-color: #f012be;
+}
+.badge-pink {
+    color: #fff;
+    background-color: #e83e8c;
+}
+.badge-maroon {
+    color: #fff;
+    background-color: #d81b60;
+}
+.badge-orange {
+    color: #fff;
+    background-color: #ff851b;
+}
+.badge-lime {
+    color: #fff;
+    background-color: #01ff70;
+}
+.badge-teal {
+    color: #fff;
+    background-color: #39cccc;
+}
+.badge-olive {
+    color: #fff;
+    background-color: #3d9970;
+}

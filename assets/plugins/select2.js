@@ -16,7 +16,7 @@ const DATA_OPTS_KEY = "options-js";
 const SELECTOR_TRIGGER = "[data-toggle='select2']";
 
 const DefaultOptions = {
-    minimumInputLength: 2,
+    minimumInputLength: 0,
 };
 
 /**

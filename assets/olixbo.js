@@ -16,8 +16,7 @@ import "./styles/switch.css";
  * Import des modules
  */
 import jQuery from "jquery";
-window.$ = jQuery;
-window.jQuery = jQuery;
+import * as Popper from "@popperjs/core";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "admin-lte";
 import "datatables.net";
@@ -39,9 +38,15 @@ import "./plugins/toastr.js";
 /**
  * Initialisation
  */
+// Initialisation des modules globales
+window.$ = jQuery;
+window.jQuery = jQuery;
+window.Popper = Popper;
+// Initialisation des widgets des formulaires
 DualListBox.initialize();
 DateTimePicker.initialize();
 Select2.initialize();
+// Initialisation des fenêtres modales
 OlixModal.initialize({
     onLoaded: function () {
         console.log("olix-modal:loaded2");
