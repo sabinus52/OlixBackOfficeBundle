@@ -1,5 +1,18 @@
 # CHANGELOG
 
+### Version 1.2.0
+
+- Deprecation de la classe `ValuesList`
+- Refonte des widgets Select2 et Select2Ajax
+- Refonte du widget DateTimePicker
+- Refonte du widget Switch
+- Refonte du widget DualListBox
+- Ajout de `OptionsResolver` dans la génération du menu et des notifications
+- Utilisation des options JS des widgets dans les formulaires via le paramètre `options_js`
+- Refonte des fenêtres modales
+- Refonte des assets javascript
+- Fix
+
 ### Version 1.1.4
 
 - Amélioration de la classe `Values` avec l'ajout de méthodes supplémentaires 
