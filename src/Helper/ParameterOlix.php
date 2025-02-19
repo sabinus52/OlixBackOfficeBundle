@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\ParameterBag;
  * Classe d'aide aux paramètres de la configuration du bundle.
  *
  * @author Sabinus52 <sabinus52@gmail.com>
+ *
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 final class ParameterOlix
 {
@@ -38,27 +40,21 @@ final class ParameterOlix
         /** @var array<mixed> $options */
         $options = $this->parameterBag->all();
 
-        // Teste les clés des options dans le tableau
-        $params = explode('.', $keySeparatorDot);
-        foreach ($params as $key) {
-            if (!array_key_exists($key, $options)) {
-                throw new \Exception(sprintf('La clé "%s" des paramètres olix_back_office est inconnue', $keySeparatorDot));
-            }
-
-            // Passe au sous tableau
-            /** @var array<mixed> $options */
-            $options = $options[$key];
+        // Récupère la valeur de la clé dans le tableau
+        /** @var array<mixed>|bool|int|string|null $value */
+        $value = Helper::getNestedValueFromArray($options, $keySeparatorDot, '[key-not-found]');
+        if ('[key-not-found]' === $value) {
+            throw new \Exception(sprintf('La clé "%s" des paramètres olix_back_office est inconnue', $keySeparatorDot));
         }
 
-        /** @var array<mixed>|bool|int|string|null $options */
-        if (is_array($options)) {
+        if (is_array($value)) {
             throw new \Exception(sprintf('La clé "%s" des paramètres olix_back_office doit être une valeur', $keySeparatorDot));
         }
         // Si la valeur est null ou vide, retourne une chaîne vide au lieu de null
-        if (null === $options) {
+        if (null === $value) {
             return '';
         }
 
-        return $options;
+        return $value;
     }
 }

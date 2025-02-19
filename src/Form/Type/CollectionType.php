@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Olix\BackOfficeBundle\Form\Type;
 
-use Olix\BackOfficeBundle\Form\Model\AbstractModelType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType as SfCollectionType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -26,7 +26,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
-class CollectionType extends AbstractModelType
+class CollectionType extends AbstractType
 {
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void

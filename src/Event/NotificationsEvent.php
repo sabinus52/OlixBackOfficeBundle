@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Olix\BackOfficeBundle\Event;
 
 use Olix\BackOfficeBundle\Model\NotificationModel;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Évènements sur la liste des notifications de la barre de navigation.
@@ -28,78 +29,63 @@ class NotificationsEvent extends BackOfficeEvent
     protected $notifications = [];
 
     /**
-     * Nombre max d'affichage de notifications dans la barre.
+     * Liste des options.
+     *
+     * @var array<string,string|int|null>
      */
-    protected int $max = 3;
+    protected array $options = [];
 
     /**
-     * Nombre total de notifications.
+     * @param array<string,mixed> $options
      */
-    protected int $total = 0;
-
-    /**
-     * Route vers une notifications.
-     */
-    protected string $route;
-
-    /**
-     * Route vers toutes les notifications.
-     */
-    protected string $routeAll;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
+    public function __construct(array $options = [])
     {
+        $this->setOptions($options);
     }
 
-    public function getMax(): int
+    /**
+     * @param array<string,mixed> $options
+     */
+    public function setOptions(array $options): self
     {
-        return $this->max;
-    }
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
 
-    public function setMax(int $max): self
-    {
-        $this->max = $max;
+        $this->options = $resolver->resolve($options);
 
         return $this;
+    }
+
+    protected function configureOptions(OptionsResolver $resolver): void
+    {
+        // Nombre max d'affichage de notifications dans la barre.
+        $resolver->setDefault('max', 3);
+        $resolver->setAllowedTypes('max', 'int');
+        $resolver->setAllowedValues('max', static fn ($value): bool => $value > 1);
+
+        // Route vers toutes les notifications.
+        $resolver->setDefault('route', null);
+        $resolver->setAllowedTypes('route', ['string', 'null']);
+        $resolver->setDefault('route_args', []);
+        $resolver->setAllowedTypes('route_args', 'array');
+
+        // Classe CSS de la boite de notification.
+        $resolver->setDefault('class', '');
+        $resolver->setAllowedTypes('class', 'string');
+    }
+
+    public function __call(string $name, mixed $arguments): mixed
+    {
+        if (!array_key_exists($name, $this->options)) {
+            throw new \InvalidArgumentException(sprintf('The "%s" option does not exist.', $name));
+        }
+
+        return $this->options[$name];
     }
 
     public function getTotal(): int
     {
-        return 0 === $this->total ? count($this->notifications) : $this->total;
-    }
-
-    public function setTotal(int $total): self
-    {
-        $this->total = $total;
-
-        return $this;
-    }
-
-    public function getRoute(): string
-    {
-        return $this->route;
-    }
-
-    public function setRoute(string $route): self
-    {
-        $this->route = $route;
-
-        return $this;
-    }
-
-    public function getRouteAll(): ?string
-    {
-        return $this->routeAll;
-    }
-
-    public function setRouteAll(string $routeAll): self
-    {
-        $this->routeAll = $routeAll;
-
-        return $this;
+        return count($this->notifications);
     }
 
     /**
@@ -109,7 +95,7 @@ class NotificationsEvent extends BackOfficeEvent
      */
     public function getNotifications(): array
     {
-        return array_slice($this->notifications, 0, $this->max);
+        return array_slice($this->notifications, 0, (int) $this->options['max']);
     }
 
     /**

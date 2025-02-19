@@ -60,15 +60,16 @@
 {%- endblock olix_switch_label %}
 
 {% block olix_switch_widget -%}
-    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' custom-control-input')|trim}) -%}
-    <div class="{{ class_color|join(' ') }}">
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' switch')|trim}) -%}
+    <span class="{{ class_switch|join(' ') }}">
         <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
-        <label class="switch-custom custom-control-label" for="{{ id }}">{{ chk_label }}</label>
-    </div>
+        <label for="{{ id }}">{{ chk_label }}</label>
+    </span>
 {%- endblock olix_switch_widget %}
 
 
 {% block olix_select2_widget -%}
+    {%- set attr = attr|merge({ 'style': 'width: 100%' }) -%}
     {% if color != 'default' %}
         {%- set attr = attr|merge({class: (attr.class|default('') ~ ' select2-' ~ color)|trim, 'data-dropdown-css-class': 'select2-' ~ color}) -%}
     {% endif %}
@@ -80,7 +81,7 @@
 {%- endblock olix_select2_widget %}
 
 {% block olix_select2_ajax_widget -%}
-    {%- set attr = attr|merge({ 'class': (attr.class|default('') ~ ' form-control')|trim }) -%}
+    {%- set attr = attr|merge({ 'class': (attr.class|default('') ~ ' form-control')|trim, 'style': 'width: 100%' }) -%}
     {% if color != 'default' %}
         {%- set attr = attr|merge({class: (attr.class|default('') ~ ' select2-' ~ color)|trim, 'data-dropdown-css-class': 'select2-' ~ color}) -%}
     {% endif %}
@@ -106,7 +107,7 @@
 
 
 {% block olix_datetimepicker_widget -%}
-    <div class="input-group" id="dp_{{ id }}" data-target-input="nearest" data-toggle="datetimepicker2" data-options-js="{{ js_options|json_encode }}">
+    <div class="input-group" id="dp_{{ id }}" data-target-input="nearest" data-toggle="datetimepicker2" data-options-js="{{ js_options }}">
         {%- set attr = attr|merge({
             'class': (attr.class|default('') ~ ' datetimepicker-input')|trim,
             'data-target': '#dp_' ~ id,

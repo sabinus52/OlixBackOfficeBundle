@@ -1,22 +1,43 @@
 /**
  * Fonction de surcharge d'initialisation des objets "Select2"
  *
+ * @link https://www.npmjs.com/package/select2
+ * @version 4
+ *
  * @author Sabinus52 <sabinus52@gmail.com>
- * @param json options
- * @returns
  */
 
+import "select2/dist/css/select2.min.css";
 import $ from "jquery";
 import Select2 from "select2/dist/js/select2.full.js";
 Select2($);
 
+const DATA_OPTS_KEY = "options-js";
+const SELECTOR_TRIGGER = "[data-toggle='select2']";
+
+const DefaultOptions = {
+    minimumInputLength: 0,
+};
+
+/**
+ * Surcharge de la fonction Select2 pour ajouter des options
+ *
+ * @param {JSON} options
+ * @returns
+ */
 $.fn.OlixSelect2 = function (options) {
     this.each(function () {
         let $elt = $(this);
         let optionsResult;
 
         // Options de base
-        optionsResult = $.extend(true, options || {}, $elt.data("options-js"));
+        optionsResult = $.extend(
+            true,
+            {},
+            DefaultOptions,
+            $elt.data(DATA_OPTS_KEY),
+            options || {}
+        );
 
         // Options pour l'auto completion en AJAX
         let optionsAjax = {};
@@ -32,7 +53,7 @@ $.fn.OlixSelect2 = function (options) {
                     }
                 },
                 ajax: {
-                    url: opts.route,
+                    url: opts.url,
                     dataType: "json",
                     delay: opts.delay,
                     cache: opts.cache,
@@ -74,4 +95,22 @@ $.fn.OlixSelect2 = function (options) {
     });
 
     return this;
+};
+
+export default {
+    /**
+     * Initialisation des widgets Select2
+     *
+     * @param {JSON} options
+     */
+    initialize: function (options) {
+        $(SELECTOR_TRIGGER).OlixSelect2(options);
+        $(document).on("select2:open", () => {
+            document
+                .querySelector(
+                    ".select2-container--open .select2-search__field"
+                )
+                .focus();
+        });
+    },
 };

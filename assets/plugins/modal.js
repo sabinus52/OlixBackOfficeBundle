@@ -6,26 +6,27 @@
 
 import $ from "jquery";
 import "bootstrap/js/src/modal.js";
-import Olix from "./functions.js";
 
 /**
  * Constants
  */
 const NAME = "OlixModal";
-const DATA_KEY = "olix.modal";
-const EVENT_KEY = `.${DATA_KEY}`;
+const DATA_KEY = "olix-modal";
+const EVENT_KEY = `${DATA_KEY}:`;
 const JQUERY_NO_CONFLICT = $.fn[NAME];
-const EVENT_LOADED = `loaded${EVENT_KEY}`;
-const EVENT_OVERLAY_ADDED = `overlay.added${EVENT_KEY}`;
-const EVENT_OVERLAY_REMOVED = `overlay.removed${EVENT_KEY}`;
 
-const SELECTOR_TRIGGER = `[data-toggle="olix-modal"]`;
+// Event sur le chargement du formulaire dans le modal
+const EVENT_LOADED = `${EVENT_KEY}loaded`;
+// Sélecteur dee boutons ou liens pour afficher le modal
+const SELECTOR_TRIGGER = '[data-toggle="olix-modal"]';
+// Sélecteur ID de la fenêtre modale par défaut
+const SELECTOR_MODAL_ID = "#modalOlix";
 
 const Default = {
     params: {},
     id: "",
     isInit: false,
-    target: "",
+    target: SELECTOR_MODAL_ID,
     urlLoad: "", // A remplir pour charger la page dans le modal (mode édition)
     urlValid: "", // A remplir pour uniquement la validation (mode suppression)
     overlayTemplate:
@@ -49,6 +50,7 @@ class OlixModal {
     constructor(element, settings) {
         this._element = element;
         this._settings = $.extend({}, Default, settings);
+        console.log(settings, this._settings);
 
         // Vérification des paramètres
         if (this._settings.target == "")
@@ -73,7 +75,7 @@ class OlixModal {
         console.log(this._settings.urlLoad);
         if (this._settings.urlLoad != "") {
             this._content.load(this._settings.urlLoad, () => {
-                Olix.initForms();
+                this._modal.trigger(EVENT_LOADED);
                 // Événement sur la validation du formulaire
                 this._modal.on("submit", "form", () => {
                     this.valid();
@@ -117,7 +119,7 @@ class OlixModal {
                 if (jqXHR.status == 422) {
                     console.log("error 422");
                     this._content.html(jqXHR.responseText);
-                    Olix.initForms();
+                    this._modal.trigger(EVENT_LOADED);
                 } else {
                     alert(
                         "Une erreur est survenue lors de validation du formulaire."
@@ -152,6 +154,7 @@ class OlixModal {
                 $(this).data(),
                 typeof config === "object" ? config : {}
             );
+            console.log("_jQueryInterface", config, data);
 
             if (!data) {
                 data = new OlixModal($(this), _config);
@@ -162,30 +165,37 @@ class OlixModal {
                     throw new TypeError(`No method named "${config}"`);
                 }
 
-                data[config]();
+                data[config](); // Execute la fonction
             } else if (typeof config === "undefined") {
                 data._init();
             }
         });
     }
-}
 
-/**
- * Data API
- */
-$(document).on("click", SELECTOR_TRIGGER, function (event) {
-    if (event) {
-        event.preventDefault();
+    static initialize(options) {
+        options = options || {};
+
+        $(document).on("click", SELECTOR_TRIGGER, function (event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            OlixModal._jQueryInterface.call($(this), "load");
+        });
+
+        $(SELECTOR_MODAL_ID).on(EVENT_LOADED, function () {
+            console.log("olix-modal:loaded");
+            if (options.onLoaded !== undefined) {
+                options.onLoaded();
+            }
+        });
+
+        // Inutile
+        /*$(SELECTOR_TRIGGER).each(function () {
+            OlixModal._jQueryInterface.call($(this), { isInit: true });
+        });*/
     }
-
-    OlixModal._jQueryInterface.call($(this), "load");
-});
-
-$(() => {
-    $(SELECTOR_TRIGGER).each(function () {
-        OlixModal._jQueryInterface.call($(this), { isInit: true });
-    });
-});
+}
 
 /**
  * jQuery API

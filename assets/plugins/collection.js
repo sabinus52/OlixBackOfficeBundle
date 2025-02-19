@@ -143,13 +143,15 @@ class OlixCollection {
 }
 
 /**
- * Data selector API
+ * Data selector API (non utilisé)
+ * Il faudra initialiser les éléments de la collection lors de l'affichage de la page
+ * $(SELECTOR_TRIGGER).OlixCollection();
  */
-$(() => {
+/* $(() => {
     $(SELECTOR_TRIGGER).each(function () {
         OlixCollection._jQueryInterface.call($(this));
     });
-});
+}); */
 
 /**
  * jQuery API

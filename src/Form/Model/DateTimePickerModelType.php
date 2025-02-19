@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace Olix\BackOfficeBundle\Form\Model;
 
 use Locale;
+use Olix\BackOfficeBundle\Helper\Helper;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
@@ -20,29 +22,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Widget de formulaire de type DateTime Picker.
  *
- * @example     Configuration with options of this type
- * @example     @param string button_icon : Icon from right input
- * @example     @param string locale
- * @example     Config widget JS parameter :
- * @example     @see https://getdatepicker.com/6/options/ Liste des différentes options
- *
  * @author      Sabinus52 <sabinus52@gmail.com>
  *
- * @see         https://github.com/Eonasdan/tempus-dominus
- * @see         https://getdatepicker.com/
+ * @see         https://www.npmjs.com/package/@eonasdan/tempus-dominus
+ * @see         Liste des différentes options : https://getdatepicker.com/6/options/
+ *
+ * @version     6.9.*
  *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
-abstract class DateTimePickerModelType extends AbstractModelType
+abstract class DateTimePickerModelType extends AbstractType
 {
-    private string $locale = 'fr'; // TODO
-
-    /**
-     * Constructeur.
-     */
-    public function __construct()
-    {
-    }
+    private string $locale = 'fr';
 
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
@@ -51,22 +43,27 @@ abstract class DateTimePickerModelType extends AbstractModelType
         $resolver->setDefaults([
             'widget' => 'single_text',
             'html5' => false,
-            'button_icon' => 'fas fa-calendar',
-            'locale' => $this->locale,
+            'button_icon' => 'fas fa-calendar',    // Icône du bouton du input
+            'locale' => $this->locale,             // Langue du widget
+            'options_js' => [],
         ]);
 
         $resolver->setAllowedValues('widget', ['single_text']);
         $resolver->setAllowedValues('html5', [false]);
         $resolver->setAllowedTypes('button_icon', ['string']);
+        // Options supplémentaires JavaScript du widget
+        $resolver->setAllowedTypes('options_js', ['array']);
 
-        // Options JavaScript supplémentaires du widget
-        $resolver->setDefaults([
-            'js_allow_input_toggle' => false,
-            'js_default_date' => null,
-            'js_use_current' => false,
-            'js_stepping' => 5,
-            'js_display' => [],
-            'js_restrictions' => [],
+        /**
+         * @deprecated 1.2 : Options JavaScript du widget
+         */
+        $resolver->setDefined([
+            'js_allow_input_toggle',
+            'js_default_date',
+            'js_use_current',
+            'js_stepping',
+            'js_display',
+            'js_restrictions',
         ]);
 
         $resolver->setAllowedTypes('js_allow_input_toggle', 'bool');
@@ -75,92 +72,73 @@ abstract class DateTimePickerModelType extends AbstractModelType
         $resolver->setAllowedTypes('js_stepping', 'int');
         $resolver->setAllowedTypes('js_display', 'array');
         $resolver->setAllowedTypes('js_restrictions', 'array');
+
+        $resolver->setDeprecated('js_allow_input_toggle', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "allowInputToggle" option of the "options_js" option instead.');
+        $resolver->setDeprecated('js_default_date', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "defaultDate" option of the "options_js" option instead.');
+        $resolver->setDeprecated('js_use_current', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "useCurrent" option of the "options_js" option instead.');
+        $resolver->setDeprecated('js_stepping', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "stepping" option of the "options_js" option instead.');
+        $resolver->setDeprecated('js_display', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "display" option of the "options_js" option instead.');
     }
 
     /**
-     * @param array<string,string>|mixed[][]|mixed[][][] $options
+     * @param array<string,array<string,mixed>> $options
      */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         /** @var string $format */
         $format = $options['format'];
-        // pass the form type option directly to the template
+        // Options javascript du widget
+        /** @var array<string,array<string,mixed>> $optionsJavaScript */
+        $optionsJavaScript = $options['options_js'];
+        $optionsJavaScriptDeprecated = Helper::getCamelizedKeys($options, 'js_'); /** @deprecated 1.2 */
+
+        // Ajoute les options javascript supplémentaires sur la locale et le format "moment.js"
+        $optionsJavaScript['localization']['locale'] = $options['locale'];
+        $optionsJavaScript['localization']['format'] = $options['format'];
+
+        // Parcours les options JavaScript de types DateTime pour les convertir en format "moment.js"
+        $this->convertAllOptionsIsDateInFormat($optionsJavaScript, $format);
+        $this->convertAllOptionsIsDateInFormat($optionsJavaScriptDeprecated, $format);
+
+        // Icône à droite cu widget et qui sert de bouton pour afficher le widget
         $view->vars['button_icon'] = $options['button_icon'];
 
-        // Convert les options de types DateTime
-        if (isset($options['js_restrictions']['minDate'])) {
-            $options['js_restrictions']['minDate'] = $this->formatIsDate($options['js_restrictions']['minDate'], $format); // @phpstan-ignore argument.type
-        }
-        if (isset($options['js_restrictions']['maxDate'])) {
-            $options['js_restrictions']['maxDate'] = $this->formatIsDate($options['js_restrictions']['maxDate'], $format);
-        }
-        $options['js_default_date'] = $this->formatIsDate($options['js_default_date'], $format); // @phpstan-ignore argument.type
-        if (null === $options['js_default_date']) {
-            unset($options['js_default_date']);
-        }
-        if (isset($options['js_restrictions']['disabledDates'])) {
-            foreach ($options['js_restrictions']['disabledDates'] as $key => $value) {
-                $options['js_restrictions']['disabledDates'][$key] = $this->formatIsDate($value, $format);
-            }
-        }
-        if (isset($options['js_restrictions']['enabledDates'])) {
-            foreach ($options['js_restrictions']['enabledDates'] as $key => $value) {
-                $options['js_restrictions']['enabledDates'][$key] = $this->formatIsDate($value, $format);
-            }
-        }
-
-        // Options javascript du widget
-        $view->vars['js_options'] = $this->getOptionsWidget($options);
+        // Sélecteur du widget déjà définit dans le template : data-toggle='datetimepicker2'
+        // Options javascript définit dans le template : data-options-js="{{ js_options }}"
+        $view->vars['js_options'] = json_encode(array_merge_recursive($optionsJavaScriptDeprecated, $optionsJavaScript));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'olix_datetimepicker';
     }
 
     /**
-     * Retourne toutes les options javascript du widget datetimepicker.
+     * Parcours et convertit les options JavaScript de types DateTime pour les convertir en format "moment.js".
+     * Modifie directement les valeurs dans le tableau.
      *
-     * @param mixed[] $options
-     *
-     * @return mixed[]
+     * @param array<string,mixed> $optionsJavaScript Options JavaScript du widget
+     * @param string              $format            Format date du widget JS
      */
-    private function getOptionsWidget(array $options): array
+    private function convertAllOptionsIsDateInFormat(array &$optionsJavaScript, string $format): void
     {
-        // Camelize options for javascript
-        $result = $this->getOptionsWidgetCamelized($options);
-
-        $result['localization']['locale'] = $options['locale']; // @phpstan-ignore offsetAccess.nonOffsetAccessible
-        // Conversion format date PHP to format moment.js
-        $result['localization']['format'] = $options['format']; // @phpstan-ignore offsetAccess.nonOffsetAccessible
-
-        if ([] === $result['restrictions']) {
-            unset($result['restrictions']);
+        foreach ($optionsJavaScript as &$option) {
+            if (is_array($option)) {
+                // Si c'est un tableau, on continue son parcours récursivement
+                $this->convertAllOptionsIsDateInFormat($option, $format);
+            } elseif ($option instanceof \DateTimeInterface) {
+                // Si c'est un DateTime, on le formate
+                $option = $this->formatDateTime($option, $format);
+            }
         }
-
-        return $result;
     }
 
     /**
-     * @param bool|string|\DateTimeInterface|null $option
+     * Formate une date de type DateTime dans le format "moment.js" spécifié du widget.
      */
-    private function formatIsDate($option, string $format): bool|string|null
-    {
-        if ($option instanceof \DateTimeInterface) {
-            return $this->formatObject($option, $format);
-        }
-
-        return $option;
-    }
-
-    /**
-     * Formate une date de type DateTime dans le format spécifié du widget.
-     */
-    private function formatObject(\DateTimeInterface $dateTime, string $format): string
+    private function formatDateTime(\DateTimeInterface $dateTime, string $format): string
     {
         $formatter = new \IntlDateFormatter($this->locale, \IntlDateFormatter::NONE, \IntlDateFormatter::NONE);
         $formatter->setPattern($format);

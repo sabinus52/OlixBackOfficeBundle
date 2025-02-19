@@ -15,34 +15,25 @@ use Doctrine\ORM\EntityManagerInterface;
 use Olix\BackOfficeBundle\Form\DataTransformer\EntitiesToValuesTransformer;
 use Olix\BackOfficeBundle\Form\DataTransformer\EntityToValueTransformer;
 use Olix\BackOfficeBundle\Form\Model\Select2ModelType;
+use Olix\BackOfficeBundle\Helper\Helper;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Widget de formulaire de type select amélioré.
  *
- * @example     Configuration with options of this type
- * @example     @param bool   multiple              : True for multiple select and false for single select.
- * @example     @param string class                 : The class of your entity
- * @example     @param string class_property        : The name of the property used to search the query
- * @example     @param string class_pkey            : The name of the property used to uniquely identify entities
- * @example     @param string class_label           : The name of the property used to retrieve the text for existing data
- * @example     @param int    page_limit            : Number items by page for the scroll
- * @example     Config for ajax remote datas
- * @example     @param string remote_route          : Route of ajax remote datas
- * @example     @param array  remote_params         : Parameters of route
- * @example     @param bool   ajax_js_scroll        : True will enable infinite scrolling
- * @example     @param int    ajax_js_delay         : The number of milliseconds to wait for the user to stop typing before issuing the ajax request
- * @example     @param bool   ajax_js_cache         :
- * @example     @see https://select2.org/configuration/options-api Liste des différentes options
- *
  * @author      Sabinus52 <sabinus52@gmail.com>
  *
  * @see         https://github.com/select2/select2
+ * @see         Liste des différentes options : https://select2.org/configuration/options-api
  * @see         https://github.com/tetranz/select2entity-bundle (inspiration)
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class Select2AjaxType extends Select2ModelType
 {
@@ -59,19 +50,21 @@ class Select2AjaxType extends Select2ModelType
         $resolver->setDefaults([
             'compound' => false,
             'multiple' => false,
-            'class' => null,
+            'class' => null,                // La classe de l'entité
         ]);
         $resolver->setAllowedValues('compound', [false]);
 
         // Options supplémentaires pour l'entité
         $resolver->setDefaults([
-            'class_property' => null,
-            'class_pkey' => 'id',
-            'class_label' => null,
-            'page_limit' => 25,
-            'allow_add' => false,
-            'allow_add_prefix' => 'onew:',
-            'callback' => null,
+            'class_pkey' => 'id',           // Le nom de la propriété utilisée pour identifier chaque élément de l'entité
+            'page_limit' => 25,             // Nombre d'éléments affichés par page pour le défilement
+            'allow_add' => false,           // Option pour l'ajout d'un élément. `class_label` est requis
+            'allow_add_prefix' => 'onew:',  // Préfixe de l'option "Ajouter" pour l'entité
+            'callback' => null,             // Callback via le QueryBuilder pour la récupération des résultats
+        ]);
+        $resolver->setDefined([
+            'class_property',               // Le nom de la propriété utilisée pour rechercher le query
+            'class_label',                  // La nom de la propriété de l'entité utilisée pour récupérer le texte à afficher
         ]);
         $resolver->setAllowedTypes('class_property', ['string']);
         $resolver->setAllowedTypes('class_pkey', ['string']);
@@ -80,24 +73,52 @@ class Select2AjaxType extends Select2ModelType
         $resolver->setAllowedTypes('allow_add', ['bool']);
         $resolver->setAllowedTypes('allow_add_prefix', ['string']);
         $resolver->setAllowedTypes('callback', ['null', 'callable']);
+        $resolver->setNormalizer('allow_add', static function (Options $options, bool $value) use ($resolver): bool {
+            if ($value) {
+                $resolver->setRequired('class_label');
+            }
 
-        // Options supplémentaires pour l'appel url en Ajax
-        $resolver->setDefaults([
-            'remote_route' => 'olix_autocomplete_select2', // Route par défaut
-            'remote_params' => [],
+            return $value;
+        });
+
+        // Options javascript supplémentaires pour l'appel url en Ajax
+        $resolver->setDefault('ajax', static function (OptionsResolver $ajaxResolver): void {
+            $ajaxResolver->setDefaults([
+                'url' => null,                          // Url générée avec `route`et `params` et utilisée par le service AutoComplete
+                'route' => 'olix_autocomplete_select2', // Route par défaut
+                'params' => [],                         // Paramètres de la route
+                'scroll' => true,                       // True pour activer le défilement par page
+                'delay' => 250,                         // Le nombre de millisecondes à attendre avant d'émettre la requête ajax
+                'cache' => true,                        // True pour activer le cache
+            ]);
+            $ajaxResolver->setAllowedTypes('route', ['null', 'string']);
+            $ajaxResolver->setAllowedTypes('params', ['array']);
+            $ajaxResolver->setAllowedTypes('scroll', ['bool']);
+            $ajaxResolver->setAllowedTypes('delay', ['int']);
+            $ajaxResolver->setAllowedTypes('cache', ['bool']);
+        });
+
+        /**
+         * @deprecated 1.2 : Options JavaScript pour la fonction Ajax
+         */
+        $resolver->setDefined([
+            'remote_route',
+            'remote_params',
+            'ajax_js_scroll',
+            'ajax_js_delay',
+            'ajax_js_cache',
         ]);
         $resolver->setAllowedTypes('remote_route', ['null', 'string']);
-        $resolver->setAllowedTypes('remote_params', ['array']);
-
-        // Options javascript pour la fonction Ajax
-        $resolver->setDefaults([
-            'ajax_js_scroll' => true,
-            'ajax_js_delay' => 250,
-            'ajax_js_cache' => true,
-        ]);
+        $resolver->setAllowedTypes('remote_params', ['null', 'array']);
         $resolver->setAllowedTypes('ajax_js_scroll', ['bool']);
         $resolver->setAllowedTypes('ajax_js_delay', ['int']);
         $resolver->setAllowedTypes('ajax_js_cache', ['bool']);
+
+        $resolver->setDeprecated('remote_route', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "route" option of the "ajax" option instead.');
+        $resolver->setDeprecated('remote_params', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "params" option of the "ajax" option instead.');
+        $resolver->setDeprecated('ajax_js_scroll', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "scroll" option of the "ajax" option instead.');
+        $resolver->setDeprecated('ajax_js_delay', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "delay" option of the "ajax" option instead.');
+        $resolver->setDeprecated('ajax_js_cache', 'olix/backoffice-bundle', '1.2', 'The "%name%" option is deprecated. Use the "cache" option of the "ajax" option instead.');
     }
 
     /**
@@ -112,55 +133,63 @@ class Select2AjaxType extends Select2ModelType
         $builder->addViewTransformer($transformer, true);
     }
 
+    /**
+     * @param array<string,array<string,mixed>> $options
+     */
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         // Autorisation d'ajout d'un nouvel élément
-        if (true === $options['allow_add']) {
+        if ((bool) $options['allow_add']) {
             // Pour autoriser Select2 à ajouter un élément
-            $options['js_tags'] = true;
+            $options['options_js']['tags'] = true;
             // Pour déterminer que l'id est bien une nouvelle valeur <option value='onew:toto'>
             $view->vars['attr'] += ['data-prefix-new' => $options['allow_add_prefix']];
         }
 
-        parent::buildView($view, $form, $options);
+        // Options spécifique pour savoir s'il faut ajouter un élément vide dans la liste
+        $view->vars['allow_clear'] = (array_key_exists('allow_clear', $options['options_js'])) ? $options['options_js']['allow_clear'] : false;
 
-        // Options pour la création du widget
-        $view->vars['allow_clear'] = $options['js_allow_clear'];
-
-        // Génération de la route
-        $options['ajax_js_route'] = $this->generateRoute($form, $options);
-
-        // Options Javascript pour les sources de données distantes
-        $view->vars['attr'] += ['data-ajax' => json_encode($this->getOptionsWidgetCamelized($options, 'ajax_js_'))];
+        // Options Javascript pour les sources de données distantes en mode Ajax
+        $optionsAjaxDeprecated = Helper::getCamelizedKeys($options, 'ajax_js_'); /** @deprecated 1.2 */
+        $options['ajax']['url'] = $this->generateRoute($form, $options['ajax']);
+        $view->vars['attr'] += ['data-ajax' => json_encode($options['ajax'] + $optionsAjaxDeprecated)];
 
         // Pour les données multiples, le nom doit être un tableau
         if ($options['multiple']) {
             $view->vars['attr'] += ['multiple' => 'multiple'];
             $view->vars['full_name'] .= '[]';
         }
+
+        parent::buildView($view, $form, $options);
     }
 
     /**
      * Génération de la route qui sera appelée par le widget Select2 pour l'autocomplétion.
+     * Récupère le formulaire parent et la classe du formulaire parent utilisé par le service AutoComplete.
      *
-     * @param array<string,mixed> $options Options du widget
+     * @param array<string,mixed> $optionsAjax Options des paramètres `ajax`
      */
-    private function generateRoute(FormInterface $form, array $options): string
+    private function generateRoute(FormInterface $form, array &$optionsAjax): string
     {
-        /** @var array<string, string> $optRemoteParams Paramètres de la route */
-        $optRemoteParams = $options['remote_params'];
+        /** @var string $optAjaxRoute Route */
+        $optAjaxRoute = $optionsAjax['route'];
+        /** @var array<string, string> $optAjaxParams Paramètres de la route */
+        $optAjaxParams = $optionsAjax['params'];
 
-        // Formulaire parent
+        // Récupère le formulaire parent
         $formParent = $form->getParent();
         if (!$formParent instanceof FormInterface) {
             throw new \RuntimeException(sprintf('Parent form of "%s" form is not a FormInterface', $form->getName()));
         }
-        // Class du type de formulaire parent
+        // Récupère la classe du type de formulaire parent
         $classFormParent = $formParent->getConfig()->getType()->getInnerType()::class;
 
-        return $this->router->generate((string) $options['remote_route'], // @phpstan-ignore cast.string
-            array_merge($optRemoteParams, [
+        // Supprime ces 2 paramètres qui ne sont plus utiles une fois la route générée
+        unset($optionsAjax['route'], $optionsAjax['params']);
+
+        return $this->router->generate($optAjaxRoute,
+            array_merge($optAjaxParams, [
                 'class' => $classFormParent,
                 'widget' => $form->getName(),
             ])

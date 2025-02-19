@@ -15,6 +15,7 @@
 - Form DatetimePicker
 - Form select2
 - Form autocomplete
+- Modal
 
 ## Installation
 

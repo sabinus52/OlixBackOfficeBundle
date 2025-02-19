@@ -22,6 +22,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  * Permet de retourner les items en AJAX.
  *
  * @author Sabinus52 <sabinus52@gmail.com>
+ *
+ * @deprecated 1.2 Utiliser le service "Olix\BackOfficeBundle\Service\AutoCompleteService" à la place
  */
 class AutoCompleteService
 {
@@ -34,6 +36,8 @@ class AutoCompleteService
 
     /**
      * Retourne les résultats trouvés depuis un recherche "Select2".
+     *
+     * @deprecated 1.2 Utiliser le service "Olix\BackOfficeBundle\Service\AutoCompleteService" à la place
      *
      * @return array<mixed>
      */

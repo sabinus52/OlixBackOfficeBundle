@@ -45,17 +45,24 @@ class TimePickerType extends DateTimePickerModelType
 
         $resolver->setDefaults([
             'button_icon' => 'far fa-clock',
-            'format' => 'hh:mm',
+            'format' => 'HH:mm',
         ]);
     }
 
     #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
+        if (array_key_exists('display', $options['options_js'])) {
+            $options['options_js']['display'] += [
+                'components' => self::COMPONENTS,
+            ];
+        } else {
+            $options['options_js']['display'] = [
+                'components' => self::COMPONENTS,
+            ];
+        }
+
         parent::buildView($view, $form, $options);
-        $view->vars['js_options']['display'] += [
-            'components' => self::COMPONENTS,
-        ];
     }
 
     #[\Override]
