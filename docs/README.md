@@ -38,3 +38,4 @@
 - [Notifications](notifications.md)
 - [Autocomplete](autocomplete.md)
 - [Charts](charts.md)
+- [Error pages](error.md)
