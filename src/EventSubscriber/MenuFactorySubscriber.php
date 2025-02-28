@@ -29,7 +29,7 @@ abstract class MenuFactorySubscriber implements EventSubscriberInterface, MenuFa
     public function __construct(
         protected readonly ParameterOlix $parameterOlix,
         protected readonly EntityManagerInterface $entityManager,
-        private readonly Security $security,
+        protected readonly Security $security,
     ) {
     }
 
