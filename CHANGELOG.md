@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### Version 1.2.1
+
+- Ajout des templates des pages d'erreur
+- Fix
+
 ### Version 1.2.0
 
 - Deprecation de la classe `ValuesList`
